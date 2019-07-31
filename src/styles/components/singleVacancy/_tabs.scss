@@ -1,0 +1,36 @@
+.c-tab {
+  border-bottom: 1px solid gray;
+  list-style: none;
+}
+
+.c-tabs {
+  border: none;
+  background: transparent;
+  padding-bottom: 6px;
+}
+
+.c-tabs--selected {
+  border-bottom: 2px solid $fiord-blue;
+}
+
+.v-tab {
+  padding-left: 0;
+  list-style: none;
+
+  button {
+    background-color: white;
+    border: none;
+    color: $accent-color;
+  }
+}
+.v-tabs {
+  margin-right: 1rem;
+}
+
+.v-tabs--selected {
+  button {
+    background-color: $accent-color;
+    border: none;
+    color: white;
+  }
+}

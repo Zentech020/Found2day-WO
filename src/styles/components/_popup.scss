@@ -1,0 +1,13 @@
+.popup {
+  &__bg {
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  &__basic-info {
+    img {
+      margin-top: -100px;
+    }
+  }
+}
