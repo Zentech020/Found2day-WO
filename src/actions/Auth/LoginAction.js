@@ -30,7 +30,8 @@ export const loginUser = (username, password) => async dispatch => {
   } catch (err) {
     return dispatch({
       type: LOGIN_ERROR,
-      err: err
+      err: err,
+      busy: false
     });
   }
 };

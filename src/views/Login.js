@@ -31,9 +31,15 @@ class Login extends React.Component {
 
   componentWillUpdate(nextProps) {
     if(!nextProps.busy && nextProps.error) {
-      toast.error(nextProps.message, {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
+      if (nextProps.message) {
+        toast.error(nextProps.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      } else {
+        toast.error('Oops', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      }
     }
   }
 
