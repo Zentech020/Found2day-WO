@@ -25,14 +25,17 @@ class Login extends React.Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      showingError: false
     };
   }
 
-  componentWillUpdate(nextProps) {
-    if(!nextProps.busy && nextProps.error) {
-      if (nextProps.message) {
-        toast.error(nextProps.message, {
+  async componentDidUpdate(nextProps) {
+    if (this.props.error && !this.state.showingError) {
+      console.log('FUck');
+      if (this.props.message) {
+
+        toast.error(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
       } else {
@@ -40,18 +43,19 @@ class Login extends React.Component {
           position: toast.POSITION.BOTTOM_CENTER
         });
       }
+      await this.setState({showingError: true})
     }
   }
 
-
-
-  onLogin = () => {
+  onLogin = async () => {
     const { username, password } = this.state;
     if (username && password) {
       this.props.loginUser(username, password);
+      await this.setState({showingError: false})
       console.log(`${username} + ${password}`);
     }
   };
+
   render() {
     const {busy} = this.props;
 
@@ -87,7 +91,7 @@ class Login extends React.Component {
                       autoComplete="email"
                       value={this.state.username}
                       onChange={e =>
-                        this.setState({ username: e.target.value })
+                        this.setState({ username: e.target.value, changed: true })
                       }
                     />
                   </FormGroup>
@@ -100,7 +104,7 @@ class Login extends React.Component {
                       autoComplete="current-password"
                       value={this.state.password}
                       onChange={e =>
-                        this.setState({ password: e.target.value })
+                        this.setState({ password: e.target.value, changed: true })
                       }
                     />
                   </FormGroup>
@@ -112,7 +116,7 @@ class Login extends React.Component {
                     theme="accent"
                     className="d-table mx-auto"
                     // type="submit"
-                    onClick={() => this.onLogin()}
+                    onClick={() => {this.onLogin()}}
                   >
                     Access Account
                   </Button>
