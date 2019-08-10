@@ -12,9 +12,6 @@ export const getApplicants = pars => async dispatch => {
     );
     return dispatch({ type: APPLICANTS_DATA, result });
   } catch (err) {
-    return dispatch({
-      type: APPLICANTS_ERROR,
-      payload: err
-    });
+    return dispatch({type:APPLICANTS_ERROR, payload:err})
   }
 };

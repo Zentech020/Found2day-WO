@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import Loader from '../components/Animations/Loader';
 import {
   Container,
@@ -53,6 +53,12 @@ class Login extends React.Component {
       this.props.loginUser(username, password);
       await this.setState({showingError: false})
       console.log(`${username} + ${password}`);
+    }
+
+    else {
+      toast.error('Please enter all the fields', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
     }
   };
 

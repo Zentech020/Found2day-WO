@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
 
     case SINGLE_VACANCY_DATA: {
       const { data } = action.result;
-      return { ...state, single_vacancy: data };
+      return { ...state,  isLoading:false ,single_vacancy: data };
     }
 
     case SINGLE_VACANCY_ERROR: {

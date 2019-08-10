@@ -46,23 +46,24 @@ const initialState = {
   vacancies_by_group:[],
   single_vacancy:[],
   isLoading: false,
-  success:false,
-  error:false,
+  err:false,
+  message:'',
+  busy:false,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
 
     case ADD_VACANCIE_IS_LOADING: {
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, err:action.error};
     }
 
     case ADD_VACANCIE_DATA: {
-      return { ...state, success: true };
+      return {  ...state, vacancies_by_group: state.vacancies_by_group.concat(action.result.data) , message:action.message, err:false,};
     }
 
     case ADD_VACANCIES_ERROR: {
-      return { ...state, error: action.error };
+      return { ...state, err: action.err, message:action.message };
     }
 
     case VACANCIES_BY_GROUP_IS_LOADING: {
@@ -96,11 +97,11 @@ export default (state = initialState, action) => {
     }
 
     case DELETE_VACANCY_DATA: {
-      return { ...state, success: true };
+      return { ...state, ...state.vacancies_by_group.filter((data, i) => data._id !== action.id)  ,success: true, err:true, message:'succesfully deleted vacancy' };
     }
 
     case DELETE_VACANCY_ERROR: {
-      return { ...state, error: action.error };
+      return { ...state, error: action.error, message:'Something went wrong , try again!' };
     }
 
 
@@ -110,7 +111,7 @@ export default (state = initialState, action) => {
 
     case SINGLE_VACANCY_DATA: {
       const { data } = action.result;
-      return { ...state, single_vacancy: data };
+      return { ...state, isLoading:false, single_vacancy: data };
     }
 
     case SINGLE_VACANCY_ERROR: {
@@ -122,11 +123,11 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_VACANCY_DATA: {
-      return { ...state, success: true };
+      return { ...state, success: true, err:false, message:'succesfully updated vacancy' };
     }
 
     case UPDATE_VACANCY_ERROR: {
-      return { ...state, error: action.error };
+      return { ...state, error: action.error, message:'Something went wrong , try again!' };
     }
 
     default:

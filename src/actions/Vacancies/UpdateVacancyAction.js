@@ -8,6 +8,8 @@ export const updateVacancy = (
   vacancyId,
   title,
   description,
+  content,
+  image,
   jobTitle,
   branch,
   education,
@@ -24,6 +26,8 @@ export const updateVacancy = (
       {
         title: title,
         description: description,
+        content:content,
+        image:image,
         jobTitle: jobTitle,
         branch: branch,
         education: education,

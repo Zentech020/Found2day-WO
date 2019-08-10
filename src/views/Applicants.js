@@ -24,9 +24,7 @@ import { connect } from 'react-redux';
 
 import PageTitle from '../components/common/PageTitle';
 import RangeDatePicker from '../components/common/RangeDatePicker';
-import getTransactionHistoryData from '../data/transaction-history-data';
-import getApplicantsData from '../data/applicants-list';
-import { getApplicants } from '../actions/index';
+import { getApplicationsByGroup } from '../actions/index';
 
 class Applicants extends React.Component {
   constructor(props) {
@@ -35,14 +33,13 @@ class Applicants extends React.Component {
     this.state = {
       pageSizeOptions: [5, 10, 15, 20, 25, 30],
       pageSize: 10,
-      tableData: [],
+      applications: [],
       modal: false,
       modalInfo: null
     };
 
     this.searcher = null;
 
-    this.getStatusClass = this.getStatusClass.bind(this);
     this.handlePageSizeChange = this.handlePageSizeChange.bind(this);
     this.handleFilterSearch = this.handleFilterSearch.bind(this);
     this.handleItemEdit = this.handleItemEdit.bind(this);
@@ -52,32 +49,27 @@ class Applicants extends React.Component {
   }
 
   componentWillMount() {
-    this.props.getApplicants();
-    const tableData = getApplicantsData();
+    const {applications} = this.props;
 
     this.setState({
       ...this.state,
-      tableData
+      applications
     });
+    console.log(applications);
 
     // Initialize the fuzzy searcher.
-    this.searcher = new FuzzySearch(tableData, ['name', 'status'], {
+    this.searcher = new FuzzySearch(applications, ['Name', 'vacancyTitle'], {
       caseSensitive: false
     });
   }
 
-  /**
-   * Returns the appropriate status class for the `Status` column.
-   */
-  getStatusClass(status) {
-    const statusMap = {
-      Cancelled: 'danger',
-      Complete: 'success',
-      Pending: 'warning'
-    };
-
-    return `text-${statusMap[status]}`;
+  componentDidMount() {
+    const group = JSON.parse(sessionStorage.getItem('group'));
+    console.log(this.searcher);
+    this.props.getApplicationsByGroup(group._id);
   }
+
+
 
   /**
    * Handles the page size change event.
@@ -135,6 +127,7 @@ class Applicants extends React.Component {
 
   render() {
     const { tableData, pageSize, pageSizeOptions } = this.state;
+    const {applications} = this.props;
     const tableColumns = [
       {
         Header: '#',
@@ -148,7 +141,7 @@ class Applicants extends React.Component {
         className: 'text-center',
         minWidth: 200,
         Cell: row =>
-          dateFormat(new Date(row.original.date), 'dddd, mmmm dS, yyyy')
+        dateFormat(new Date(row.original.createdAt), 'dddd, mmmm dS, yyyy')
       },
       {
         Header: 'Name',
@@ -157,7 +150,7 @@ class Applicants extends React.Component {
       },
       {
         Header: 'Vacancy',
-        accessor: 'vacancy',
+        accessor: 'vacancyTitle',
         maxWidth: 200,
         className: 'text-center'
       },
@@ -169,7 +162,7 @@ class Applicants extends React.Component {
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <a href={row.original.cv} download theme="white">
+            <a target="_blank" href={row.original.cvURL} theme="white">
               <i className="material-icons">&#xE870;</i>
             </a>
           </ButtonGroup>
@@ -253,10 +246,10 @@ class Applicants extends React.Component {
             <div className="">
               <ReactTable
                 columns={tableColumns}
-                data={tableData}
+                data={applications}
                 pageSize={pageSize}
                 showPageSizeOptions={false}
-                resizable={false}
+                resizable={true}
                 getTdProps={(state, rowInfo, column, instance) => {
                   return {
                     onClick: (e, handleOriginal) => {
@@ -351,11 +344,11 @@ class Applicants extends React.Component {
 //Connect redux
 function mapStateToProps(state) {
   return {
-    applicants: state.vacancies.applicants
+    applications: state.applicants.applications
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getApplicants }
+  { getApplicationsByGroup }
 )(Applicants);

@@ -52,7 +52,7 @@ export default function(
     case LOGIN_DATA: {
       return {
         ...state,
-        error:false,
+        err:false,
         isLoading: false,
         isAuthenticated: true
       };
@@ -102,11 +102,13 @@ export default function(
       return {
         ...state,
         isLoading: false,
+        err:false,
+        message:'Reset email is on the way',
       };
     }
 
     case FORGOT_PW_ERROR: {
-      return { ...state, err: action.err };
+      return { ...state, err: true, message:'Something went wront , try again!', };
     }
 
     case RESET_PW_IS_LOADING: {
@@ -117,11 +119,12 @@ export default function(
       return {
         ...state,
         isLoading: false,
+        err:false,
       };
     }
 
     case RESET_PW_ERROR: {
-      return { ...state, err: action.err };
+      return { ...state, err: true };
     }
 
     case REGISTER_INVITE_IS_LOADING: {

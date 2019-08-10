@@ -21,11 +21,12 @@ export const resetPasswordUser = (
         newPassword2: newPassword2
       }
     );
-    return dispatch({ type: RESET_PW_DATA, result });
+    return dispatch({ type: RESET_PW_DATA, result, err:false });
   } catch (err) {
     return dispatch({
       type: RESET_PW_ERROR,
-      payload: err
+      payload: err,
+      err:true
     });
   }
 };

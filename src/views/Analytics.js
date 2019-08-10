@@ -10,19 +10,13 @@ import {
   CardBody,
   CardFooter
 } from 'shards-react';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { getHomeNotification } from '../actions';
+import { getHomeNotification , getApplicationCount, getVacancyCount} from '../actions';
 
 import PageTitle from '../components/common/PageTitle';
-import RangeDatePicker from '../components/common/RangeDatePicker';
 import SmallStats from '../components/common/SmallStats';
-import TopReferrals from '../components/common/TopReferrals';
-import CountryReports from '../components/common/CountryReports';
 import Sessions from '../components/analytics/Sessions';
-import UsersByDevice from '../components/analytics/UsersByDevice';
-import GoalsOverview from '../components/analytics/GoalsOverview/GoalsOverview';
 
 import colors from '../utils/colors';
 class Analytics extends React.Component {
@@ -30,10 +24,13 @@ class Analytics extends React.Component {
     super(props);
   }
   componentDidMount() {
+    const group = JSON.parse(sessionStorage.getItem('group'));
     this.props.getHomeNotification();
+    this.props.getApplicationCount(group._id);
+    this.props.getVacancyCount(group._id);
   }
   render() {
-    const { homeNotification } = this.props;
+    const { homeNotification, applicationCount, vacancyCount } = this.props;
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
@@ -60,7 +57,7 @@ class Analytics extends React.Component {
                   </a>
                 </h5>
                 <p className="card-text d-inline-block mb-3">
-                  {homeNotification.notification}
+                  {homeNotification}
                 </p>
                 <span className="text-muted">28 February 2019</span>
               </CardBody>
@@ -84,7 +81,7 @@ class Analytics extends React.Component {
                     chartData={stats.datasets}
                     chartLabels={stats.chartLabels}
                     label={stats.label}
-                    value={stats.value}
+                    value={idx === 0 ? applicationCount : vacancyCount}
                     percentage={stats.percentage}
                     increase={stats.increase}
                     decrease={stats.decrease}
@@ -152,53 +149,19 @@ Analytics.defaultProps = {
         }
       ]
     }
-    // {
-    //   label: 'Pageviews',
-    //   value: '21,293',
-    //   percentage: '3.71%',
-    //   increase: true,
-    //   chartLabels: [null, null, null, null, null],
-    //   decrease: false,
-    //   datasets: [
-    //     {
-    //       label: 'Today',
-    //       fill: 'start',
-    //       borderWidth: 1.5,
-    //       backgroundColor: colors.warning.toRGBA(0.1),
-    //       borderColor: colors.warning.toRGBA(),
-    //       data: [6, 6, 9, 3, 3]
-    //     }
-    //   ]
-    // },
-    // {
-    //   label: 'Pages/Session',
-    //   value: '6.43',
-    //   percentage: '2.71%',
-    //   increase: false,
-    //   chartLabels: [null, null, null, null, null],
-    //   decrease: true,
-    //   datasets: [
-    //     {
-    //       label: 'Today',
-    //       fill: 'start',
-    //       borderWidth: 1.5,
-    //       backgroundColor: colors.salmon.toRGBA(0.1),
-    //       borderColor: colors.salmon.toRGBA(),
-    //       data: [0, 9, 3, 3, 3]
-    //     }
-    //   ]
-    // }
   ]
 };
 
 //Connect redux
 function mapStateToProps(state) {
   return {
-    homeNotification: state.homeNotification
+    homeNotification: state.home.notification,
+    applicationCount:state.home.application_count,
+    vacancyCount:state.home.vacancy_count
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getHomeNotification }
+  { getHomeNotification,getApplicationCount, getVacancyCount }
 )(Analytics);

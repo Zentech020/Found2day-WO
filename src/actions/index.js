@@ -1,4 +1,6 @@
 import { getHomeNotification } from './Home/NotificationAction';
+import { getApplicationCount } from './Home/getApplicationCount';
+import { getVacancyCount } from './Home/getVacancyCount';
 import { getVacancies } from './Vacancies/getVacanciesAction';
 import { addVacancyAction } from './Vacancies/AddVacancyAction';
 import { getApplicants } from './Applicants/getApplicantsAction';
@@ -16,9 +18,19 @@ import { deleteSingleVacancy } from './Vacancies/DeleteSingleVacancyAction';
 import { updateVacancy } from './Vacancies/UpdateVacancyAction';
 import { getPayLink } from './Finance/PaymentAction';
 import { getSpecs } from './Vacancies/GetSpecsAction';
+import { getApplicationsByGroup } from './Applicants/GetApplicationsByGroup';
+import { getApplicationsByVacancy } from './Applicants/GetApplicationsByVacancy';
+import {changeSpecs} from './Vacancies/GetSpecsAction';
+import {getProfile} from './Profile/GetProfileAction';
+import {updateProfile} from './Profile/UpdateProfileAction';
+import {getGroup} from './Group/GetGroupAction';
+import {updateGroup} from './Group/UpdateGroupAction';
+import {getMembers} from './Group/GetMembersAction';
 
 export {
   getHomeNotification,
+  getApplicationCount,
+  getVacancyCount,
   getVacancies,
   getApplicants,
   loginUser,
@@ -35,5 +47,13 @@ export {
   deleteSingleVacancy,
   updateVacancy,
   getPayLink,
-  getSpecs
+  getSpecs,
+  getApplicationsByGroup,
+  changeSpecs,
+  getApplicationsByVacancy,
+  getProfile,
+  updateProfile,
+  getGroup,
+  updateGroup,
+  getMembers
 };

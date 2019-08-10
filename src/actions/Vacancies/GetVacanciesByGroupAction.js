@@ -10,7 +10,6 @@ export const getVacanciesByGroup = groupId => async dispatch => {
     const result = await axios.get(
       `http://127.0.0.1:5000/vacancies/groups/${groupId}`
     );
-    console.log(result);
     return dispatch({ type: VACANCIES_BY_GROUP_DATA, result });
   } catch (err) {
     return dispatch({

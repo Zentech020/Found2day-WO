@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {toast} from 'react-toastify';
 import {
   Container,
   Row,
@@ -20,20 +21,38 @@ class ChangePassword extends React.Component {
       token: '',
       id: '',
       password: '',
-      password1: ''
+      password1: '',
+      showingError: true
     };
   }
+
+  async componentDidUpdate(nextProps) {
+    if (!this.props.error && !this.state.showingError) {
+      console.log('FUck');
+
+
+        toast.success('Successfully Resetted password', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+
+      await this.setState({showingError: true})
+    }
+  }
+
   componentDidMount() {
     this.setState({
       id: this.props.match.params.id,
       token: this.props.match.params.token
     });
   }
-  onReset = () => {
+  onReset = async() => {
     const { password, password1, token, id } = this.state;
     if (password && password1 && token && id) {
       console.log('changing pw');
-      this.props.resetPasswordUser(token, id, password, password1);
+      this.props.resetPasswordUser(token, id, password, password1).then((res)=>{
+        this.props.history.push('/login');
+      });
+      await this.setState({showingError: true})
     }
   };
   render() {
@@ -103,7 +122,16 @@ class ChangePassword extends React.Component {
   }
 }
 
+//Connect redux
+function mapStateToProps(state) {
+  return {
+    error: state.auth.err,
+    message:state.auth.message,
+    busy:state.auth.busy
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { resetPasswordUser }
 )(ChangePassword);

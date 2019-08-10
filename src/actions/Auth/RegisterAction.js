@@ -20,11 +20,14 @@ export const registerUser = (
       password2,
       groupName
     });
-    return dispatch({ type: REGISTER_DATA, result });
+    return dispatch({ type: REGISTER_DATA, result, err:false });
   } catch (err) {
     return dispatch({
       type: REGISTER_ERROR,
-      payload: err
+      payload: err,
+      message: "Register failed",
+      err:true,
+      busy:false
     });
   }
 };

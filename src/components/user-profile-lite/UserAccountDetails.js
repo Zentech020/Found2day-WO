@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -15,10 +15,10 @@ import {
   Button
 } from "shards-react";
 
-const UserAccountDetails = ({ title }) => (
+const UserAccountDetails = ({ account, isAdmin, updateAccount, changeStringAccount, changeStringGroup, updateGroup }) => (
   <Card small className="mb-4">
     <CardHeader className="border-bottom">
-      <h6 className="m-0">{title}</h6>
+      <h6 className="m-0">{isAdmin ? 'Company Details' : 'Account details'}</h6>
     </CardHeader>
     <ListGroup flush>
       <ListGroupItem className="p-3">
@@ -27,27 +27,37 @@ const UserAccountDetails = ({ title }) => (
             <Form>
               <Row form>
                 {/* First Name */}
-                <Col md="6" className="form-group">
-                  <label htmlFor="feFirstName">First Name</label>
-                  <FormInput
-                    id="feFirstName"
-                    placeholder="First Name"
-                    value="Sierra"
-                    onChange={() => {}}
-                  />
-                </Col>
-                {/* Last Name */}
-                <Col md="6" className="form-group">
-                  <label htmlFor="feLastName">Last Name</label>
-                  <FormInput
-                    id="feLastName"
-                    placeholder="Last Name"
-                    value="Brooks"
-                    onChange={() => {}}
-                  />
+                <Col md="12" className="form-group">
+                  {isAdmin ? (
+                    <Fragment>
+                      <label htmlFor="feFirstName">Company name</label>
+                      <FormInput
+                        id="feFirstName"
+                        placeholder="Company name"
+                        onChange={changeStringGroup}
+                        defaultValue={account.title}
+                        name="title"
+                      />
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      <label htmlFor="feFirstName">Full name</label>
+                      <FormInput
+                        id="feFirstName"
+                        placeholder="Full name"
+                        defaultValue={account.name}
+                        onChange={changeStringAccount}
+                        name="name"
+                      />
+                  </Fragment>
+                  ) }
+
                 </Col>
               </Row>
-              <Row form>
+              {isAdmin ? (
+                null
+              ) : (
+                <Row form>
                 {/* Email */}
                 <Col md="6" className="form-group">
                   <label htmlFor="feEmail">Email</label>
@@ -55,8 +65,9 @@ const UserAccountDetails = ({ title }) => (
                     type="email"
                     id="feEmail"
                     placeholder="Email Address"
-                    value="sierra@example.com"
-                    onChange={() => {}}
+                    defaultValue={account.email}
+                    onChange={isAdmin ? changeStringGroup : changeStringAccount}
+                    name="email"
                     autoComplete="email"
                   />
                 </Col>
@@ -73,6 +84,20 @@ const UserAccountDetails = ({ title }) => (
                   />
                 </Col>
               </Row>
+              ) }
+
+              {isAdmin ? (
+                  <FormGroup>
+                  <label htmlFor="feAddress">KVK Nummer</label>
+                  <FormInput
+                    id="feAddress"
+                    placeholder="KVK Nummer"
+                    value="65661796"
+                    onChange={() => {}}
+                  />
+                </FormGroup>
+              ) : (null)}
+
               <FormGroup>
                 <label htmlFor="feAddress">Address</label>
                 <FormInput
@@ -92,16 +117,8 @@ const UserAccountDetails = ({ title }) => (
                     onChange={() => {}}
                   />
                 </Col>
-                {/* State */}
-                <Col md="4" className="form-group">
-                  <label htmlFor="feInputState">State</label>
-                  <FormSelect id="feInputState">
-                    <option>Choose...</option>
-                    <option>...</option>
-                  </FormSelect>
-                </Col>
                 {/* Zip Code */}
-                <Col md="2" className="form-group">
+                <Col md="6" className="form-group">
                   <label htmlFor="feZipCode">Zip</label>
                   <FormInput
                     id="feZipCode"
@@ -110,14 +127,7 @@ const UserAccountDetails = ({ title }) => (
                   />
                 </Col>
               </Row>
-              <Row form>
-                {/* Description */}
-                <Col md="12" className="form-group">
-                  <label htmlFor="feDescription">Description</label>
-                  <FormTextarea id="feDescription" rows="5" />
-                </Col>
-              </Row>
-              <Button theme="accent">Update Account</Button>
+              <Button theme="accent" onClick={isAdmin ? updateGroup : updateAccount}>Update Account</Button>
             </Form>
           </Col>
         </Row>
@@ -130,11 +140,19 @@ UserAccountDetails.propTypes = {
   /**
    * The component's title.
    */
-  title: PropTypes.string
+  account: PropTypes.object,
+  isAdmin:PropTypes.bool,
+  updateAccount: PropTypes.func,
+  updateGroup:PropTypes.func,
+  changeStringAccount:PropTypes.func,
+  changeStringGroup:PropTypes.func
 };
 
 UserAccountDetails.defaultProps = {
-  title: "Account Details"
+  account: {
+    name:"Full name",
+    title: "Account Details"
+  }
 };
 
 export default UserAccountDetails;

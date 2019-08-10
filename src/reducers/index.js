@@ -1,19 +1,20 @@
 import { combineReducers } from 'redux';
-import homeNotification from './Home/NotificationReducer';
+import home from './Home/Home';
 import applicants from './Applicants/ApplicantsReducer';
-import inviteUser from './Profile/InviteUserReducer';
 import Specs from './Vacancies/GetSpecsReducer';
 import Payment from './Finance/PaymentReducer';
 import vacancies from './Vacancies/vacancies';
 import auth from './Auth/auth';
 import profile from './Profile/profile';
+import group from './Group/group';
 
 export default combineReducers({
   auth,
-  homeNotification,
+  home,
   vacancies,
   applicants,
   profile,
   Payment,
-  Specs
+  Specs,
+  group
 });
