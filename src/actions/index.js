@@ -16,6 +16,8 @@ import { deleteSingleVacancy } from './Vacancies/DeleteSingleVacancyAction';
 import { updateVacancy } from './Vacancies/UpdateVacancyAction';
 import { getPayLink } from './Finance/PaymentAction';
 import { getSpecs } from './Vacancies/GetSpecsAction';
+import { getMembersByGroup } from './Group/GetMembersByGroupAction';
+
 
 export {
   getHomeNotification,
@@ -35,5 +37,6 @@ export {
   deleteSingleVacancy,
   updateVacancy,
   getPayLink,
-  getSpecs
+  getSpecs,
+  getMembersByGroup
 };

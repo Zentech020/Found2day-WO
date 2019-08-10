@@ -30,10 +30,12 @@ export default class UserActions extends React.Component {
 
   componentDidMount() {
     const account = JSON.parse(sessionStorage.getItem('account'));
-    console.log(account);
-    this.setState({
-      name: account.name
-    });
+    console.log('acc', account);
+    if (account) {
+      this.setState({
+        name: account.name
+      });
+    }
   }
 
   render() {

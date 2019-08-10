@@ -1,8 +1,8 @@
 import {
-  INVITE_USER_IS_LOADING,
-  INVITE_USER_DATA,
-  INVITE_USER_ERROR
-} from '../../actions/Profile/InviteUserAction';
+  MEMBERS_BY_GROUP_IS_LOADING,
+  MEMBERS_BY_GROUP_DATA,
+  MEMBERS_BY_GROUP_ERROR
+} from '../../actions/Group/GetMembersByGroupAction';
 
 const initialState = {
   err: '',
@@ -12,11 +12,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case INVITE_USER_IS_LOADING: {
+    case MEMBERS_BY_GROUP_IS_LOADING: {
       return { ...state, isLoading: true };
     }
 
-    case INVITE_USER_DATA: {
+    case MEMBERS_BY_GROUP_DATA: {
       return {
         ...state,
         isLoading: false,
@@ -24,7 +24,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case INVITE_USER_ERROR: {
+    case MEMBERS_BY_GROUP_ERROR: {
       return { ...state, err: action.err };
     }
 

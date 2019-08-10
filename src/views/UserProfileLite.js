@@ -12,7 +12,7 @@ import {
   Button
 } from 'shards-react';
 import { connect } from 'react-redux';
-import { inviteUser } from '../actions';
+import { inviteUser, getMembersByGroup } from '../actions';
 
 import PageTitle from '../components/common/PageTitle';
 import UserDetails from '../components/user-profile-lite/UserDetails';
@@ -25,8 +25,10 @@ class UserProfileLite extends React.Component {
     this.state = {
       inviteModal: false,
       name: '',
+      photo: '',
       groupId: '',
-      inviteEmail: ''
+      inviteEmail: '',
+      members: []
     };
   }
 
@@ -45,9 +47,13 @@ class UserProfileLite extends React.Component {
   componentDidMount() {
     const account = JSON.parse(sessionStorage.getItem('account'));
     const group = JSON.parse(sessionStorage.getItem('group'));
+
+    this.props.getMembersByGroup(group._id);
+
     this.setState({
       name: account.name,
-      groupId: group._id
+      photo: account.photo,
+      groupId: group._id,
     });
   }
 
@@ -59,7 +65,9 @@ class UserProfileLite extends React.Component {
   };
 
   render() {
-    const { inviteModal, name } = this.state;
+    const { inviteModal, name, photo } = this.state;
+    const { groups } = this.props;
+    const userDetails = { name, photo };
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
@@ -72,8 +80,8 @@ class UserProfileLite extends React.Component {
         </Row>
         <Row>
           <Col lg="4">
-            <UserDetails name={name} inviteMember={() => this.inviteMember()} />
-            <UserTeams />
+            <UserDetails userDetails={userDetails} inviteMember={() => this.inviteMember()} />
+            <UserTeams teams={groups.members}/>
           </Col>
           <Col lg="8">
             <UserAccountDetails />
@@ -123,7 +131,14 @@ class UserProfileLite extends React.Component {
   }
 }
 
+//Connect redux
+function mapStateToProps(state) {
+  return {
+    groups: state.groups
+  };
+}
+
 export default connect(
-  null,
-  { inviteUser }
+  mapStateToProps,
+  { inviteUser, getMembersByGroup }
 )(UserProfileLite);

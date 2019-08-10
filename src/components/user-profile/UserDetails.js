@@ -12,10 +12,10 @@ const UserDetails = ({ userData }) => (
     <CardBody className="p-0">
       {/* User Avatar */}
       <div className="user-details__avatar mx-auto">
-        <img src={userData.avatarImg} alt={userData.name} />
+        <img src={userData.photo} alt={userData.name} />
       </div>
       {/* User Name */}
-      <h4 className="text-center m-0 mt-2">{userData.name}</h4>
+      <h4 className="text-center m-0 mt-2">{userData.name}dsd{userData}</h4>
       {/* User Bio */}
       <p className="text-center text-light m-0 mb-2">{userData.bio}</p>
       {/* User Social Icons */}

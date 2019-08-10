@@ -16,7 +16,7 @@ const UserDetails = function({ userDetails, inviteMember }) {
         <div className="mb-3 mx-auto">
           <img
             className="rounded-circle"
-            src={userDetails.avatar}
+            src={userDetails.photo}
             alt={userDetails.name}
             width="110"
           />
@@ -24,7 +24,7 @@ const UserDetails = function({ userDetails, inviteMember }) {
         <h4 className="mb-0">{userDetails.name}</h4>
         <span className="text-muted d-block mb-2">{userDetails.jobTitle}</span>
         <Button pill outline size="sm" className="mb-2" onClick={inviteMember}>
-          <i className="material-icons mr-1">person_add</i> Invite memmber
+          <i className="material-icons mr-1">person_add</i> Invite member
         </Button>
       </CardHeader>
       {/* <ListGroup flush>
