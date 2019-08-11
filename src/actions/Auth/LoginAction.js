@@ -24,14 +24,15 @@ export const loginUser = (username, password) => async dispatch => {
     }
 
     else {
-      return dispatch({ type: LOGIN_ERROR, message: "Login failed", err:true, busy:false});
+      return dispatch({ type: LOGIN_ERROR, message: "Register failed", err:true, busy:false});
     }
 
   } catch (err) {
     return dispatch({
       type: LOGIN_ERROR,
       err: err,
-      busy: false
+      busy: false,
+      message: "Login failed"
     });
   }
 };

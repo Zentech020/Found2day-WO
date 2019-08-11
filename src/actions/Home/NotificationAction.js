@@ -15,10 +15,8 @@ export const getHomeNotification = pars => async dispatch => {
       `https://api.airtable.com/v0/appBtsrpZag3oEavg/Notifications?maxRecords=3&view=Grid%20view`,
       config
     );
-    console.log(result);
     return dispatch({ type: HOME_DATA_NOTIFICATION, result });
   } catch (err) {
-    console.log(err, 'from notifications actions');
     return dispatch({
       type: HOME_DATA_NOTIFICATION_ERROR,
       payload: err

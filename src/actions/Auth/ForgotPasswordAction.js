@@ -7,13 +7,15 @@ export const FORGOT_PW_ERROR = 'forgot_pw_error';
 export const forgetPasswordUser = email => async dispatch => {
   try {
     dispatch({ type: FORGOT_PW_IS_LOADING });
-    const result = await axios.post(`${API_URL}/forgot-password`, {
+    const result = await axios.post(`http://127.0.0.1:5000/auth/forgot-password`, {
       email: email
     });
-    return dispatch({ type: FORGOT_PW_DATA, result });
+    return dispatch({ type: FORGOT_PW_DATA, result, err:false, message:'Reset email is on the way' });
   } catch (err) {
     return dispatch({
       type: FORGOT_PW_ERROR,
+      err:true,
+      message:'Something went wront , try again!',
       payload: err
     });
   }

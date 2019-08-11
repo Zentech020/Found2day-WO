@@ -17,6 +17,7 @@ if (sessionStorage.getItem('jwtToken')) {
 export const addVacancyAction = (
   title,
   description,
+  content,
   image,
   jobTitle,
   branch,
@@ -30,13 +31,13 @@ export const addVacancyAction = (
   groupId
 ) => async dispatch => {
   try {
-    dispatch({ type: ADD_VACANCIE_IS_LOADING });
+    dispatch({ type: ADD_VACANCIE_IS_LOADING  });
     const result = await axios.post(
-
       `http://127.0.0.1:5000/vacancies`,
       {
         title: title,
         description: description,
+        content:content,
         image: image,
         jobTitle: jobTitle,
         branch: branch,
@@ -52,11 +53,12 @@ export const addVacancyAction = (
       },
       config
     );
-    return dispatch({ type: ADD_VACANCIE_DATA, result });
+    console.log(result);
+    return dispatch({ type: ADD_VACANCIE_DATA, result, err:false, message: "Submitting vacancy succeed" });
   } catch (err) {
     return dispatch({
       type: ADD_VACANCIES_ERROR,
-      payload: err
+      message: "Submitting vacancy failed", err:true
     });
   }
 };

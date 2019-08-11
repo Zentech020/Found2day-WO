@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {  toast } from 'react-toastify';
 import {
-  Alert,
   Container,
   Row,
   Col,
@@ -9,28 +9,22 @@ import {
   Card,
   CardBody,
   CardFooter,
-  Nav,
-  NavItem,
-  NavLink,
   Form,
   FormInput,
   FormSelect,
-  FormCheckbox,
   FormTextarea,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Progress,
   Modal,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  Slider
 } from 'shards-react';
 import ReactQuill from 'react-quill';
 import { connect } from 'react-redux';
 import FormSectionTitle from '../components/edit-user-profile/FormSectionTitle';
 import GeneralInformation from '../components/add-vacancy/GeneralInformation';
 
-import { addVacancyAction, getSpecs } from '../actions';
+import { addVacancyAction, getSpecs, changeSpecs } from '../actions';
 import PageTitle from '../components/common/PageTitle';
 
 import colors from '../utils/colors';
@@ -43,6 +37,7 @@ class addVacancy extends React.Component {
       preview: false,
       title: '',
       description: '',
+      content:'',
       image: '',
       jobTitle: 'Select Option',
       branch: 'Select Option',
@@ -54,19 +49,30 @@ class addVacancy extends React.Component {
       postalCode: '',
       author: '',
       groupId: '',
+      showingError: true,
+      branchId:'',
     };
   }
 
   componentDidMount = async () => {
     const account = JSON.parse(sessionStorage.getItem('account'));
     const group = JSON.parse(sessionStorage.getItem('group'));
-    console.log(group);
     this.setState({
       author: account._id,
       groupId: group._id
     });
     await this.props.getSpecs();
   };
+
+  async componentDidUpdate(nextProps, history) {
+    if (!this.props.error && !this.state.showingError) {
+        toast.success("Succesfully added vacancy", {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      await this.setState({showingError: true})
+    }
+  }
+
 
   toggle = () => {
     this.setState({
@@ -78,10 +84,11 @@ class addVacancy extends React.Component {
     this.setState({ text: value });
   };
 
-  onSubmitVacancy = () => {
+  onSubmitVacancy = async () => {
     const {
       title,
       description,
+      content,
       image,
       jobTitle,
       branch,
@@ -94,10 +101,10 @@ class addVacancy extends React.Component {
       author,
       groupId
     } = this.state;
-    console.log(image);
     if (
       (title &&
         description &&
+        content &&
         image &&
         jobTitle &&
         branch &&
@@ -113,6 +120,7 @@ class addVacancy extends React.Component {
       this.props.addVacancyAction(
         title,
         description,
+        content,
         image,
         jobTitle,
         branch,
@@ -124,21 +132,40 @@ class addVacancy extends React.Component {
         postalCode,
         author,
         groupId
-      );
+      ).then((res)=>{
+        this.props.history.push(`/vacancies`);
+      });
+      await this.setState({showingError: false})
     } else {
-      console.log('not working');
+      toast.error('Please enter all fields', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
     }
+
   };
 
   onUploadImage = (e)  => {
       var reader = new FileReader();
       reader.onloadend = () => {
-        console.log('RESULT', reader.result)
         this.setState({
           image: reader.result
         })
       }
       reader.readAsDataURL(e.target.files[0]);
+    }
+
+    handleSlide = (e) => {
+      this.setState({
+        distance: parseInt(e[0])
+      });
+    }
+
+    onChangeBranch = (e) => {
+      var index = e.nativeEvent.target.selectedIndex;
+      const brachTitle = e.nativeEvent.target[index].text;
+      console.log(e.target.value)
+      this.props.changeSpecs(e.target.value);
+      this.setState({branch:brachTitle})
     }
 
   render() {
@@ -152,9 +179,17 @@ class addVacancy extends React.Component {
       weekHours
     } = this.props.specs;
 
+    const {distance, image} = this.state;
+
+    const BranchList = ({ array }) => {
+      if (array) {
+        return array.map(item => <option key={item.id} value={item.id}>{item.name}</option>);
+      }
+    };
+
     const SpecsList = ({ array }) => {
       if (array) {
-        return array.map(item => <option key={item.id}>{item.name}</option>);
+        return array.map(item => <option key={item.id} value={item.name}>{item.name}</option>);
       }
     };
 
@@ -198,14 +233,27 @@ class addVacancy extends React.Component {
                               />
                             </Col>
 
-                            {/* Description */}
+                          {/* Content */}
                             <Col md="12" className="form-group">
                               <label htmlFor="feDescription">Description</label>
                               {/* <FormTextarea id="feDescription" rows="5" /> */}
-                              <ReactQuill
+                              <FormTextarea
+                                id="firstName"
                                 value={this.state.description}
+                                onChange={e =>
+                                  this.setState({ description: e.target.value })
+                                }
+                              />
+                            </Col>
+
+                            {/* Content */}
+                            <Col md="12" className="form-group">
+                              <label htmlFor="feDescription">Content</label>
+                              {/* <FormTextarea id="feDescription" rows="5" /> */}
+                              <ReactQuill
+                                value={this.state.content}
                                 onChange={value =>
-                                  this.setState({ description: value })
+                                  this.setState({ content: value })
                                 }
                               />
                             </Col>
@@ -215,6 +263,8 @@ class addVacancy extends React.Component {
                                 <i className="material-icons mr-1">&#xE439;</i>
                                 Change Background Photo
                                 <input className="d-none" type="file" onChange={(e) => this.onUploadImage(e)}/>
+                                <br/>
+                                {image ? (<img src={image} height={100} width={100} />) : (null)}
                               </label>
                             </Col>
                           </Row>
@@ -235,11 +285,12 @@ class addVacancy extends React.Component {
                               </label>
                               <FormSelect
                                 onChange={e =>
-                                  this.setState({ branch: e.target.value })
+                                  this.onChangeBranch(e)
                                 }
+
                               >
                                 <option>{this.state.branch}</option>
-                                {branch ? <SpecsList array={branch} /> : null}
+                                {branch ? <BranchList array={branch} /> : null}
                               </FormSelect>
                             </Col>
 
@@ -322,11 +373,6 @@ class addVacancy extends React.Component {
                                 }}
                               />
                             </Col>
-
-                            <Col md="6" className="form-group">
-                              <label htmlFor="firstName">Afstand</label>
-                              <Progress value="20">20</Progress>
-                            </Col>
                           </Row>
                         </Col>
                       </Row>
@@ -339,7 +385,7 @@ class addVacancy extends React.Component {
                         size="sm"
                         theme="accent"
                         outline
-                        disbaled={this.state.title && this.state.image ? (false) : (true)}
+                        disabled={this.state.title && this.state.image ? (false) : (true)}
                         className="d-table mr-3"
                         onClick={() => this.setState({ preview: true })}
                       >
@@ -400,11 +446,14 @@ addVacancy.propTypes = {
 //Connect redux
 function mapStateToProps(state) {
   return {
-    specs: state.Specs.specs
+    specs: state.Specs.specs,
+    error: state.vacancies.err,
+    message:state.vacancies.message,
+    busy:state.vacancies.busy
   };
 }
 
 export default connect(
   mapStateToProps,
-  { addVacancyAction, getSpecs }
+  { addVacancyAction, getSpecs , changeSpecs}
 )(addVacancy);

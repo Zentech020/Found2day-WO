@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {
   Container,
   Row,
@@ -19,13 +20,26 @@ class forgotPassword extends React.Component {
     super(props);
     this.state = {
       email: '',
-      btnSend: true
+      btnSend: true,
+      showingError: true
     };
   }
-  onSubmit = () => {
+
+  async componentDidUpdate(nextProps) {
+    if (!this.props.error && !this.state.showingError) {
+        await toast.success('Reset email is on the way', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+
+      await this.setState({showingError: true})
+    }
+  }
+
+  onSubmit = async() => {
     const { email } = this.state;
     if (email) {
       this.props.forgetPasswordUser(email);
+      await this.setState({showingError: false})
     }
   };
   render() {
@@ -91,7 +105,16 @@ class forgotPassword extends React.Component {
   }
 }
 
+//Connect redux
+function mapStateToProps(state) {
+  return {
+    error: state.auth.err,
+    message:state.auth.message,
+    busy:state.auth.busy
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { forgetPasswordUser }
 )(forgotPassword);

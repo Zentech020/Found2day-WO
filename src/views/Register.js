@@ -14,6 +14,7 @@ import {
   FormCheckbox,
   Button
 } from 'shards-react';
+import {toast} from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../actions/index';
@@ -25,17 +26,40 @@ class Register extends React.Component {
       email: '',
       password: '',
       password2: '',
-      groupName: ''
+      groupName: '',
+      showingError: true
     };
   }
 
-  onRegister = () => {
+
+  async componentDidUpdate(nextProps) {
+    if (!this.props.error && !this.state.showingError) {
+      console.log('FUck');
+
+
+        toast.success('Successfully registered', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+
+      await this.setState({showingError: true})
+    }
+  }
+
+  onRegister = async() => {
     const { name, email, password, password2, groupName } = this.state;
     console.log(
       `${name} -- ${email} -- ${password} -- ${password2} -- ${groupName}`
     );
     if (name && email && password && password2 && groupName) {
       this.props.registerUser(name, email, password, password2, groupName);
+      await this.setState({showingError: false})
+      await this.props.history.push(`/login`)
+    }
+
+    else {
+      toast.error('Please enter all the fields', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
     }
   };
   render() {
@@ -132,32 +156,6 @@ class Register extends React.Component {
                   </Button>
                 </Form>
               </CardBody>
-
-              {/* Social Icons */}
-              {/* <CardFooter>
-                <ul className="auth-form__social-icons d-table mx-auto">
-                  <li>
-                    <a href="#">
-                      <i className="fab fa-facebook-f" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fab fa-twitter" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fab fa-github" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fab fa-google-plus-g" />
-                    </a>
-                  </li>
-                </ul>
-              </CardFooter> */}
             </Card>
 
             {/* Meta Details */}
@@ -174,7 +172,16 @@ class Register extends React.Component {
   }
 }
 
+//Connect redux
+function mapStateToProps(state) {
+  return {
+    error: state.auth.err,
+    message:state.auth.message,
+    busy:state.auth.busy
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { registerUser }
 )(Register);

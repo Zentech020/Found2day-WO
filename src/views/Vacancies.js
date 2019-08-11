@@ -38,7 +38,6 @@ class Vacancies extends React.Component {
 
   render() {
     const { vacancies_by_group, vacancies_by_account ,isLoading} = this.props;
-    console.log(vacancies_by_group);
     return (
       <Container fluid className="main-content-container px-4">
 

@@ -11,10 +11,11 @@ import {
   Col,
   FormSelect,
   ButtonGroup,
-  Button
+  Button,
+  FormCheckbox
 } from "shards-react";
 
-const LatestOrders = ({ title, latestOrdersData }) => (
+const LatestOrders = ({ title, latestOrdersData,isSwitched, switchPosition }) => (
   <Card small className="lo-stats h-100">
     <CardHeader className="border-bottom">
       <h6 className="m-0">{title}</h6>
@@ -28,9 +29,9 @@ const LatestOrders = ({ title, latestOrdersData }) => (
             <tr>
               <th>Details</th>
               <th />
-              <th className="text-center">Status</th>
+              {/* <th className="text-center">Status</th>
               <th className="text-center">Items</th>
-              <th className="text-center">Total</th>
+              <th className="text-center">Total</th> */}
               <th className="text-right">Actions</th>
             </tr>
           </thead>
@@ -45,10 +46,9 @@ const LatestOrders = ({ title, latestOrdersData }) => (
                   />
                 </td>
                 <td className="lo-stats__order-details">
-                  <span>{item.id}</span>
-                  <span>{item.date}</span>
+                  <span>{item.name}</span>
                 </td>
-                <td className="lo-stats__status">
+                {/* <td className="lo-stats__status">
                   <div className="d-table mx-auto">
                     <Badge pill theme={getBadgeType(item.status)}>
                       {item.status}
@@ -58,16 +58,15 @@ const LatestOrders = ({ title, latestOrdersData }) => (
                 <td className="lo-stats__items text-center">{item.items}</td>
                 <td className="lo-stats__total text-center text-success">
                   {item.total}
-                </td>
+                </td> */}
                 <td className="lo-stats__actions">
-                  <ButtonGroup className="d-table ml-auto">
-                    <Button size="sm" theme="white">
-                      Cancel
-                    </Button>
-                    <Button size="sm" theme="white">
-                      Edit
-                    </Button>
-                  </ButtonGroup>
+                <FormCheckbox
+              toggle
+              checked={item.status}
+              className="ml-auto my-auto"
+              id="conversationsEmailsToggle"
+              onChange={switchPosition}
+            />
                 </td>
               </tr>
             ))}
@@ -76,30 +75,6 @@ const LatestOrders = ({ title, latestOrdersData }) => (
       </Container>
     </CardBody>
 
-    <CardFooter className="border-top">
-      <Row>
-        {/* Time Span */}
-        <Col>
-          <FormSelect
-            size="sm"
-            value="last-week"
-            style={{ maxWidth: "130px" }}
-            onChange={() => {}}
-          >
-            <option value="last-week">Last Week</option>
-            <option value="today">Today</option>
-            <option value="last-month">Last Month</option>
-            <option value="last-year">Last Year</option>
-          </FormSelect>
-        </Col>
-
-        {/* View Full Report */}
-        <Col className="text-right view-report">
-          {/* eslint-disable-next-line */}
-          <a href="#">View full report &rarr;</a>
-        </Col>
-      </Row>
-    </CardFooter>
   </Card>
 );
 
@@ -121,6 +96,8 @@ LatestOrders.propTypes = {
    * The component's title.
    */
   title: PropTypes.string,
+  isSwitched:PropTypes.bool,
+  switchPosition:PropTypes.func,
 
   /**
    * The latest orders data.
@@ -129,40 +106,18 @@ LatestOrders.propTypes = {
 };
 
 LatestOrders.defaultProps = {
-  title: "Latest Orders",
+  title: "Members",
   latestOrdersData: [
     {
-      id: "#19280",
-      date: "21 February 2018 20:32",
+      name: "Zenno Bruinsma",
       image: require("../../images/sales-overview/product-sweaters.jpg"),
-      status: "Complete",
-      items: "7",
-      total: "$199"
+      status: true,
     },
     {
-      id: "#19279",
-      date: "21 February 2018 20:32",
-      image: require("../../images/sales-overview/product-order-1.jpg"),
-      status: "Pending",
-      items: "7",
-      total: "$612"
+      name: "Pelle Vlaar",
+      image: require("../../images/sales-overview/product-sweaters.jpg"),
+      status: false,
     },
-    {
-      id: "#19278",
-      date: "21 February 2018 20:32",
-      image: require("../../images/sales-overview/product-order-2.jpg"),
-      status: "Canceled",
-      items: "18",
-      total: "$1211"
-    },
-    {
-      id: "#19277",
-      date: "21 February 2018 20:32",
-      image: require("../../images/sales-overview/product-order-3.jpg"),
-      status: "Pending",
-      items: "7",
-      total: "$612"
-    }
   ]
 };
 

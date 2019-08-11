@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
+import {  toast } from 'react-toastify';
 import FuzzySearch from 'fuzzy-search';
 import dateFormat from 'dateformat';
 
@@ -26,15 +27,14 @@ import {
 } from 'shards-react';
 import { connect } from 'react-redux';
 
-import classNames from 'classnames';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import PageTitle from '../components/common/PageTitle';
 import SingleHeader from '../components/single-vacancy/singleHeader';
+import BlockAnimation from '../components/Animations/Block';
 import 'react-tabs/style/react-tabs.css';
-import getTransactionHistoryData from '../data/transaction-history-data';
 import getApplicantsData from '../data/applicants-list';
-import { getSingleVacancy, deleteSingleVacancy } from '../actions';
+import { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy } from '../actions';
 
 import colors from '../utils/colors';
 
@@ -49,7 +49,8 @@ class SingleVacancy extends React.Component {
       tableData: [],
       modal: false,
       modalInfo: null,
-      vacancySwitcher: true
+      vacancySwitcher: true,
+      showingError: true
     };
 
     this.searcher = null;
@@ -68,7 +69,18 @@ class SingleVacancy extends React.Component {
     const { id } = this.props.match.params;
     console.log(id);
     this.props.getSingleVacancy(id);
+    this.props.getApplicationsByVacancy(id);
   };
+
+  async componentDidUpdate(nextProps, history) {
+    if (!this.props.error && !this.state.showingError) {
+        toast.success("Succesfully deleted vacancy", {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+
+      await this.setState({showingError: true})
+    }
+  }
 
   componentWillMount() {
     const tableData = getApplicantsData();
@@ -165,8 +177,11 @@ class SingleVacancy extends React.Component {
     this.props.history.push(`/edit-vacancy/${id}`);
   };
 
-  onDeleteVacancy = id => {
-    this.props.deleteSingleVacancy(id);
+  onDeleteVacancy = async(id) => {
+    this.props.deleteSingleVacancy(id).then((res) => {
+      this.props.history.push('/vacancies')
+    });
+    await this.setState({showingError: false})
   };
 
   render() {
@@ -186,6 +201,7 @@ class SingleVacancy extends React.Component {
       postalcode
     } = this.props.single_vacancy;
     const { id } = this.props.match.params;
+    const {applications, isLoading} = this.props;
     const tableColumns = [
       {
         Header: '#',
@@ -199,7 +215,7 @@ class SingleVacancy extends React.Component {
         className: 'text-center',
         minWidth: 200,
         Cell: row =>
-          dateFormat(new Date(row.original.date), 'dddd, mmmm dS, yyyy')
+        dateFormat(new Date(row.original.createdAt), 'dddd, mmmm dS, yyyy')
       },
       {
         Header: 'Name',
@@ -208,7 +224,7 @@ class SingleVacancy extends React.Component {
       },
       {
         Header: 'Vacancy',
-        accessor: 'vacancy',
+        accessor: 'vacancyTitle',
         maxWidth: 200,
         className: 'text-center'
       },
@@ -220,7 +236,7 @@ class SingleVacancy extends React.Component {
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <a href={row.original.cv} download theme="white">
+            <a target="_blank" href={row.original.cvURL} theme="white">
               <i className="material-icons">&#xE870;</i>
             </a>
           </ButtonGroup>
@@ -254,11 +270,12 @@ class SingleVacancy extends React.Component {
       }
     ];
 
+
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="pt-4">
           <Col md={6}>
-            <SingleHeader backgroundImg={image} />
+            {isLoading ? ( <BlockAnimation height={300} width={600}/>) : (<SingleHeader backgroundImg={image} />) }
           </Col>
         </Row>
 
@@ -310,10 +327,10 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">pie_chart</i>{' '}
                           </span>
                           <h6 className="file-manager__item-title">
-                            {jobTitle}
+                            {branch}
                           </h6>
                         </CardFooter>
                       </Card>
@@ -325,9 +342,9 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">pie_chart</i>{' '}
                           </span>
-                          <h6 className="file-manager__item-title">{branch}</h6>
+                          <h6 className="file-manager__item-title">{jobTitle}</h6>
                         </CardFooter>
                       </Card>
                     </Col>
@@ -338,7 +355,7 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">school</i>{' '}
                           </span>
                           <h6 className="file-manager__item-title">
                             {education}
@@ -353,7 +370,7 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">format_list_bulleted</i>{' '}
                           </span>
                           <h6 className="file-manager__item-title">
                             {experience}
@@ -368,7 +385,7 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">description</i>{' '}
                           </span>
                           <h6 className="file-manager__item-title">
                             {employmentType}
@@ -383,7 +400,7 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">calendar_today</i>{' '}
                           </span>
                           <h6 className="file-manager__item-title">
                             {weekHours}
@@ -391,7 +408,7 @@ class SingleVacancy extends React.Component {
                         </CardFooter>
                       </Card>
                     </Col>
-                    <Col lg="3" key={7}>
+                    {/* <Col lg="3" key={7}>
                       <Card
                         small
                         className="file-manager__item file-manager__item--directory mb-3"
@@ -405,7 +422,7 @@ class SingleVacancy extends React.Component {
                           </h6>
                         </CardFooter>
                       </Card>
-                    </Col>
+                    </Col> */}
                     <Col lg="3" key={8}>
                       <Card
                         small
@@ -413,7 +430,7 @@ class SingleVacancy extends React.Component {
                       >
                         <CardFooter>
                           <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
+                            <i className="material-icons">place</i>{' '}
                           </span>
                           <h6 className="file-manager__item-title">
                             {postalcode}
@@ -472,7 +489,7 @@ class SingleVacancy extends React.Component {
                     <div className="">
                       <ReactTable
                         columns={tableColumns}
-                        data={tableData}
+                        data={applications}
                         pageSize={pageSize}
                         showPageSizeOptions={false}
                         resizable={false}
@@ -626,11 +643,16 @@ SingleVacancy.defaultProps = {
 //Connect redux
 function mapStateToProps(state) {
   return {
-    single_vacancy: state.vacancies.single_vacancy
+    single_vacancy: state.vacancies.single_vacancy,
+    error: state.vacancies.err,
+    message:state.vacancies.message,
+    busy:state.vacancies.busy,
+    applications: state.applicants.applications,
+    isLoading: state.vacancies.isLoading,
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getSingleVacancy, deleteSingleVacancy }
+  { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy }
 )(SingleVacancy);

@@ -23,7 +23,7 @@ const UserTeams = ({ title, teams }) => (
             </Col>
             <Col className="user-teams__info pl-3">
               <h6 className="m-0">{team.name}</h6>
-              <span className="text-light">{team.members}</span>
+              {/* <span className="text-light">{team.members}</span> */}
             </Col>
           </Row>
         ))}

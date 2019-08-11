@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {  toast } from 'react-toastify';
 import {
   Container,
   Row,
@@ -21,7 +22,7 @@ import { connect } from 'react-redux';
 import ReactQuill from 'react-quill';
 import FormSectionTitle from '../components/edit-user-profile/FormSectionTitle';
 import GeneralInformation from '../components/add-vacancy/GeneralInformation';
-import { getSingleVacancy, updateVacancy, getSpecs } from '../actions';
+import { getSingleVacancy, updateVacancy, getSpecs, changeSpecs } from '../actions';
 
 import PageTitle from '../components/common/PageTitle';
 
@@ -35,6 +36,7 @@ class editVacancy extends React.Component {
       preview: false,
       newTitle: '',
       newDescription: '',
+      newContent:'',
       newJobTitle: '',
       newBranch: '',
       newEducation: '',
@@ -42,21 +44,22 @@ class editVacancy extends React.Component {
       newExperience: '',
       newWeekHours: '',
       newDistance: '',
-      newPostalCode: ''
+      newPostalCode: '',
+      newImage:'',
+      showingError: true
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async() => {
     const { id } = this.props.match.params;
     const { getSpecs, getSingleVacancy } = this.props;
+    await getSingleVacancy(id);
     getSpecs();
-    getSingleVacancy(id);
-  }
 
-  componentWillReceiveProps(nextProps) {
     const {
       title,
       description,
+      content,
       jobTitle,
       branch,
       experience,
@@ -64,13 +67,15 @@ class editVacancy extends React.Component {
       weekHours,
       distance,
       postalcode,
-      employmentType
-    } = nextProps.single_vacancy;
-    console.log(title);
-    if (nextProps.single_vacancy) {
+      employmentType,
+      image
+    } = this.props.single_vacancy;
+
+    if (this.props.single_vacancy) {
       this.setState({
         newTitle: title,
         newDescription: description,
+        newContent:content,
         newJobTitle: jobTitle,
         newBranch: branch,
         newEducation: education,
@@ -78,15 +83,27 @@ class editVacancy extends React.Component {
         newExperience: experience,
         newWeekHours: weekHours,
         newDistance: distance,
-        newPostalCode: postalcode
+        newPostalCode: postalcode,
+        newImage:image
       });
     }
   }
 
-  onUpdateVacancy = id => {
+  async componentDidUpdate(nextProps, history) {
+    if (!this.props.error && !this.state.showingError) {
+        toast.success("Succesfully updated vacancy", {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({showingError: true})
+    }
+  }
+
+  onUpdateVacancy = async (id) => {
     const {
       newTitle,
       newDescription,
+      newContent,
+      newImage,
       newJobTitle,
       newBranch,
       newEducation,
@@ -99,6 +116,8 @@ class editVacancy extends React.Component {
     if (
       newTitle ||
       newDescription ||
+      newContent ||
+      newImage ||
       newJobTitle ||
       newBranch ||
       newEducation ||
@@ -112,6 +131,8 @@ class editVacancy extends React.Component {
         id,
         newTitle,
         newDescription,
+        newContent,
+        newImage,
         newJobTitle,
         newBranch,
         newEducation,
@@ -120,8 +141,13 @@ class editVacancy extends React.Component {
         newWeekHours,
         newDistance,
         newPostalCode
-      );
+      ).then((res)=>{
+        this.props.history.push(`/vacancy/${id}`);
+      });
+      await this.setState({showingError: false})
+
     }
+
   };
 
   toggle = () => {
@@ -134,28 +160,51 @@ class editVacancy extends React.Component {
     this.setState({ text: value });
   };
 
+  onUploadImage = (e)  => {
+    var reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState({
+        newImage: reader.result
+      })
+    }
+    reader.readAsDataURL(e.target.files[0]);
+  }
+
+  onChangeBranch = (e) => {
+    this.setState({newBranch: e.target.value})
+    var index = e.nativeEvent.target.selectedIndex;
+    this.props.changeSpecs(e.target[e.target.selectedIndex].getAttribute('data-id'));
+  }
+
   render() {
     const { id } = this.props.match.params;
-    const { title, description, jobTitle } = this.props.single_vacancy;
 
     const {
       newTitle,
       newDescription,
+      newContent,
       newJobTitle,
       newBranch,
       newEducation,
       newExperience,
       newEmploymentType,
-      newDistance,
       newWeekHours,
-      newPostalCode
+      newPostalCode,
+      newImage
     } = this.state;
+
+    const BranchList = ({ array }) => {
+      if (array) {
+        return array.map(item => <option key={item.id} data-id={item.id} value={item.name}>{item.name}</option>);
+      }
+    };
 
     const SpecsList = ({ array }) => {
       if (array) {
-        return array.map(item => <option key={item.id}>{item.name}</option>);
+        return array.map(item => <option key={item.id} value={item.name}>{item.name}</option>);
       }
     };
+
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
@@ -196,13 +245,24 @@ class editVacancy extends React.Component {
                               />
                             </Col>
 
-                            {/* Description */}
                             <Col md="12" className="form-group">
                               <label htmlFor="feDescription">Description</label>
-                              <ReactQuill
+                              <FormTextarea
+                                id="firstName"
                                 value={newDescription}
+                                onChange={e =>
+                                  this.setState({ newDescription: e.target.value })
+                                }
+                              />
+                            </Col>
+
+                            {/* Description */}
+                            <Col md="12" className="form-group">
+                              <label htmlFor="feDescription">Content</label>
+                              <ReactQuill
+                                value={newContent}
                                 onChange={value =>
-                                  this.setState({ newDescription: value })
+                                  this.setState({ newContent: value })
                                 }
                               />
                             </Col>
@@ -210,8 +270,10 @@ class editVacancy extends React.Component {
                               <label className="edit-user-details__change-background">
                                 <i className="material-icons mr-1">&#xE439;</i>
                                 Change Background Photo
-                                <FormInput className="d-none" type="file" />
+                                <FormInput className="d-none" type="file" onChange={(e) => this.onUploadImage(e)}/>
                               </label>
+                              <br/>
+                              <img src={newImage} height={100} width={100}/>
                             </Col>
                           </Row>
                         </Col>
@@ -230,15 +292,13 @@ class editVacancy extends React.Component {
                                 Alle vakgebieden
                               </label>
                               <FormSelect
-                                onChange={e =>
-                                  this.setState({
-                                    newJobTitle: e.target.value
-                                  })
-                                }
+                              onChange={(e) => this.onChangeBranch(e)}
+
+
                               >
-                                <option selected>{newJobTitle}</option>
+                                <option>{newBranch}</option>
                                 {this.props.specs.branch ? (
-                                  <SpecsList array={this.props.specs.branch} />
+                                  <BranchList array={this.props.specs.branch} />
                                 ) : null}
                               </FormSelect>
                             </Col>
@@ -248,11 +308,11 @@ class editVacancy extends React.Component {
                               <FormSelect
                                 onChange={e =>
                                   this.setState({
-                                    newBranch: e.target.value
+                                    newJobTitle: e.target.value
                                   })
                                 }
                               >
-                                <option selected>{newBranch}</option>
+                                <option value={newJobTitle} >{newJobTitle}</option>
                                 {this.props.specs.jobTitle ? (
                                   <SpecsList
                                     array={this.props.specs.jobTitle}
@@ -269,7 +329,7 @@ class editVacancy extends React.Component {
                                   })
                                 }
                               >
-                                <option selected>{newEducation}</option>
+                                <option value={newEducation}>{newEducation}</option>
                                 {this.props.specs.education ? (
                                   <SpecsList
                                     array={this.props.specs.education}
@@ -286,7 +346,7 @@ class editVacancy extends React.Component {
                                   })
                                 }
                               >
-                                <option selected>{newExperience}</option>
+                                <option value={newExperience}>{newExperience}</option>
                                 {this.props.specs.experience ? (
                                   <SpecsList
                                     array={this.props.specs.experience}
@@ -305,7 +365,7 @@ class editVacancy extends React.Component {
                                   })
                                 }
                               >
-                                <option selected>{newEmploymentType}</option>
+                                <option value={newEmploymentType}>{newEmploymentType}</option>
                                 {this.props.specs.employmentType ? (
                                   <SpecsList
                                     array={this.props.specs.employmentType}
@@ -322,7 +382,7 @@ class editVacancy extends React.Component {
                                   })
                                 }
                               >
-                                <option selected>{newWeekHours}</option>
+                                <option value={newWeekHours}>{newWeekHours}</option>
                                 {this.props.specs.weekHours ? (
                                   <SpecsList
                                     array={this.props.specs.weekHours}
@@ -341,11 +401,6 @@ class editVacancy extends React.Component {
                                   });
                                 }}
                               />
-                            </Col>
-
-                            <Col md="6" className="form-group">
-                              <label htmlFor="firstName">Afstand</label>
-                              <Progress value="20">20</Progress>
                             </Col>
                           </Row>
                         </Col>
@@ -369,7 +424,7 @@ class editVacancy extends React.Component {
             </Row>
           </Container>
         </div>
-        {this.state.preview ? (
+        {/* {this.state.preview ? (
           <Modal
             open={this.state.preview}
             toggle={() => this.toggle()}
@@ -394,7 +449,7 @@ class editVacancy extends React.Component {
               <hr />
             </ModalBody>
           </Modal>
-        ) : null}
+        ) : null} */}
       </Container>
     );
   }
@@ -411,11 +466,15 @@ editVacancy.propTypes = {
 function mapStateToProps(state) {
   return {
     single_vacancy: state.vacancies.single_vacancy,
-    specs: state.Specs.specs
+    specs: state.Specs.specs,
+    error: state.vacancies.err,
+    message:state.vacancies.message,
+    busy:state.vacancies.busy
   };
 }
 
+
 export default connect(
   mapStateToProps,
-  { getSingleVacancy, updateVacancy, getSpecs }
+  { getSingleVacancy, updateVacancy, getSpecs, changeSpecs }
 )(editVacancy);

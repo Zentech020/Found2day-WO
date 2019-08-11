@@ -11,7 +11,6 @@ export const getVacanciesByAccount = accountId => async dispatch => {
     const result = await axios.get(
       `http://127.0.0.1:5000/vacancies/accounts/${accountId}`
     );
-    console.log(result);
     return dispatch({ type: VACANCIES_BY_ACCOUNT_DATA, result });
   } catch (err) {
     return dispatch({
