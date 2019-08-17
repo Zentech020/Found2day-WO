@@ -37,7 +37,6 @@ export default (state = initialState, action) => {
     }
 
     case HOME_DATA_NOTIFICATION_ERROR: {
-      const { data } = action.res;
       return { ...state, err:true };
     }
 
@@ -51,7 +50,6 @@ export default (state = initialState, action) => {
     }
 
     case APPLICATIONS_COUNT_ERROR: {
-      const { data } = action.res;
       return { ...state, err:true ,isLoading:false};
     }
 
@@ -65,7 +63,6 @@ export default (state = initialState, action) => {
     }
 
     case VACANCIES_COUNT_ERROR: {
-      const { data } = action.res;
       return { ...state, err:true ,isLoading:false};
     }
 
