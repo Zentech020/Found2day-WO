@@ -1,14 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Navbar, NavbarBrand } from 'shards-react';
+import {connect} from 'react-redux';
 
 import { Dispatcher, Constants } from '../../../flux';
 
 class SidebarMainNavbar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      groupIcon:'',
+    }
 
     this.handleToggleSidebar = this.handleToggleSidebar.bind(this);
+  }
+  componentDidMount = () => {
+    const group = JSON.parse(sessionStorage.getItem('group'));
+    if(group) {
+      this.setState({
+        groupIcon: group.icon
+      })
+    }
   }
 
   handleToggleSidebar() {
@@ -19,6 +31,7 @@ class SidebarMainNavbar extends React.Component {
 
   render() {
     const { hideLogoText } = this.props;
+    const {groupIcon} = this.state;
     return (
       <div className="main-navbar">
         <Navbar
@@ -30,12 +43,12 @@ class SidebarMainNavbar extends React.Component {
             href="#"
             style={{ lineHeight: '25px' }}
           >
-            <div className="d-table m-auto">
+            <div className="d-flex justify-content-center align-items-center m-auto">
               <img
                 id="main-logo"
                 className="d-inline-block align-top mr-1"
-                style={{ maxWidth: '25px' }}
-                src={require('../../../images/shards-dashboards-logo.svg')}
+                style={{ maxWidth: '50px' }}
+                src={groupIcon}
                 alt="Shards Dashboard"
               />
               {!hideLogoText && (

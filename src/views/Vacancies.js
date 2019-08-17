@@ -15,7 +15,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from 'react-redux';
 import { getVacanciesByGroup, getVacanciesByAccount } from '../actions/index';
 
-import { NavLink, Link, Redirect } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 import CardSkeleton from '../components/Animations/CardSkeleton';
 import PageTitle from '../components/common/PageTitle';
 import EmptyVacanciesImg from '../images/EmptyVacanciesImg.png';
@@ -27,6 +27,7 @@ class Vacancies extends React.Component {
     super(props);
     this.state = {
       vacancies_by_group:[],
+      vacancies_by_account:[],
       vacancies_loaded:false,
     }
   }
@@ -35,9 +36,10 @@ class Vacancies extends React.Component {
     const account = JSON.parse(sessionStorage.getItem('account'));
     const group = JSON.parse(sessionStorage.getItem('group'));
     await this.props.getVacanciesByGroup(group._id);
-    this.props.getVacanciesByAccount(account._id);
+    await this.props.getVacanciesByAccount(account._id);
     this.setState({
       vacancies_by_group:this.props.vacancies_by_group,
+      vacancies_by_account:this.props.vacancies_by_account,
       vacancies_loaded:true,
     })
 
@@ -49,11 +51,11 @@ class Vacancies extends React.Component {
   render() {
     const { vacancies_by_group, vacancies_by_account ,isLoading} = this.props;
     const {vacancies_loaded} = this.state
-    const GroupVacancies = () => {
-      if(this.state.vacancies_by_group.length && vacancies_loaded) {
+    const GroupVacancies = ({vacancy_type}) => {
+      if(vacancy_type.length && vacancies_loaded) {
         return (
           <Row>
-            {vacancies_by_group.map((vacancy, i) => (
+            {vacancy_type.map((vacancy, i) => (
               <Col lg="4" md="6" sm="12" className="mb-4" key={i}>
                 <Card
                   small
@@ -135,41 +137,10 @@ class Vacancies extends React.Component {
           </TabList>
 
           <TabPanel>
-           {isLoading ? (<CardSkeleton/>) : (<GroupVacancies/>)}
+           {isLoading ? (<CardSkeleton/>) : (<GroupVacancies vacancy_type={this.state.vacancies_by_group}/>)}
           </TabPanel>
           <TabPanel>
-            <Row>
-              {vacancies_by_account.map((vacancy, i) => (
-                <Col lg="4" md="6" sm="12" className="mb-4" key={i}>
-                  <Card
-                    small
-                    className="card-post card-post--1"
-                    onClick={() => this.linkTo(vacancy._id)}
-                  >
-                    <div
-                      className="card-post__image"
-                      style={{
-                        backgroundImage: `url(${vacancy.image})`
-                      }}
-                    />
-                    <CardBody>
-                      <h5 className="card-title">
-                        <a href="#" className="text-fiord-blue">
-                          {vacancy.title}
-                        </a>
-                      </h5>
-                      {/* <p className="card-text d-inline-block mb-3"> */}
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: vacancy.description
-                        }}
-                      />
-                      <span className="text-muted">28 February 2019</span>
-                    </CardBody>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            {isLoading ? (<CardSkeleton/>) : (<GroupVacancies vacancy_type={this.state.vacancies_by_account}/>)}
           </TabPanel>
         </Tabs>
       </Container>

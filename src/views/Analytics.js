@@ -16,7 +16,7 @@ import addVacancyImg from '../images/AddVacancy.jpg';
 import updateProfileImg from '../images/UpdateProfile.jpg';
 import leaveFeedbackImg from '../images/LeaveFeedback.jpg';
 
-import { getHomeNotification , getApplicationCount, getVacancyCount} from '../actions';
+import { getHomeNotification , getApplicationCount, getVacancyCount, getApplicantsTime} from '../actions';
 
 import PageTitle from '../components/common/PageTitle';
 import SmallStats from '../components/common/SmallStats';
@@ -36,6 +36,7 @@ class Analytics extends React.Component {
       this.props.getHomeNotification();
       this.props.getApplicationCount(group._id);
       this.props.getVacancyCount(group._id);
+      this.props.getApplicantsTime(group._id, '2019-09-01', '2019-10-01');
     }
   }
   render() {
@@ -260,11 +261,12 @@ function mapStateToProps(state) {
   return {
     homeNotification: state.home.notification,
     applicationCount:state.home.application_count,
-    vacancyCount:state.home.vacancy_count
+    vacancyCount:state.home.vacancy_count,
+    applicantsTime: state.stats.applicantsTime
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getHomeNotification,getApplicationCount, getVacancyCount }
+  { getHomeNotification,getApplicationCount, getVacancyCount, getApplicantsTime }
 )(Analytics);

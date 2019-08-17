@@ -20,7 +20,7 @@ const MainNavbar = ({ layout, stickyTop }) => {
   return (
     <div className={classes}>
       <Container fluid={!isHeaderNav || null} className="p-0">
-        <Navbar type="light" className="align-items-stretch flex-md-nowrap p-0">
+        <Navbar type="light" className="align-items-stretch justify-content-end flex-md-nowrap p-0">
           {isHeaderNav && (
             <NavbarBrand href="#" style={{ lineHeight: "25px" }}>
               <div className="d-table m-auto">
@@ -37,7 +37,7 @@ const MainNavbar = ({ layout, stickyTop }) => {
               </div>
             </NavbarBrand>
           )}
-          <NavbarSearch />
+          {/* <NavbarSearch /> */}
           <NavbarNav />
           <NavbarToggle />
         </Navbar>

@@ -7,6 +7,7 @@ import vacancies from './Vacancies/vacancies';
 import auth from './Auth/auth';
 import profile from './Profile/profile';
 import group from './Group/group';
+import stats from './Stats/stats';
 
 export default combineReducers({
   auth,
@@ -16,5 +17,6 @@ export default combineReducers({
   profile,
   Payment,
   Specs,
-  group
+  group,
+  stats
 });
