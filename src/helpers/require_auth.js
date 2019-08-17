@@ -5,13 +5,13 @@ const token = sessionStorage.getItem('jwtToken');
 
 export default function(ComposedComponent) {
   class Authentication extends Component {
-    componentWillMount() {
+    componentDidMount() {
       if (!this.props.authenticated) {
         this.props.history.push('/login');
       }
     }
 
-    componentWillUpdate(nextProps) {
+    componentDidUpdate(nextProps) {
       if (!this.props.authenticated) {
         this.props.history.push('/login');
       }

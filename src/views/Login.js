@@ -50,9 +50,13 @@ class Login extends React.Component {
   onLogin = async () => {
     const { username, password } = this.state;
     if (username && password) {
-      this.props.loginUser(username, password);
-      await this.setState({showingError: false})
-      console.log(`${username} + ${password}`);
+      this.props.loginUser(username, password).then((res)=> {
+        this.setState({showingError: false})
+        window.location.reload();
+      });
+
+
+      // await this.props.history.push(`/analytics`);
     }
 
     else {

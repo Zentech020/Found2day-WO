@@ -1,21 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  Badge,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Container,
-  Row,
-  Col,
-  FormSelect,
-  ButtonGroup,
-  Button,
   FormCheckbox
 } from "shards-react";
+import {isAdmin} from '../../helpers/isAdmin';
 
-const LatestOrders = ({ title, latestOrdersData,isSwitched, switchPosition }) => (
+const LatestOrders = ({ title, users,isSwitched, switchPosition}) => (
   <Card small className="lo-stats h-100">
     <CardHeader className="border-bottom">
       <h6 className="m-0">{title}</h6>
@@ -36,40 +30,33 @@ const LatestOrders = ({ title, latestOrdersData,isSwitched, switchPosition }) =>
             </tr>
           </thead>
           <tbody>
-            {latestOrdersData.map((item, idx) => (
-              <tr key={idx}>
+            {users.map((user) => {
+              return (
+                <tr key={user._id}>
                 <td className="lo-stats__image">
                   <img
-                    alt={item.title}
+                    alt={user.name}
                     className="border rounded"
-                    src={item.image}
+                    src={user.photo}
                   />
                 </td>
                 <td className="lo-stats__order-details">
-                  <span>{item.name}</span>
+                  <span>{user.name}</span>
                 </td>
-                {/* <td className="lo-stats__status">
-                  <div className="d-table mx-auto">
-                    <Badge pill theme={getBadgeType(item.status)}>
-                      {item.status}
-                    </Badge>
-                  </div>
-                </td>
-                <td className="lo-stats__items text-center">{item.items}</td>
-                <td className="lo-stats__total text-center text-success">
-                  {item.total}
-                </td> */}
                 <td className="lo-stats__actions">
-                <FormCheckbox
-              toggle
-              checked={item.status}
-              className="ml-auto my-auto"
-              id="conversationsEmailsToggle"
-              onChange={switchPosition}
-            />
+                  <FormCheckbox
+                    toggle
+                    checked={user.isAdmin}
+                    value={user._id}
+                    className="ml-auto my-auto"
+                    id={user._id}
+                    data-checked={user.isAdmin}
+                    onChange={(e) => switchPosition(e, user._id, user.isAdmin)}
+                  />
                 </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </Container>
@@ -81,15 +68,6 @@ const LatestOrders = ({ title, latestOrdersData,isSwitched, switchPosition }) =>
 /**
  * Returns the badge type for a specific
  */
-function getBadgeType(itemStatus) {
-  const statusMap = {
-    Complete: "success",
-    Pending: "warning",
-    Canceled: "danger"
-  };
-
-  return statusMap[itemStatus];
-}
 
 LatestOrders.propTypes = {
   /**
@@ -98,25 +76,24 @@ LatestOrders.propTypes = {
   title: PropTypes.string,
   isSwitched:PropTypes.bool,
   switchPosition:PropTypes.func,
+  isAdmin:PropTypes.func,
 
   /**
    * The latest orders data.
    */
-  latestOrdersData: PropTypes.array
+  users: PropTypes.array
 };
 
 LatestOrders.defaultProps = {
   title: "Members",
-  latestOrdersData: [
+  user: [
     {
       name: "Zenno Bruinsma",
-      image: require("../../images/sales-overview/product-sweaters.jpg"),
-      status: true,
+      photo: require("../../images/sales-overview/product-sweaters.jpg"),
     },
     {
       name: "Pelle Vlaar",
-      image: require("../../images/sales-overview/product-sweaters.jpg"),
-      status: false,
+      photo: require("../../images/sales-overview/product-sweaters.jpg"),
     },
   ]
 };

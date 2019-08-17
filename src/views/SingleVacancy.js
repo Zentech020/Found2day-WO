@@ -74,11 +74,20 @@ class SingleVacancy extends React.Component {
 
   async componentDidUpdate(nextProps, history) {
     if (!this.props.error && !this.state.showingError) {
-        toast.success("Succesfully deleted vacancy", {
+      if(this.props.message) {
+        toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
-
-      await this.setState({showingError: true})
+        await this.setState({showingError: true})
+    }
+    }
+    if(this.props.error && !this.state.showingError) {
+      if(this.props.message) {
+        toast.error(this.props.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({showingError: true})
+      }
     }
   }
 

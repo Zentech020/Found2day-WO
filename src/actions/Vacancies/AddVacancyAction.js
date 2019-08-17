@@ -1,18 +1,9 @@
 import axios from 'axios';
-
+import {bearer} from '../../helpers/Bearer';
+const header = bearer();
 export const ADD_VACANCIE_IS_LOADING = 'add_vacancie_is_loading';
 export const ADD_VACANCIE_DATA = 'add_vacancie_data';
-export const ADD_VACANCIES_ERROR = 'add_vacancie_data';
-
-if (sessionStorage.getItem('jwtToken')) {
-  var config = {
-    headers: {
-      Authorization: 'Bearer ' + sessionStorage.getItem('jwtToken'),
-     }
-  };
-} else {
-  var config = '';
-}
+export const ADD_VACANCIES_ERROR = 'add_vacancie_error';
 
 export const addVacancyAction = (
   title,
@@ -51,14 +42,13 @@ export const addVacancyAction = (
         groupId: groupId,
         author: author
       },
-      config
+      header
     );
-    console.log(result);
-    return dispatch({ type: ADD_VACANCIE_DATA, result, err:false, message: "Submitting vacancy succeed" });
+    return dispatch({ type: ADD_VACANCIE_DATA, result, message: "Submitting vacancy succeed" });
   } catch (err) {
     return dispatch({
       type: ADD_VACANCIES_ERROR,
-      message: "Submitting vacancy failed", err:true
+      message: "Submitting vacancy failed",
     });
   }
 };
