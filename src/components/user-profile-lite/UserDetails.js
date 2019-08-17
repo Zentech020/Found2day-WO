@@ -5,23 +5,21 @@ import {
   CardHeader,
   Button,
 } from 'shards-react';
+import Circle from '../Animations/Circle';
 
-const UserDetails = function({ account, inviteMember, management, uploadPhoto,uploadIcon, isAdmin }) {
+const UserDetails = function({ account, inviteMember, management, uploadPhoto,uploadIcon, isAdmin, isLoading }) {
   return (
     <Card small className="mb-4 pt-3">
       <CardHeader className="border-bottom text-center">
         <div className="mb-1 mx-auto d-flex flex-column align-items-center">
-          <img
-            className="rounded-circle"
-            src={isAdmin ? account.icon : account.photo}
-            alt={account.name}
-            width="110"
-          >
-          </img>
+          {isLoading ? (
+            <Circle/>
+          ) : (
+            <div style={{borderRadius:'50%',height:'125px',width:'125px',backgroundSize:'cover',backgroundImage:`url(${isAdmin ? account.icon : account.photo})`}} />
+          )}
           <label>Change avatar
-          <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
+            <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
           </label>
-
         </div>
         <h4 className="mb-0">{isAdmin ? account.title : account.name}</h4>
         <span className="text-muted d-block mb-2">{account.jobTitle}</span>
@@ -36,23 +34,20 @@ const UserDetails = function({ account, inviteMember, management, uploadPhoto,up
           </Fragment>
         )
         : (null) }
-
       </CardHeader>
     </Card>
   );
 };
 
 UserDetails.propTypes = {
-  /**
-   * The user details object.
-   */
   account: PropTypes.object,
   inviteMember: PropTypes.func,
   management: PropTypes.func,
   uploadPhoto: PropTypes.func,
   uploadIcon: PropTypes.func,
   avatar:PropTypes.String,
-  isAdmin:PropTypes.bool
+  isAdmin:PropTypes.bool,
+  isLoading:PropTypes.bool
 };
 
 UserDetails.defaultProps = {

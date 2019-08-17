@@ -7,12 +7,6 @@ const UserTeams = ({ title, teams }) => (
     <CardHeader className="border-bottom">
       <h6 className="m-0">{title}</h6>
       <div className="block-handle" />
-      <Button
-        onClick={() => openAdminPanel()}
-        className="ml-2 mt-2"
-      >
-        Manage admins
-      </Button>
     </CardHeader>
     <CardBody className="p-0">
       <Container fluid>
@@ -32,11 +26,6 @@ const UserTeams = ({ title, teams }) => (
   </Card>
 );
 
-const openAdminPanel = () => {
-  this.setState({
-    adminModal: true
-  });
-}
 
 UserTeams.propTypes = {
   /**

@@ -16,6 +16,12 @@ import {
   GET_MEMBERS_ERROR
 } from '../../actions/Group/GetMembersAction';
 
+import {
+  UPDATE_ADMIN_IS_LOADING,
+  UPDATE_ADMIN_DATA,
+  UPDATE_ADMIN_ERROR
+} from '../../actions/Group/UpdateAdminsAction';
+
 
 const initialState = {
   isLoading: true,
@@ -64,6 +70,18 @@ export default (state = initialState, action) => {
 
   case GET_MEMBERS_ERROR: {
     return {...state , err:true, isLoading:false}
+  }
+
+  case UPDATE_ADMIN_IS_LOADING: {
+    return {...state , err:false, isLoading:true}
+  }
+
+  case UPDATE_ADMIN_DATA: {
+    return {...state , err:false, isLoading:false, message: "Sucessfully updated ADMIN"}
+  }
+
+  case UPDATE_ADMIN_ERROR: {
+    return {...state , err:true, isLoading:false, message: "Failed updated ADMIN"}
   }
 
   default:

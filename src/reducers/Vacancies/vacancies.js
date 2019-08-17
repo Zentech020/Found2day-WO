@@ -4,11 +4,11 @@ import {
   ADD_VACANCIES_ERROR
 } from '../../actions/Vacancies/AddVacancyAction';
 
-import {
-  VACANCIES_IS_LOADING,
-  VACANCIES_DATA,
-  VACANCIES_ERROR
-} from '../../actions/Vacancies/getVacanciesAction';
+// import {
+//   VACANCIES_IS_LOADING,
+//   VACANCIES_DATA,
+//   VACANCIES_ERROR
+// } from '../../actions/Vacancies/getVacanciesAction';
 
 import {
   DELETE_VACANCY_IS_LOADING,
@@ -63,7 +63,7 @@ export default (state = initialState, action) => {
     }
 
     case ADD_VACANCIES_ERROR: {
-      return { ...state, err: action.err, message:action.message };
+      return { ...state, err: true, message:action.message };
     }
 
     case VACANCIES_BY_GROUP_IS_LOADING: {
@@ -79,9 +79,6 @@ export default (state = initialState, action) => {
       return { ...state, error: action.err };
     }
 
-    case VACANCIES_IS_LOADING: {
-      return { ...state, isLoading: true };
-    }
 
     case VACANCIES_BY_ACCOUNT_DATA: {
       const { data } = action.result;
@@ -97,11 +94,13 @@ export default (state = initialState, action) => {
     }
 
     case DELETE_VACANCY_DATA: {
-      return { ...state, ...state.vacancies_by_group.filter((data, i) => data._id !== action.id)  ,success: true, err:true, message:'succesfully deleted vacancy' };
+      return {
+        ...state, ...state.vacancies_by_group.filter((data, i) => data._id !== action.id),
+        success: true, err:false, message:'succesfully deleted vacancy' };
     }
 
     case DELETE_VACANCY_ERROR: {
-      return { ...state, error: action.error, message:'Something went wrong , try again!' };
+      return { ...state, error: true, message:'Something went wrong , try again!' };
     }
 
 
@@ -127,7 +126,7 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_VACANCY_ERROR: {
-      return { ...state, error: action.error, message:'Something went wrong , try again!' };
+      return { ...state, err: true, message:'Something went wrong , try again!' };
     }
 
     default:

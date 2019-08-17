@@ -66,7 +66,9 @@ class Applicants extends React.Component {
   componentDidMount() {
     const group = JSON.parse(sessionStorage.getItem('group'));
     console.log(this.searcher);
-    this.props.getApplicationsByGroup(group._id);
+    if(group) {
+      this.props.getApplicationsByGroup(group._id);
+    }
   }
 
 

@@ -11,7 +11,7 @@ export default function(ComposedComponent) {
       }
     }
 
-    componentWillUpdate(nextProps) {
+    componentDidUpdate(nextProps) {
       if (this.props.authenticated) {
         this.props.history.push('/analytics');
       }

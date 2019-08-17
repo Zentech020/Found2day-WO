@@ -1,7 +1,6 @@
 import { getHomeNotification } from './Home/NotificationAction';
 import { getApplicationCount } from './Home/getApplicationCount';
 import { getVacancyCount } from './Home/getVacancyCount';
-import { getVacancies } from './Vacancies/getVacanciesAction';
 import { addVacancyAction } from './Vacancies/AddVacancyAction';
 import { getApplicants } from './Applicants/getApplicantsAction';
 import { loginUser } from './Auth/LoginAction';
@@ -26,12 +25,12 @@ import {updateProfile} from './Profile/UpdateProfileAction';
 import {getGroup} from './Group/GetGroupAction';
 import {updateGroup} from './Group/UpdateGroupAction';
 import {getMembers} from './Group/GetMembersAction';
+import {updateAdmin} from './Group/UpdateAdminsAction';
 
 export {
   getHomeNotification,
   getApplicationCount,
   getVacancyCount,
-  getVacancies,
   getApplicants,
   loginUser,
   registerUser,
@@ -55,5 +54,6 @@ export {
   updateProfile,
   getGroup,
   updateGroup,
-  getMembers
+  getMembers,
+  updateAdmin
 };

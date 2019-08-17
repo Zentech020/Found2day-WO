@@ -14,7 +14,7 @@ import {
 import {toast} from 'react-toastify';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { inviteUser,getProfile, updateProfile, getGroup, updateGroup, getMembers } from '../actions';
+import { inviteUser,getProfile, updateProfile, getGroup, updateGroup, getMembers, updateAdmin } from '../actions';
 
 import PageTitle from '../components/common/PageTitle';
 import UserDetails from '../components/user-profile-lite/UserDetails';
@@ -78,29 +78,37 @@ class UserProfileLite extends React.Component {
     await this.props.getProfile(account._id);
     await this.props.getGroup(group._id);
     await this.props.getMembers(group._id);
-    const {profile} = this.props;
-    console.log(account.photo);
+    const {profile, members} = this.props;
+
+    const memberIsAdmin = members.map(m => ({...m, isAdmin: this.props.group.admins.includes(m._id)}))
+
     this.setState({
-      // name: account.name,
-      // photo:account.photo,
       groupId: group._id,
       account:account,
       profile:profile,
       group:this.props.group,
-      members:this.props.members,
+      members:memberIsAdmin,
       message:'',
     });
-
   }
 
-  async componentDidUpdate(nextProps) {
+
+  async componentDidUpdate(nextProps, history) {
     if (!this.props.error && !this.state.showingError) {
       if(this.props.message) {
-         toast.success(this.props.message, {
+        toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
+        await this.setState({showingError: true})
+    }
+    }
+    if(this.props.error && !this.state.showingError) {
+      if(this.props.message) {
+        toast.error(this.props.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({showingError: true})
       }
-      await this.setState({showingError: true})
     }
   }
 
@@ -112,8 +120,17 @@ class UserProfileLite extends React.Component {
     }
   };
 
-  onSwitchPosition = () => {
-    alert('switch');
+  onSwitchPosition = (e, userId, isChecked) => {
+    const {members} = this.state;
+    const group = JSON.parse(sessionStorage.getItem('group'));
+    members.forEach(async member => {
+       if (member._id === userId) {
+        member.isAdmin =  !isChecked
+        await this.props.updateAdmin(group._id, userId, !isChecked);
+       }
+    })
+    console.log(userId);
+    this.setState({members})
   }
 
   onUploadPhoto = (e)  => {
@@ -139,6 +156,7 @@ class UserProfileLite extends React.Component {
   onChangeStringAccount = (e) => {
     const name = e.target.name
     const value = e.target.value;
+    console.log(name, value);
     let newState = Object.assign({}, this.state);
     newState.profile[name] = value
     this.setState(newState);
@@ -167,6 +185,7 @@ class UserProfileLite extends React.Component {
 
   render() {
     const { inviteModal, manageModal, profile, group, members } = this.state;
+    const {isLoading} = this.props;
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
@@ -192,6 +211,7 @@ class UserProfileLite extends React.Component {
                   uploadPhoto={(e) => this.onUploadPhoto(e)}
                   account={profile}
                   isAdmin={false}
+                  isLoading={isLoading}
                 />
               </Col>
               <Col lg="8">
@@ -199,7 +219,7 @@ class UserProfileLite extends React.Component {
                   isAdmin={false}
                   account={profile}
                   updateAccount={() => this.onUpdateAccount()}
-                  ChangeStringAccount={(e) => this.onChangeStringAccount(e)}
+                  changeStringAccount={(e) => this.onChangeStringAccount(e)}
                 />
               </Col>
             </Row>
@@ -213,6 +233,7 @@ class UserProfileLite extends React.Component {
                 uploadIcon={(e) => this.onUploadIcon(e)}
                 account={group}
                 isAdmin={true}
+                isLoading={isLoading}
                 />
                 <UserTeams teams={members} />
               </Col>
@@ -270,7 +291,7 @@ class UserProfileLite extends React.Component {
         >
           <ModalHeader>Manage group</ModalHeader>
           <ModalBody>
-            <LatestOrders switchPosition={() => this.onSwitchPosition()}/>
+            <LatestOrders users={members} switchPosition={(e, userId, isChecked) => this.onSwitchPosition(e, userId, isChecked)}/>
           </ModalBody>
         </Modal>
       </Container>
@@ -281,8 +302,9 @@ class UserProfileLite extends React.Component {
 //Connect redux
 function mapStateToProps(state) {
   return {
-    error: state.profile.err,
-    message:state.profile.message,
+    error: state.profile.err || state.group.err,
+    isLoading:state.profile.isLoading,
+    message:state.profile.message || state.group.message,
     busy:state.auth.busy,
     profile:state.profile.profile,
     group:state.group.group,
@@ -292,5 +314,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { inviteUser, getProfile, updateProfile, getGroup, updateGroup, getMembers }
+  { inviteUser, getProfile, updateProfile, getGroup, updateGroup, getMembers, updateAdmin }
 )(UserProfileLite);

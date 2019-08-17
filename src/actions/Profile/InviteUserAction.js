@@ -1,16 +1,10 @@
 import axios from 'axios';
-
+import {bearer} from '../../helpers/Bearer';
+const header = bearer();
 export const INVITE_USER_IS_LOADING = 'invite_user_is_loading';
 export const INVITE_USER_DATA = 'invite_user_data';
 export const INVITE_USER_ERROR = 'invite_user_error';
 
-if (sessionStorage.getItem('jwtToken')) {
-  var config = {
-    headers: { Authorization: 'Bearer ' + sessionStorage.getItem('jwtToken') }
-  };
-} else {
-  var config = '';
-}
 
 export const inviteUser = (groupId, email) => async dispatch => {
   try {
@@ -21,7 +15,7 @@ export const inviteUser = (groupId, email) => async dispatch => {
         groupId: groupId,
         inviteeEmail: email
       },
-      config
+      header
     );
     return dispatch({ type: INVITE_USER_DATA, result });
   } catch (err) {

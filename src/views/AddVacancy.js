@@ -66,10 +66,20 @@ class addVacancy extends React.Component {
 
   async componentDidUpdate(nextProps, history) {
     if (!this.props.error && !this.state.showingError) {
-        toast.success("Succesfully added vacancy", {
+      if(this.props.message) {
+        toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
-      await this.setState({showingError: true})
+        await this.setState({showingError: true})
+    }
+    }
+    if(this.props.error && !this.state.showingError) {
+      if(this.props.message) {
+        toast.error(this.props.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({showingError: true})
+      }
     }
   }
 
@@ -101,22 +111,13 @@ class addVacancy extends React.Component {
       author,
       groupId
     } = this.state;
-    if (
-      (title &&
-        description &&
-        content &&
-        image &&
-        jobTitle &&
-        branch &&
-        education &&
-        employmentType &&
+    if (title && description && content && image && jobTitle && branch && education && employmentType &&
         experience &&
         weekHours &&
         distance &&
         postalCode,
-      author,
-      groupId)
-    ) {
+        author,
+        groupId) {
       this.props.addVacancyAction(
         title,
         description,
@@ -132,16 +133,9 @@ class addVacancy extends React.Component {
         postalCode,
         author,
         groupId
-      ).then((res)=>{
-        this.props.history.push(`/vacancies`);
-      });
+      )
       await this.setState({showingError: false})
-    } else {
-      toast.error('Please enter all fields', {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
     }
-
   };
 
   onUploadImage = (e)  => {
@@ -170,16 +164,8 @@ class addVacancy extends React.Component {
 
   render() {
 
-    const {
-      jobTitle,
-      branch,
-      education,
-      experience,
-      employmentType,
-      weekHours
-    } = this.props.specs;
-
-    const {distance, image} = this.state;
+    const {jobTitle, branch, education, experience, employmentType, weekHours} = this.props.specs;
+    const {image} = this.state;
 
     const BranchList = ({ array }) => {
       if (array) {
@@ -208,10 +194,8 @@ class addVacancy extends React.Component {
             <Row>
               <Col lg="10" className="mx-auto mt-4">
                 <Card small className="edit-user-details mb-4">
-                  {/* <ProfileBackgroundPhoto /> */}
 
                   <CardBody className="p-0">
-                    {/* Form Section Title :: General */}
                     <Form className="py-4">
                       <FormSectionTitle
                         title="General"
@@ -258,10 +242,18 @@ class addVacancy extends React.Component {
                               />
                             </Col>
 
+                            <Col md="6" className="form-group">
+                              <label htmlFor="firstName">Max Applicants</label>
+                              <FormInput
+                                id="maxApplicants"
+                                type="number"
+                              />
+                            </Col>
+
                             <Col md="12">
                               <label className="edit-user-details__change-background">
                                 <i className="material-icons mr-1">&#xE439;</i>
-                                Change Background Photo
+                                Add vacancy image
                                 <input className="d-none" type="file" onChange={(e) => this.onUploadImage(e)}/>
                                 <br/>
                                 {image ? (<img src={image} height={100} width={100} />) : (null)}
@@ -274,7 +266,7 @@ class addVacancy extends React.Component {
                       <hr />
                       <FormSectionTitle
                         title="Specifications"
-                        description="Setup your general profile details."
+                        description="Add your specifications"
                       />
                       <Row form className="mx-4">
                         <Col lg="8">
@@ -287,7 +279,6 @@ class addVacancy extends React.Component {
                                 onChange={e =>
                                   this.onChangeBranch(e)
                                 }
-
                               >
                                 <option>{this.state.branch}</option>
                                 {branch ? <BranchList array={branch} /> : null}
