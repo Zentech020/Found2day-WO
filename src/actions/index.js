@@ -27,6 +27,7 @@ import {getGroup} from './Group/GetGroupAction';
 import {updateGroup} from './Group/UpdateGroupAction';
 import {getMembers} from './Group/GetMembersAction';
 import {updateAdmin} from './Group/UpdateAdminsAction';
+import {getApplicantsTime} from './Stats/GetApplicantsTime';
 
 export {
   getHomeNotification,
@@ -57,5 +58,6 @@ export {
   getGroup,
   updateGroup,
   getMembers,
-  updateAdmin
+  updateAdmin,
+  getApplicantsTime
 };

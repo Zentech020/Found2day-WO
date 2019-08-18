@@ -8,6 +8,7 @@ import auth from './Auth/auth';
 import profile from './Profile/profile';
 import group from './Group/group';
 import UpcomingInvoice from './Billing/InvoiceReducer';
+import stats from './Stats/stats';
 
 export default combineReducers({
   auth,
@@ -18,5 +19,6 @@ export default combineReducers({
   Payment,
   Specs,
   group,
-  UpcomingInvoice
+  UpcomingInvoice,
+  stats
 });

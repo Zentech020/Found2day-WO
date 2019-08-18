@@ -70,7 +70,9 @@ class addVacancy extends React.Component {
         toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
+
         await this.setState({showingError: true})
+        await history.push('/vacancies');
     }
     }
     if(this.props.error && !this.state.showingError) {

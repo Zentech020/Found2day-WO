@@ -56,7 +56,7 @@ class Login extends React.Component {
       });
 
 
-      // await this.props.history.push(`/analytics`);
+      await this.props.history.push(`/analytics`);
     }
 
     else {
