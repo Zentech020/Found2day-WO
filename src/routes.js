@@ -11,7 +11,7 @@ import Vacancies from './views/Vacancies';
 import SingleVacancy from './views/SingleVacancy';
 import AddVacancy from './views/AddVacancy';
 import EditVacancy from './views/EditVacancy';
-import Finance from './views/Finance';
+import Billing from './views/Billing';
 import Help from './views/Help';
 import OnlineStore from './views/OnlineStore';
 import BlogOverview from './views/BlogOverview';
@@ -93,9 +93,9 @@ export default [
     needsAuth: true
   },
   {
-    path: '/finance',
+    path: '/billing',
     layout: DefaultLayout,
-    component: Finance,
+    component: Billing,
     needsAuth: true
   },
   {

@@ -2,11 +2,12 @@ import { combineReducers } from 'redux';
 import home from './Home/Home';
 import applicants from './Applicants/ApplicantsReducer';
 import Specs from './Vacancies/GetSpecsReducer';
-import Payment from './Finance/PaymentReducer';
+import Payment from './Billing/PaymentReducer';
 import vacancies from './Vacancies/vacancies';
 import auth from './Auth/auth';
 import profile from './Profile/profile';
 import group from './Group/group';
+import UpcomingInvoice from './Billing/InvoiceReducer';
 
 export default combineReducers({
   auth,
@@ -16,5 +17,6 @@ export default combineReducers({
   profile,
   Payment,
   Specs,
-  group
+  group,
+  UpcomingInvoice
 });

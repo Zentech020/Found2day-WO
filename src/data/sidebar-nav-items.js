@@ -34,8 +34,8 @@ export default function() {
           htmlAfter: ''
         },
         {
-          title: 'Finance',
-          to: '/finance',
+          title: 'Billing',
+          to: '/billing',
           htmlBefore: '<i class="material-icons">attach_money</i>',
           htmlAfter: ''
         },
