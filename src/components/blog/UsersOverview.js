@@ -33,7 +33,8 @@ class UsersOverview extends React.Component {
             type: "time",
             time:       {
               format: 'DD/MM/YYYY',
-              tooltipFormat: 'll'
+              tooltipFormat: 'll',
+              unit:'day'
             },
             scaleLabel: {
               display:     true,
@@ -58,6 +59,7 @@ class UsersOverview extends React.Component {
         }
       },
       ...this.props.chartOptions
+
     };
 
     const BlogUsersOverview = new Chart(this.canvasRef.current, {
@@ -66,12 +68,11 @@ class UsersOverview extends React.Component {
       options: chartOptions,
     });
 
-    // They can still be triggered on hover.
-    const buoMeta = BlogUsersOverview.getDatasetMeta(0);
-    buoMeta.data[0]._model.radius = 0;
-    buoMeta.data[
-      this.props.chartData.datasets[0].data.length - 1
-    ]._model.radius = 0;
+    // const buoMeta = BlogUsersOverview.getDatasetMeta(0);
+    // buoMeta.data[0]._model.radius = 0;
+    // buoMeta.data[
+    //   this.props.chartData.datasets[0].data.length - 1
+    // ]._model.radius = 0;
 
     // Render the chart.
     BlogUsersOverview.render();
@@ -134,13 +135,13 @@ UsersOverview.defaultProps = {
         fill: false,
         data: [
           {
-              x: "04/01/2014", y: 175
+              x: "04/03/2014", y: 175
           }, {
-              x: "05/01/2014", y: 300
+              x: "05/03/2014", y: 300
           }, {
-              x: "06/01/2014", y: 500
+              x: "06/03/2014", y: 500
           }, {
-              x: "07/01/2014", y: 600
+              x: "07/03/2014", y: 600
           }
         ],
         backgroundColor: "rgba(0,123,255,0.1)",
@@ -151,53 +152,9 @@ UsersOverview.defaultProps = {
         pointRadius: 0,
         pointHoverRadius: 3
       },
-      // {
-      //   label: "Past Month",
-      //   fill: "start",
-      //   data: [
-      //     380,
-      //     430,
-      //     120,
-      //     230,
-      //     410,
-      //     740,
-      //     472,
-      //     219,
-      //     391,
-      //     229,
-      //     400,
-      //     203,
-      //     301,
-      //     380,
-      //     291,
-      //     620,
-      //     700,
-      //     300,
-      //     630,
-      //     402,
-      //     320,
-      //     380,
-      //     289,
-      //     410,
-      //     300,
-      //     530,
-      //     630,
-      //     720,
-      //     780,
-      //     1200
-      //   ],
-      //   backgroundColor: "rgba(255,65,105,0.1)",
-      //   borderColor: "rgba(255,65,105,1)",
-      //   pointBackgroundColor: "#ffffff",
-      //   pointHoverBackgroundColor: "rgba(255,65,105,1)",
-      //   borderDash: [3, 3],
-      //   borderWidth: 1,
-      //   pointRadius: 0,
-      //   pointHoverRadius: 2,
-      //   pointBorderColor: "rgba(255,65,105,1)"
-      // }
     ]
   }
 };
 
-export default UsersOverview;
+
+export default (UsersOverview);

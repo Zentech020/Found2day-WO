@@ -30,17 +30,21 @@ class Analytics extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount() {
+  componentDidMount = async() => {
     const group = JSON.parse(sessionStorage.getItem('group'));
     if (group) {
       this.props.getHomeNotification();
       this.props.getApplicationCount(group._id);
       this.props.getVacancyCount(group._id);
-      this.props.getApplicantsTime(group._id, '2019-09-01', '2019-10-01');
+      this.props.getApplicantsTime(group._id, '2019-08-01', '2019-10-01');
     }
   }
   render() {
-    const { homeNotification, applicationCount, vacancyCount } = this.props;
+
+    const { applicationCount, vacancyCount, applicantsTime } = this.props;
+    if(applicantsTime) {
+      console.log(applicantsTime);
+    }
     return (
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-2">
@@ -53,7 +57,7 @@ class Analytics extends React.Component {
         </Row>
         <Row className="py-2">
           {this.props.smallStats.map((stats, idx) => (
-            <Col className={'col-lg'} lg="4" md="4" sm="4" key={idx}>
+            <Col className={'col-lg mb-4'} lg="4" md="4" sm="4" key={idx}>
               <SmallStats
                 id={`small-stats-${idx}`}
                 variation="1"
@@ -71,17 +75,49 @@ class Analytics extends React.Component {
 
         <Row className="py-2">
         {/* Users Overview */}
-        <Col lg="4" md="6" sm="12" className="mb-4">
+        <Col lg="4" md="12" sm="12" className="mb-4">
           <Notification/>
         </Col>
 
         {/* Users by Device */}
-        <Col lg="8" md="6" sm="12" className="mb-4">
-          <UsersOverview />
+        <Col lg="8" md="12" sm="12" className="mb-4">
+          {this.props.applicantsTime ? (
+          <UsersOverview
+          chartData={{
+            datasets: [
+              {
+                label: "Applicants",
+                fill: false,
+                data: this.props.applicantsTime,
+                // data: [
+                //   {
+                //       x: "04/03/2014", y: 175
+                //   }, {
+                //       x: "05/03/2014", y: 300
+                //   }, {
+                //       x: "06/03/2014", y: 500
+                //   }, {
+                //       x: "07/03/2014", y: 600
+                //   }
+                // ],
+                backgroundColor: "rgba(0,123,255,0.1)",
+                borderColor: "rgba(0,123,255,1)",
+                pointBackgroundColor: "#ffffff",
+                pointHoverBackgroundColor: "rgb(0,123,255)",
+                borderWidth: 1.5,
+                pointRadius: 0,
+                pointHoverRadius: 3
+              },
+            ]
+          }}
+        />
+        ):(null)}
+
         </Col>
       </Row>
+
       <Row className="py-2">
-        <Col lg="4">
+        <Col lg="4" className="mb-4">
           <Card small >
           <CardBody className="d-flex flex-column py-0" style={{height:'200px',backgroundSize:'cover',backgroundImage:`url(${addVacancyImg})`}}>
               {/* <img width={300} src={addVacancyImg} /> */}
@@ -96,7 +132,7 @@ class Analytics extends React.Component {
           </Card>
         </Col>
 
-        <Col lg="4">
+        <Col lg="4" className="mb-4">
           <Card small >
           <CardBody className="d-flex flex-column py-0" style={{height:'200px',backgroundSize:'cover',backgroundImage:`url(${updateProfileImg})`}}>
               {/* <img width={300} src={addVacancyImg} /> */}
@@ -111,7 +147,7 @@ class Analytics extends React.Component {
           </Card>
         </Col>
 
-        <Col lg="4">
+        <Col lg="4" className="mb-4">
           <Card small >
           <CardBody className="d-flex flex-column py-0" style={{height:'200px',backgroundSize:'cover',backgroundImage:`url(${leaveFeedbackImg})`}}>
               {/* <img width={300} src={addVacancyImg} /> */}

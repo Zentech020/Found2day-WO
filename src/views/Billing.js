@@ -18,7 +18,7 @@ import {
   FormInput
 } from 'shards-react';
 import { connect } from 'react-redux';
-import { getPayLink, getUpcomingInvoice } from '../actions';
+import { getPayLink, getUpcomingInvoice, endInvoice } from '../actions';
 import PageTitle from '../components/common/PageTitle';
 import getTransactionHistoryData from '../data/transaction-history-data';
 import getBillingData from '../data/billing-data';
@@ -31,7 +31,8 @@ class Billing extends React.Component {
       pageSizeOptions: [5],
       pageSize: 1,
       tableData: [],
-      invoice: {}
+      invoice: {},
+      toPayLink:false,
     };
 
     this.searcher = null;
@@ -52,14 +53,13 @@ class Billing extends React.Component {
     this.searcher = new FuzzySearch(tableData, ['customer', 'status'], {
       caseSensitive: false
     });
-    
-    console.log('action');
-    
+
+
 
     await this.props.getUpcomingInvoice(JSON.parse(sessionStorage.getItem('group')).stripeCustomerId);
     console.log(this.props);
-    
-    
+
+
     this.setState({
       ...this.state,
       tableData,
@@ -128,13 +128,15 @@ class Billing extends React.Component {
     alert(`Viewing details for "${row.original.id}"!`);
   }
 
-  onPay = async () => {
-    const group = sessionStorage.getItem('group');
-
-    this.props.getPayLink(group._id, '230.00', 'EUR', 'ideal').then(res => {
+  onPay = async() => {
+    await this.props.endInvoice(JSON.parse(sessionStorage.getItem('group')).stripeCustomerId).then((res)=>{
       console.log(res);
-      if (res.result.status == 200) {
-        window.location.replace(res.result.data.mollieLink);
+      if(res) {
+        this.setState({
+          toPayLink:true,
+        })
+        var win = window.open(res.result.data.hosted_invoice_url, '_blank');
+        win.focus();
       }
     });
   };
@@ -153,33 +155,6 @@ class Billing extends React.Component {
           <Col className="file-manager__filters__rows d-flex" md="4">
             <span>Will be sent on {next_payment_attempt} to {'!EMAIL!'}</span>
           </Col>
-          {/* Filters :: Page Size */}
-          {/* <Col className="file-manager__filters__rows d-flex" md="6">
-            <span>Show</span>
-            <FormSelect
-              size="sm"
-              value={this.state.pageSize}
-              onChange={this.handlePageSizeChange}
-            >
-              {pageSizeOptions.map((size, idx) => (
-                <option key={idx} value={size}>
-                  {size} rows
-                </option>
-              ))}
-            </FormSelect>
-          </Col> */}
-
-          {/* Filters :: Search */}
-          {/* <Col className="file-manager__filters__search d-flex" md="6">
-            <InputGroup seamless size="sm" className="ml-auto">
-              <InputGroupAddon type="prepend">
-                <InputGroupText>
-                  <i className="material-icons">search</i>
-                </InputGroupText>
-              </InputGroupAddon>
-              <FormInput onChange={this.handleFilterSearch} />
-            </InputGroup>
-          </Col> */}
         </Row>
       </Container>
     </CardHeader>
@@ -200,32 +175,19 @@ class Billing extends React.Component {
       </div>
     </CardBody>
   </Card>
-  
+
 
   render() {
-    const { tableData, pageSize, pageSizeOptions } = this.state;
+    const { tableData } = this.state;
     let amount_due, period_start, period_end, next_payment_attempt;
-    if (this.props.invoice) {
+
+    if (this.props.invoice !== undefined) {
       amount_due = this.props.invoice.upcomingInvoice.amount_due;
       period_start = new Date(this.props.invoice.upcomingInvoice.period_start * 1000).toLocaleString();
       period_end = new Date(this.props.invoice.upcomingInvoice.period_end * 1000).toLocaleString();
       next_payment_attempt = new Date(this.props.invoice.upcomingInvoice.next_payment_attempt * 1000).toLocaleString();
     }
     const tableColumns = [
-      // {
-      //   Header: '#',
-      //   accessor: 'id',
-      //   maxWidth: 500,
-      //   className: 'text-center'
-      // },
-      // {
-      //   Header: 'Placement Date',
-      //   accessor: 'date',
-      //   className: 'text-center',
-      //   minWidth: 200,
-      //   Cell: row =>
-      //     dateFormat(new Date(row.original.date), 'dddd, mmmm dS, yyyy')
-      // },
       {
         Header: 'Vacancy',
         accessor: 'metadata.vacancyName',
@@ -282,15 +244,16 @@ class Billing extends React.Component {
             className="text-sm-left mb-3"
           />
         </Row>
-        {this.renderTable(tableColumns, tableData, period_start, period_end, next_payment_attempt)}
+        {this.props.invoice ? (
+          this.renderTable(tableColumns, tableData, period_start, period_end, next_payment_attempt)
+        ) : (null) }
+
       </Container>
     );
   }
 }
 
 function mapStateToProps(state) {
-  console.log(state);
-  
   return {
     invoice: state.UpcomingInvoice.data
   };
@@ -298,5 +261,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { getUpcomingInvoice }
+  { getUpcomingInvoice, endInvoice }
 )(Billing);

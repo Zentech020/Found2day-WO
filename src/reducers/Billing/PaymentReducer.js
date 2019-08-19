@@ -22,7 +22,6 @@ export default (state = initialState, action) => {
     }
 
     case PAYMENTS_ERROR: {
-      const { data } = action.res;
       return { ...state, err: true, success: false };
     }
 

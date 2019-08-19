@@ -20,7 +20,7 @@ class Notification extends React.Component {
   render() {
     const { title } = this.props;
     return (
-      <Card small className="h-100">
+      <Card small className="h-100 mb-4">
         <CardHeader className="border-bottom">
           <h6 className="m-0">{title}</h6>
         </CardHeader>
@@ -30,26 +30,6 @@ class Notification extends React.Component {
           </div>
           <p>Hi, welkom op Found2Day! Heb jij jouw droombaan al gevonden? Help ons met het geven van feedback zodat wij nog beter kunnen worden en like onze pagina op Facebook!</p>
         </CardBody>
-        {/* <CardFooter className="border-top">
-          <Row>
-            <Col>
-              <FormSelect
-                size="sm"
-                value="last-week"
-                style={{ maxWidth: "130px" }}
-                onChange={() => {}}
-              >
-                <option value="last-week">Last Week</option>
-                <option value="today">Today</option>
-                <option value="last-month">Last Month</option>
-                <option value="last-year">Last Year</option>
-              </FormSelect>
-            </Col>
-            <Col className="text-right view-report">
-              <a href="#">View full report &rarr;</a>
-            </Col>
-          </Row>
-        </CardFooter> */}
       </Card>
     );
   }

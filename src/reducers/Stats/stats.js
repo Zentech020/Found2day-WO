@@ -24,7 +24,8 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         err:false,
-        applicantsTime:action.result.data
+        applicantsTime: action.result.data.map( s => ({x:s.date, y:s.count}))
+
       };
     }
 

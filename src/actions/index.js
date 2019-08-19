@@ -17,6 +17,7 @@ import { deleteSingleVacancy } from './Vacancies/DeleteSingleVacancyAction';
 import { updateVacancy } from './Vacancies/UpdateVacancyAction';
 import { getPayLink } from './Billing/PaymentAction';
 import { getUpcomingInvoice } from './Billing/InvoiceAction';
+import { endInvoice } from './Billing/InvoiceAction';
 import { getSpecs } from './Vacancies/GetSpecsAction';
 import { getApplicationsByGroup } from './Applicants/GetApplicationsByGroup';
 import { getApplicationsByVacancy } from './Applicants/GetApplicationsByVacancy';
@@ -49,6 +50,7 @@ export {
   updateVacancy,
   getPayLink,
   getUpcomingInvoice,
+  endInvoice,
   getSpecs,
   getApplicationsByGroup,
   changeSpecs,

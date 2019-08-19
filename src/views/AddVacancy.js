@@ -38,6 +38,7 @@ class addVacancy extends React.Component {
       title: '',
       description: '',
       content:'',
+      maxApplicants:0,
       image: '',
       jobTitle: 'Select Option',
       branch: 'Select Option',
@@ -101,6 +102,7 @@ class addVacancy extends React.Component {
       title,
       description,
       content,
+      maxApplicants,
       image,
       jobTitle,
       branch,
@@ -124,6 +126,7 @@ class addVacancy extends React.Component {
         title,
         description,
         content,
+        maxApplicants,
         image,
         jobTitle,
         branch,
@@ -249,6 +252,9 @@ class addVacancy extends React.Component {
                               <FormInput
                                 id="maxApplicants"
                                 type="number"
+                                onChange={e =>
+                                  this.setState({ maxApplicants: e.target.value })
+                                }
                               />
                             </Col>
 
