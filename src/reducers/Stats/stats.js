@@ -11,6 +11,7 @@ const initialState = {
   message:'',
   busy:false,
   applicantsTime:[],
+  dates:[]
 };
 
 export default (state = initialState, action) => {
@@ -24,8 +25,8 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         err:false,
-        applicantsTime: action.result.data.map( s => ({x:s.date, y:s.count}))
-
+        applicantsTime: action.result.data.map( s => ({x:s.date, y:s.count})),
+        dates: action.result.data.map( s => (s.date))
       };
     }
 

@@ -36,14 +36,15 @@ class Analytics extends React.Component {
       this.props.getHomeNotification();
       this.props.getApplicationCount(group._id);
       this.props.getVacancyCount(group._id);
-      this.props.getApplicantsTime(group._id, '2019-08-01', '2019-10-01');
+      this.props.getApplicantsTime(group._id, '2019-09-01', '2019-10-01');
     }
   }
   render() {
 
     const { applicationCount, vacancyCount, applicantsTime } = this.props;
-    if(applicantsTime) {
-      console.log(applicantsTime);
+    if(this.props.applicantsTime) {
+      const dates = this.props.applicantsTime.map(s => ({x:s.date}));
+      console.log(dates);
     }
     return (
       <Container fluid className="main-content-container px-4">
@@ -82,35 +83,37 @@ class Analytics extends React.Component {
         {/* Users by Device */}
         <Col lg="8" md="12" sm="12" className="mb-4">
           {this.props.applicantsTime ? (
-          <UsersOverview
-          chartData={{
-            datasets: [
-              {
-                label: "Applicants",
-                fill: false,
-                data: this.props.applicantsTime,
-                // data: [
-                //   {
-                //       x: "04/03/2014", y: 175
-                //   }, {
-                //       x: "05/03/2014", y: 300
-                //   }, {
-                //       x: "06/03/2014", y: 500
-                //   }, {
-                //       x: "07/03/2014", y: 600
-                //   }
-                // ],
-                backgroundColor: "rgba(0,123,255,0.1)",
-                borderColor: "rgba(0,123,255,1)",
-                pointBackgroundColor: "#ffffff",
-                pointHoverBackgroundColor: "rgb(0,123,255)",
-                borderWidth: 1.5,
-                pointRadius: 0,
-                pointHoverRadius: 3
-              },
-            ]
-          }}
-        />
+            <UsersOverview
+            chartData={{
+              labels: this.props.dates ? this.props.dates : null,
+              // labels: ["2019-09-08","2019-09-09","2019-09-10"],
+              datasets: [
+                {
+                  label: "Applicants",
+                  fill: false,
+                  data: this.props.applicantsTime,
+                  // data: [
+                  //   {
+                  //       x: "04/03/2014", y: 175
+                  //   }, {
+                  //       x: "05/03/2014", y: 300
+                  //   }, {
+                  //       x: "06/03/2014", y: 500
+                  //   }, {
+                  //       x: "07/03/2014", y: 600
+                  //   }
+                  // ],
+                  backgroundColor: "rgba(0,123,255,0.1)",
+                  borderColor: "rgba(0,123,255,1)",
+                  pointBackgroundColor: "#ffffff",
+                  pointHoverBackgroundColor: "rgb(0,123,255)",
+                  borderWidth: 1.5,
+                  pointRadius: 0,
+                  pointHoverRadius: 3
+                },
+              ]
+            }}
+          />
         ):(null)}
 
         </Col>
@@ -298,7 +301,8 @@ function mapStateToProps(state) {
     homeNotification: state.home.notification,
     applicationCount:state.home.application_count,
     vacancyCount:state.home.vacancy_count,
-    applicantsTime: state.stats.applicantsTime
+    applicantsTime: state.stats.applicantsTime,
+    dates:state.stats.dates,
   };
 }
 

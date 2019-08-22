@@ -29,17 +29,20 @@ class UsersOverview extends React.Component {
           }
         },
         scales: {
+
           xAxes: [{
             type: "time",
             time:       {
-              format: 'DD/MM/YYYY',
               tooltipFormat: 'll',
-              unit:'day'
+              unit:'day',
+              displayFormats: {
+                'day':'YYYY-MM-DD'
+              }
             },
-            scaleLabel: {
-              display:     true,
-              labelString: 'Date'
-            }
+            // scaleLabel: {
+            //   display:     true,
+            //   labelString: 'Date'
+            // }
         }],
           yAxes: [{
             scaleLabel: {
@@ -128,7 +131,7 @@ UsersOverview.propTypes = {
 UsersOverview.defaultProps = {
   title: "Applicants Overview",
   chartData: {
-    // labels: Array.from(new Array(30), (_, i) => (i === 0 ? 1 : i)),
+    labels: Array.from(new Array(30), (_, i) => (i === 0 ? 1 : i)),
     datasets: [
       {
         label: "Applicants",
