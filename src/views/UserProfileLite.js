@@ -197,9 +197,13 @@ class UserProfileLite extends React.Component {
           />
       </Row>
         <Tabs>
-          <TabList>
-            <Tab>Personal profile</Tab>
-            <Tab>Company profile</Tab>
+          <TabList className="v-tab d-flex align-items-center">
+            <Tab selectedClassName="v-tabs--selected" className="v-tabs">
+              <Button>Personal Profile</Button>
+            </Tab>
+            <Tab selectedClassName="v-tabs--selected" className="v-tabs">
+              <Button>Company Profile</Button>
+            </Tab>
           </TabList>
 
           <TabPanel>

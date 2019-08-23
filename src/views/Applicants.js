@@ -48,27 +48,38 @@ class Applicants extends React.Component {
     this.handleItemViewDetails = this.handleItemViewDetails.bind(this);
   }
 
-  componentWillMount() {
-    const {applications} = this.props;
+  componentWillMount = async() => {
+    const group = JSON.parse(sessionStorage.getItem('group'));
+    if(group) {
+      await this.props.getApplicationsByGroup(group._id);
+    }
 
     this.setState({
       ...this.state,
-      applications
+      applications:this.props.applications
     });
-    console.log(applications);
 
     // Initialize the fuzzy searcher.
-    this.searcher = new FuzzySearch(applications, ['Name', 'vacancyTitle'], {
+    this.searcher = new FuzzySearch(this.state.applications, ['name', 'vacancyTitle'], {
       caseSensitive: false
     });
+    console.log(this.searcher);
   }
 
-  componentDidMount() {
+
+  componentDidMount = async() => {
     const group = JSON.parse(sessionStorage.getItem('group'));
-    console.log(this.searcher);
+
     if(group) {
-      this.props.getApplicationsByGroup(group._id);
+      await this.props.getApplicationsByGroup(group._id);
+      this.setState({
+        applications:this.props.applications
+      })
     }
+    this.searcher = new FuzzySearch(this.state.applications, ['name', 'vacancyTitle'], {
+      caseSensitive: false
+    });
+    // console.log(this.searcher);
   }
 
 
@@ -87,9 +98,10 @@ class Applicants extends React.Component {
    * Handles the global search.
    */
   handleFilterSearch(e) {
+    console.log(e.target.value);
     this.setState({
       ...this.state,
-      tableData: this.searcher.search(e.target.value)
+      applications: this.searcher.search(e.target.value)
     });
   }
 
@@ -129,7 +141,7 @@ class Applicants extends React.Component {
 
   render() {
     const { tableData, pageSize, pageSizeOptions } = this.state;
-    const {applications} = this.props;
+    const {applications} = this.state;
     const tableColumns = [
       {
         Header: '#',
@@ -146,7 +158,7 @@ class Applicants extends React.Component {
         dateFormat(new Date(row.original.createdAt), 'dddd, mmmm dS, yyyy')
       },
       {
-        Header: 'Name',
+        Header: 'name',
         accessor: 'name',
         className: 'text-center'
       },
