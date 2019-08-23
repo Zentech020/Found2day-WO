@@ -21,8 +21,10 @@ import {
 } from 'shards-react';
 import ReactQuill from 'react-quill';
 import { connect } from 'react-redux';
+import TooltipHelper from '../components/tooltip/tooltip';
 import FormSectionTitle from '../components/edit-user-profile/FormSectionTitle';
 import GeneralInformation from '../components/add-vacancy/GeneralInformation';
+import PreviewVacancy from '../components/add-vacancy/PreviewVacancy';
 
 import { addVacancyAction, getSpecs, changeSpecs } from '../actions';
 import PageTitle from '../components/common/PageTitle';
@@ -34,6 +36,7 @@ class addVacancy extends React.Component {
     super(props);
 
     this.state = {
+      toggleTooltip:false,
       preview: false,
       title: '',
       description: '',
@@ -184,7 +187,9 @@ class addVacancy extends React.Component {
       }
     };
 
+
     return (
+
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
           {/* Page Header :: Title */}
@@ -212,7 +217,16 @@ class addVacancy extends React.Component {
                           <Row form>
                             {/* Title */}
                             <Col md="12" className="form-group">
-                              <label htmlFor="firstName">Title</label>
+                              <div className="d-flex">
+                                <label htmlFor="firstName">Title</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="title"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."
+                                  // open={this.state.toggleTooltip}
+                                  // toggle={() => this.setState({toggleTooltip: !this.state.toggleTooltip})}
+                                />
+                              </div>
                               <FormInput
                                 id="firstName"
                                 value={this.state.title}
@@ -224,8 +238,13 @@ class addVacancy extends React.Component {
 
                           {/* Content */}
                             <Col md="12" className="form-group">
-                              <label htmlFor="feDescription">Description</label>
-                              {/* <FormTextarea id="feDescription" rows="5" /> */}
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">Description</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="description"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormTextarea
                                 id="firstName"
                                 value={this.state.description}
@@ -237,7 +256,13 @@ class addVacancy extends React.Component {
 
                             {/* Content */}
                             <Col md="12" className="form-group">
-                              <label htmlFor="feDescription">Content</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Content</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="content"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               {/* <FormTextarea id="feDescription" rows="5" /> */}
                               <ReactQuill
                                 value={this.state.content}
@@ -248,7 +273,13 @@ class addVacancy extends React.Component {
                             </Col>
 
                             <Col md="6" className="form-group">
-                              <label htmlFor="firstName">Max Applicants</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Max applicants</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="maxApplicants"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormInput
                                 id="maxApplicants"
                                 type="number"
@@ -280,9 +311,13 @@ class addVacancy extends React.Component {
                         <Col lg="8">
                           <Row form>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">
-                                Alle vakgebieden
-                              </label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Alle vakgebieden</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="vakgebieden"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormSelect
                                 onChange={e =>
                                   this.onChangeBranch(e)
@@ -294,7 +329,13 @@ class addVacancy extends React.Component {
                             </Col>
 
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Functietitel</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Functietitel</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="Functietitel"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormSelect
                                 onChange={e =>
                                   this.setState({ jobTitle: e.target.value })
@@ -307,7 +348,13 @@ class addVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Opleiding</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Opleiding</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="Opleiding"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormSelect
                                 onChange={e =>
                                   this.setState({ education: e.target.value })
@@ -320,7 +367,13 @@ class addVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Werkervaring</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Werkervaring</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="Werkervaring"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormSelect
                                 onChange={e =>
                                   this.setState({ experience: e.target.value })
@@ -333,9 +386,13 @@ class addVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">
-                                Dienstverbanden
-                              </label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Dienstverbanden</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="Dienstverbanden"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormSelect
                                 onChange={e =>
                                   this.setState({
@@ -350,7 +407,13 @@ class addVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Werkweek</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Werkweek</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="Werkweek"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormSelect
                                 onChange={e =>
                                   this.setState({ weekHours: e.target.value })
@@ -363,7 +426,13 @@ class addVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="firstName">Postcode</label>
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">Postcode</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="Postcode"
+                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
+                                </div>
                               <FormInput
                                 id="firstName"
                                 value={this.state.postalCode}
@@ -410,24 +479,16 @@ class addVacancy extends React.Component {
             open={this.state.preview}
             toggle={() => this.toggle()}
             position="center"
+            className="c-modal"
           >
-            <ModalHeader
-              className="popup__bg"
-              style={{
-                backgroundImage: this.state.image ? (`url(${this.state.image})`)  :(`url(https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80)`)
-              }}
+            <PreviewVacancy
+              // image={this.state.image}
+              title={this.state.title}
+              description={this.state.description}
+              image={this.state.image}
+              icon={(JSON.parse(sessionStorage.getItem('group')).icon)}
+              company={(JSON.parse(sessionStorage.getItem('group')).title)}
             />
-            <ModalBody>
-              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
-                <h2 className="mt-4">{this.state.title ? (this.state.title) : ('title')}</h2>
-                <p className="text-center mt-2">
-                  Discovered had get considered projection who favourable.
-                  Necessary up knowledge it tolerably. Unwilling departure
-                  education to admitted speaking...
-                </p>
-              </div>
-              <hr />
-            </ModalBody>
           </Modal>
         ) : null}
       </Container>

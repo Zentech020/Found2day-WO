@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {  toast } from 'react-toastify';
 import FuzzySearch from 'fuzzy-search';
 import dateFormat from 'dateformat';
+import TooltipHelper from "./../components/tooltip/tooltip";
 
 import {
   Container,
@@ -50,7 +51,8 @@ class SingleVacancy extends React.Component {
       modal: false,
       modalInfo: null,
       vacancySwitcher: true,
-      showingError: true
+      showingError: true,
+      toggleTooltip:false,
     };
 
     this.searcher = null;
@@ -296,7 +298,12 @@ class SingleVacancy extends React.Component {
             htmlDecription={description}
             className="text-sm-left mb-3 align-items-center"
           />
-          <Col sm="6" className="d-flex">
+          <Col sm="6" className="d-flex flex-column align-items-end">
+          <TooltipHelper
+            className="ml-auto my-auto"
+            content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."
+            tooltipTarget="hideorshow"
+          />
             <FormCheckbox
               toggle
               checked={this.state.vacancySwitcher}

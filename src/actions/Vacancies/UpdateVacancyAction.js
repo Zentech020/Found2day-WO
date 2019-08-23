@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from "react-toastify";
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();
 export const UPDATE_VACANCY_IS_LOADING = 'update_vacancy_is_loading';

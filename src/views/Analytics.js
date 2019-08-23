@@ -42,11 +42,13 @@ class Analytics extends React.Component {
   render() {
 
     const { applicationCount, vacancyCount, applicantsTime } = this.props;
-    if(this.props.applicantsTime) {
-      const dates = this.props.applicantsTime.map(s => ({x:s.date}));
-      console.log(dates);
+    if(this.props.dates.length) {
+      console.log(this.props.dates);
     }
+
+
     return (
+
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-2">
           {/* Page Header :: Title */}
@@ -82,27 +84,15 @@ class Analytics extends React.Component {
 
         {/* Users by Device */}
         <Col lg="8" md="12" sm="12" className="mb-4">
-          {this.props.applicantsTime ? (
+          {this.props.applicantsTime && this.props.dates.length ? (
             <UsersOverview
             chartData={{
               labels: this.props.dates ? this.props.dates : null,
-              // labels: ["2019-09-08","2019-09-09","2019-09-10"],
               datasets: [
                 {
                   label: "Applicants",
                   fill: false,
                   data: this.props.applicantsTime,
-                  // data: [
-                  //   {
-                  //       x: "04/03/2014", y: 175
-                  //   }, {
-                  //       x: "05/03/2014", y: 300
-                  //   }, {
-                  //       x: "06/03/2014", y: 500
-                  //   }, {
-                  //       x: "07/03/2014", y: 600
-                  //   }
-                  // ],
                   backgroundColor: "rgba(0,123,255,0.1)",
                   borderColor: "rgba(0,123,255,1)",
                   pointBackgroundColor: "#ffffff",

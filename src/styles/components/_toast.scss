@@ -1,0 +1,19 @@
+.Toastify {
+  &__toast {
+    &--success {
+     background: white !important;
+     color: $fiord-blue;
+     border-radius: 10px !important;
+     border-left: 10px solid #34d058 !important;
+     box-shadow: $card-small-box-shadow !important;
+    }
+
+    &--error {
+      background: white !important;
+      color: $fiord-blue;
+      border-radius: 10px !important;
+      border-left: 10px solid $salmon !important;
+      box-shadow: $card-small-box-shadow !important;
+    }
+  }
+}

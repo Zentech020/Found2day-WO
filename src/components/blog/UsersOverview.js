@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Row, Col, Card, CardHeader, CardBody, Button } from "shards-react";
-
-import RangeDatePicker from "../common/RangeDatePicker";
+import {Link} from 'react-router-dom';
 import Chart from "../../utils/chart";
 
 class UsersOverview extends React.Component {
@@ -90,16 +89,18 @@ class UsersOverview extends React.Component {
         </CardHeader>
         <CardBody className="pt-0">
           <Row className="border-bottom py-2 bg-light">
-            <Col sm="6" className="d-flex mb-2 mb-sm-0">
+            {/* <Col sm="6" className="d-flex mb-2 mb-sm-0">
               <RangeDatePicker />
-            </Col>
+            </Col> */}
             <Col>
+            <Link to="/applicants">
               <Button
                 size="sm"
                 className="d-flex btn-white ml-auto mr-auto ml-sm-auto mr-sm-0 mt-3 mt-sm-0"
               >
-                View Full Report &rarr;
+                View applicants overview &rarr;
               </Button>
+              </Link>
             </Col>
           </Row>
           <canvas

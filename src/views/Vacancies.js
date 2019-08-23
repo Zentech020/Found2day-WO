@@ -49,10 +49,13 @@ class Vacancies extends React.Component {
   };
 
   render() {
-    const { vacancies_by_group, vacancies_by_account ,isLoading} = this.props;
+    const { isLoading} = this.props;
     const {vacancies_loaded} = this.state
     const GroupVacancies = ({vacancy_type}) => {
-      if(vacancy_type.length && vacancies_loaded) {
+      if(vacancy_type && vacancy_type.length) {
+        console.log("checking emtpy vacancies",vacancy_type)
+      }
+      if( vacancy_type && vacancy_type.length) {
         return (
           <Row>
             {vacancy_type.map((vacancy, i) => (
@@ -88,7 +91,7 @@ class Vacancies extends React.Component {
           </Row>
         )
       }
-      else {
+      else if( vacancy_type.length === 0 ){
         return (
           <Container>
             <Row className="my-4">

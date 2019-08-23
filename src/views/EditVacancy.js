@@ -37,6 +37,7 @@ class editVacancy extends React.Component {
       newTitle: '',
       newDescription: '',
       newContent:'',
+      newMaxApplicants:0,
       newJobTitle: '',
       newBranch: '',
       newEducation: '',
@@ -60,6 +61,7 @@ class editVacancy extends React.Component {
       title,
       description,
       content,
+      maxApplicants,
       jobTitle,
       branch,
       experience,
@@ -76,6 +78,7 @@ class editVacancy extends React.Component {
         newTitle: title,
         newDescription: description,
         newContent:content,
+        newMaxApplicants:maxApplicants,
         newJobTitle: jobTitle,
         newBranch: branch,
         newEducation: education,
@@ -193,6 +196,7 @@ class editVacancy extends React.Component {
       newTitle,
       newDescription,
       newContent,
+      newMaxApplicants,
       newJobTitle,
       newBranch,
       newEducation,
@@ -273,6 +277,17 @@ class editVacancy extends React.Component {
                                 value={newContent}
                                 onChange={value =>
                                   this.setState({ newContent: value })
+                                }
+                              />
+                            </Col>
+                            <Col md="6" className="form-group">
+                              <label htmlFor="firstName">Max Applicants</label>
+                              <FormInput
+                                id="maxApplicants"
+                                type="number"
+                                value={newMaxApplicants}
+                                onChange={e =>
+                                  this.setState({ newMaxApplicants: e.target.value })
                                 }
                               />
                             </Col>

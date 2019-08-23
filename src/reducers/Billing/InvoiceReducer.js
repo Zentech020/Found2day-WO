@@ -2,6 +2,9 @@ import {
     UP_INVOICE_IS_LOADING,
     UP_INVOICE_DATA,
     UP_INVOICE_ERROR,
+    INVOICES_IS_LOADING,
+    INVOICES_DATA,
+    INVOICES_ERROR,
     END_INVOICE_IS_LOADING,
     END_INVOICE_DATA,
     END_INVOICE_ERROR
@@ -23,10 +26,22 @@ import {
       }
 
       case UP_INVOICE_DATA: {
-          return { ...state, data: action.result.data, success: true };
+          return { ...state, upcomingInvoices: action.result.data, success: true };
       }
 
       case UP_INVOICE_ERROR: {
+        return { ...state, err: true, success: false };
+      }
+
+      case INVOICES_IS_LOADING: {
+        return { ...state, isLoading: true };
+      }
+
+      case INVOICES_DATA: {
+          return { ...state, allInvoices: action.result.data.invoices.data, success: true, isLoading: false };
+      }
+
+      case INVOICES_ERROR: {
         return { ...state, err: true, success: false };
       }
 
@@ -35,7 +50,6 @@ import {
       }
 
       case END_INVOICE_DATA: {
-        console.log("from ending action",action.result);
         return { ...state, upcomingInvoice: action.result.data, success: true };
       }
 
