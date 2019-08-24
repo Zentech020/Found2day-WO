@@ -155,7 +155,7 @@ class Billing extends React.Component {
             <span>Invoice for period {period_start} - {period_end}</span>
           </Col>
           <Col className="file-manager__filters__rows d-flex" md="4">
-            <span>Will be sent on {next_payment_attempt} to {'!EMAIL!'}</span>
+            <span>Will be sent on {next_payment_attempt} to {JSON.parse(sessionStorage.getItem('account')).email}</span>
           </Col>
         </Row>
       </Container>
@@ -178,19 +178,19 @@ class Billing extends React.Component {
     </CardBody>
   </Card>
 
-renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next_payment_attempt) =>
+renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next_payment_attempt, amount_due, status) =>
 <Card className="p-0 mb-4">
 <CardHeader className="p-0">
   <Container fluid className="file-manager__filters border-bottom">
     <Row>
       <Col className="file-manager__filters__rows d-flex" md="2">
-        <span>ALL INVOICE</span>
+        <span>INVOICE</span>
       </Col>
       <Col className="file-manager__filters__rows d-flex" md="6">
-        <span>Invoice for period {period_start} - {period_end}</span>
+        <span>Invoice for period {new Date(period_start * 1000).toLocaleDateString()} - {new Date(period_end * 1000).toLocaleDateString()}</span>
       </Col>
       <Col className="file-manager__filters__rows d-flex" md="4">
-        <span>Will be sent on {next_payment_attempt} to {'!EMAIL!'}</span>
+        <span>Will be sent on {next_payment_attempt} to {JSON.parse(sessionStorage.getItem('account')).email}</span>
       </Col>
     </Row>
   </Container>
@@ -207,7 +207,16 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
           minRows={0}
         />
       }
-
+      <div className="d-flex">
+        {status !== "paid" ? (<Button onClick={() => this.onPay()} className="flex-end my-2 mx-3 ml-auto w-25">
+          Pay now ({(amount_due / 100).toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        })})
+        </Button>) : (
+          <Button outline theme="success" className="flex-end my-2 mx-3 ml-auto w-25 disabled">Paid</Button>
+        )}
+      </div>
   </div>
 </CardBody>
 </Card>
@@ -298,11 +307,11 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         accessor: 'quantity',
         maxWidth: 200,
         className: 'text-center',
-        Footer: <span></span>,
-        Cell: row => 59.99.toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        })
+        // Footer: <span></span>,
+        // Cell: row => 59.99.toLocaleString('en-US', {
+        //   style: 'currency',
+        //   currency: 'USD',
+        // })
       },
       {
         Header: 'Total',
@@ -314,23 +323,25 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
           style: 'currency',
           currency: 'USD',
         }),
-        Footer: (
-          isPaid ? (
-            null
-          ) : (
-            <div className="d-flex flex-column">
-            <span>{(amount_due_all / 100).toLocaleString('en-US', {
-              style: 'currency',
-              currency: 'USD',
-            })}</span>
-            <Button onClick={() => this.onPay()} className="mt-2">
-              Pay
-            </Button>
-          </div>
-          )
+        // Footer: (
+        //   isPaid ? (
+        //     null
+        //   ) : (
+        //     row => 
+        //       <div className="d-flex flex-column">
+        //         <span>{(row.amount_due_all / 100).toLocaleString('en-US', {
+        //           style: 'currency',
+        //           currency: 'USD',
+        //         })}</span>
+        //         <Button onClick={() => this.onPay()} className="mt-2">
+        //           Payeee
+        //           {console.log('eh',row.data.reduce((acc, r) => acc + r.amount))}
+        //         </Button>
+        //       </div>
+        //   )
 
 
-        )
+        // )
       }
     ];
 
@@ -353,7 +364,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
             </Tab>
           </TabList>
           <TabPanel>
-            {this.props.invoice ? (
+            {(this.props.invoice && this.props.invoice.upcomingInvoice && this.props.invoice.upcomingInvoice.lines) ? (
             this.renderTableUpcomingInvoice(tableColumns_upcoming, this.props.invoice.upcomingInvoice.lines.data, period_start_upcoming, period_end_upcoming, next_payment_attempt_upcoming)
             ) :
               (
@@ -374,7 +385,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
           </TabPanel>
           <TabPanel>
             {this.props.all_invoices && this.props.all_invoices.map(invoice =>
-              this.renderTableAllInvoice(tableColumns_all, invoice.lines.data, invoice.period_start, invoice.period_end, invoice.next_payment_attempt)
+              this.renderTableAllInvoice(tableColumns_all, invoice.lines.data, invoice.period_start, invoice.period_end, invoice.next_payment_attempt, invoice.amount_due, invoice.status)
             )}
           </TabPanel>
         </Tabs>
