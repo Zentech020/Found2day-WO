@@ -122,7 +122,7 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_VACANCY_DATA: {
-      return { ...state, success: true, err:false, message:'succesfully updated vacancy' };
+      return { ...state, success: true, isLoading:false, err:false, message:'succesfully updated vacancy' };
     }
 
     case UPDATE_VACANCY_ERROR: {

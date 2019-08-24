@@ -8,36 +8,25 @@ export const UPDATE_VACANCY_ERROR = 'update_vacancy_error';
 
 export const updateVacancy = (
   vacancyId,
-  title,
-  description,
-  content,
-  image,
-  jobTitle,
-  branch,
-  education,
-  experience,
-  employmentType,
-  weekHours,
-  distance,
-  postalcode
+  vacancy
 ) => async dispatch => {
   try {
     dispatch({ type: UPDATE_VACANCY_IS_LOADING });
     const result = await axios.put(
       `http://127.0.0.1:5000/vacancies/${vacancyId}`,
       {
-        title: title,
-        description: description,
-        content:content,
-        image:image,
-        jobTitle: jobTitle,
-        branch: branch,
-        education: education,
-        experience: experience,
-        employmentType: employmentType,
-        weekHours: weekHours,
-        distance: distance,
-        postalcode: postalcode
+        title: vacancy.title,
+        description: vacancy.description,
+        content:"<p>contentcontent</p>",
+        image: vacancy.image,
+        jobTitle: vacancy.jobTitle,
+        branch: vacancy.branch,
+        education: vacancy.education,
+        experience: vacancy.experience,
+        employmentType: vacancy.employmentType,
+        weekHours: vacancy.weekHours,
+        postalcode: vacancy.postalcode,
+        visible:vacancy.visible
       },
       header
     );

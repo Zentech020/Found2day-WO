@@ -35,7 +35,7 @@ import SingleHeader from '../components/single-vacancy/singleHeader';
 import BlockAnimation from '../components/Animations/Block';
 import 'react-tabs/style/react-tabs.css';
 import getApplicantsData from '../data/applicants-list';
-import { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy } from '../actions';
+import { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy , updateVacancy} from '../actions';
 
 import colors from '../utils/colors';
 
@@ -53,6 +53,8 @@ class SingleVacancy extends React.Component {
       vacancySwitcher: true,
       showingError: true,
       toggleTooltip:false,
+      applications:[],
+      singleVacancy:[],
     };
 
     this.searcher = null;
@@ -67,11 +69,21 @@ class SingleVacancy extends React.Component {
     this.handleDirectoryClick = this.handleDirectoryClick.bind(this);
   }
 
-  componentDidMount = () => {
+  componentDidMount = async() => {
     const { id } = this.props.match.params;
     console.log(id);
-    this.props.getSingleVacancy(id);
-    this.props.getApplicationsByVacancy(id);
+    await this.props.getSingleVacancy(id);
+    await this.props.getApplicationsByVacancy(id);
+
+    this.setState({
+      applications:this.props.applications,
+      single_vacancy:this.props.single_vacancy
+    });
+
+    this.searcher = new FuzzySearch(this.state.applications, ['name', 'vacancyTitle'], {
+      caseSensitive: false
+    });
+    console.log(this.searcher);
   };
 
   async componentDidUpdate(nextProps, history) {
@@ -91,20 +103,6 @@ class SingleVacancy extends React.Component {
         await this.setState({showingError: true})
       }
     }
-  }
-
-  componentWillMount() {
-    const tableData = getApplicantsData();
-
-    this.setState({
-      ...this.state,
-      tableData
-    });
-
-    // Initialize the fuzzy searcher.
-    this.searcher = new FuzzySearch(tableData, ['customer', 'status'], {
-      caseSensitive: false
-    });
   }
 
   /**
@@ -136,7 +134,7 @@ class SingleVacancy extends React.Component {
   handleFilterSearch(e) {
     this.setState({
       ...this.state,
-      tableData: this.searcher.search(e.target.value)
+      applications: this.searcher.search(e.target.value)
     });
   }
 
@@ -195,9 +193,19 @@ class SingleVacancy extends React.Component {
     await this.setState({showingError: false})
   };
 
+  onChangeVisibillity = async() => {
+    const { id } = this.props.match.params;
+    console.log('change');
+    let newState = Object.assign({}, this.state);
+
+    newState.single_vacancy['visible'] = !this.state.single_vacancy.visible;
+    this.setState(newState);
+    await this.props.updateVacancy(id, this.state.single_vacancy);
+  }
+
   render() {
-    const { directories } = this.state;
-    const { tableData, pageSize, pageSizeOptions } = this.state;
+    const { directories, applications } = this.state;
+    const { pageSize, pageSizeOptions , single_vacancy} = this.state;
     const {
       title,
       description,
@@ -208,11 +216,10 @@ class SingleVacancy extends React.Component {
       employmentType,
       education,
       weekHours,
-      distance,
       postalcode
     } = this.props.single_vacancy;
     const { id } = this.props.match.params;
-    const {applications, isLoading} = this.props;
+    const {isLoading} = this.props;
     const tableColumns = [
       {
         Header: '#',
@@ -306,12 +313,10 @@ class SingleVacancy extends React.Component {
           />
             <FormCheckbox
               toggle
-              checked={this.state.vacancySwitcher}
+              checked={single_vacancy.visible}
               className="ml-auto my-auto"
               id="conversationsEmailsToggle"
-              onChange={() => {
-                this.setState({ vacancySwitcher: !this.state.vacancySwitcher });
-              }}
+              onChange={() => this.onChangeVisibillity()}
             />
           </Col>
         </Row>
@@ -670,5 +675,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy }
+  { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy, updateVacancy }
 )(SingleVacancy);
