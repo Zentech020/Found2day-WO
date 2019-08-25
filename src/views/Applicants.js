@@ -24,7 +24,8 @@ import { connect } from 'react-redux';
 
 import PageTitle from '../components/common/PageTitle';
 import RangeDatePicker from '../components/common/RangeDatePicker';
-import { getApplicationsByGroup } from '../actions/index';
+import DeviationModal from '../components/applicants/deviationModal';
+import { getApplicationsByGroup, getApplicantCV, getDeviation } from '../actions/index';
 
 class Applicants extends React.Component {
   constructor(props) {
@@ -35,7 +36,8 @@ class Applicants extends React.Component {
       pageSize: 10,
       applications: [],
       modal: false,
-      modalInfo: null
+      modalInfo: null,
+      openDeviationModal:false,
     };
 
     this.searcher = null;
@@ -68,6 +70,7 @@ class Applicants extends React.Component {
 
 
   componentDidMount = async() => {
+
     const group = JSON.parse(sessionStorage.getItem('group'));
 
     if(group) {
@@ -79,7 +82,6 @@ class Applicants extends React.Component {
     this.searcher = new FuzzySearch(this.state.applications, ['name', 'vacancyTitle'], {
       caseSensitive: false
     });
-    // console.log(this.searcher);
   }
 
 
@@ -133,14 +135,36 @@ class Applicants extends React.Component {
     alert(`Viewing details for "${row.original.id}"!`);
   }
 
+  onGetCV = () => {
+    this.props.getApplicantCV().then((res) => {
+      console.log(res);
+      const url = window.URL.createObjectURL(new Blob([res.result.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.pdf'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+
   toggle = () => {
     this.setState({
       modal: !this.state.modal
     });
   };
 
+  onSetDeviations = async(vacancyId) => {
+    await this.props.getDeviation(vacancyId);
+    this.setState({
+      openDeviationModal:true,
+      modal:true,
+    })
+  }
+
   render() {
-    const { tableData, pageSize, pageSizeOptions } = this.state;
+
+
+    const { pageSize, pageSizeOptions } = this.state;
     const {applications} = this.state;
     const tableColumns = [
       {
@@ -176,9 +200,9 @@ class Applicants extends React.Component {
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <a target="_blank" href={row.original.cvURL} theme="white">
+            <div onClick={() => this.onGetCV()}>
               <i className="material-icons">&#xE870;</i>
-            </a>
+            </div>
           </ButtonGroup>
         )
       },
@@ -190,21 +214,7 @@ class Applicants extends React.Component {
         sortable: false,
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <Button theme="white" onClick={() => this.handleItemConfirm(row)}>
-              <i className="material-icons">&#xE5CA;</i>
-            </Button>
-            <Button
-              theme="white"
-              onClick={() => this.handleItemViewDetails(row)}
-            >
-              <i className="material-icons">&#xE870;</i>
-            </Button>
-            <Button theme="white" onClick={() => this.handleItemEdit(row)}>
-              <i className="material-icons">&#xE254;</i>
-            </Button>
-            <Button theme="white" onClick={() => this.handleItemDelete(row)}>
-              <i className="material-icons">&#xE872;</i>
-            </Button>
+            <Button onClick={() => this.onSetDeviations(row.original.vacancyId)}>See Job deviations</Button>
           </ButtonGroup>
         )
       }
@@ -264,92 +274,42 @@ class Applicants extends React.Component {
                 pageSize={pageSize}
                 showPageSizeOptions={false}
                 resizable={true}
-                getTdProps={(state, rowInfo, column, instance) => {
-                  return {
-                    onClick: (e, handleOriginal) => {
-                      console.log('It was in this row:', rowInfo);
-                      this.setState({
-                        modal: true,
-                        modalInfo: rowInfo.original
-                      });
+                // getTdProps={(state, rowInfo, column, instance) => {
+                //   return {
+                //     onClick: (e, handleOriginal) => {
+                //       console.log('It was in this row:', rowInfo);
+                //       this.setState({
+                //         modal: true,
+                //         modalInfo: rowInfo.original
+                //       });
 
-                      // IMPORTANT! React-Table uses onClick internally to trigger
-                      // events like expanding SubComponents and pivots.
-                      // By default a custom 'onClick' handler will override this functionality.
-                      // If you want to fire the original onClick handler, call the
-                      // 'handleOriginal' function.
-                      if (handleOriginal) {
-                        handleOriginal();
-                      }
-                    }
-                  };
-                }}
+                //       // IMPORTANT! React-Table uses onClick internally to trigger
+                //       // events like expanding SubComponents and pivots.
+                //       // By default a custom 'onClick' handler will override this functionality.
+                //       // If you want to fire the original onClick handler, call the
+                //       // 'handleOriginal' function.
+                //       if (handleOriginal) {
+                //         handleOriginal();
+                //       }
+                //     }
+                //   };
+                // }}
               />
             </div>
           </CardBody>
         </Card>
-        {this.state.modalInfo ? (
+        {this.state.openDeviationModal ? (
           <Modal
             open={this.state.modal}
             toggle={() => this.toggle()}
             position="center"
+            className="c-modal"
           >
-            <ModalHeader
-              className="popup__bg"
-              style={{
-                backgroundImage:
-                  'url(https://images.unsplash.com/photo-1477948879622-5f16e220fa42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)'
-              }}
-            />
-            <ModalBody>
-              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
-                <img
-                  height="125"
-                  width="125"
-                  alt="profile"
-                  className="rounded-circle"
-                  src={this.state.modalInfo.image}
-                />
-                <h2 className="mt-4">{this.state.modalInfo.name}</h2>
-                <p className="text-center mt-2">
-                  Discovered had get considered projection who favourable.
-                  Necessary up knowledge it tolerably. Unwilling departure
-                  education to admitted speaking...
-                </p>
-              </div>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Email</h5>
-                    <p className="my-0">steye.k@vindicat.nl</p>
-                  </div>
-                </Col>
-
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Address</h5>
-                    <p className="my-0">Helmholtzstraat 18b</p>
-                  </div>
-                </Col>
-
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Phone</h5>
-                    <p className="my-0">+40 0123 456 789</p>
-                  </div>
-                </Col>
-
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">CV</h5>
-                    <i className="material-icons">insert_drive_file</i>
-                  </div>
-                </Col>
-              </Row>
-            </ModalBody>
-          </Modal>
-        ) : null}
+                      <DeviationModal
+                        deviations={this.props.deviations}
+                      />
+                    </Modal>
+                  ) : null}
       </Container>
     );
   }
@@ -358,11 +318,12 @@ class Applicants extends React.Component {
 //Connect redux
 function mapStateToProps(state) {
   return {
-    applications: state.applicants.applications
+    applications: state.applicants.applications,
+    deviations: state.applicants.deviations,
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getApplicationsByGroup }
+  { getApplicationsByGroup, getApplicantCV, getDeviation }
 )(Applicants);

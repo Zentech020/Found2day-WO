@@ -3,6 +3,7 @@ import { getApplicationCount } from './Home/getApplicationCount';
 import { getVacancyCount } from './Home/getVacancyCount';
 import { addVacancyAction } from './Vacancies/AddVacancyAction';
 import { getApplicants } from './Applicants/getApplicantsAction';
+import { getDeviation } from './Applicants/getDeviatonsAction';
 import { loginUser } from './Auth/LoginAction';
 import { registerUser } from './Auth/RegisterAction';
 import { registerInviteUser } from './Auth/RegisterInviteAction';
@@ -21,6 +22,7 @@ import { endInvoice, getInvoices } from './Billing/InvoiceAction';
 import { getSpecs } from './Vacancies/GetSpecsAction';
 import { getApplicationsByGroup } from './Applicants/GetApplicationsByGroup';
 import { getApplicationsByVacancy } from './Applicants/GetApplicationsByVacancy';
+import { getApplicantCV } from './Applicants/getApplicantCV';
 import {changeSpecs} from './Vacancies/GetSpecsAction';
 import {getProfile} from './Profile/GetProfileAction';
 import {updateProfile} from './Profile/UpdateProfileAction';
@@ -35,6 +37,7 @@ export {
   getApplicationCount,
   getVacancyCount,
   getApplicants,
+  getDeviation,
   loginUser,
   registerUser,
   logoutUser,
@@ -45,6 +48,7 @@ export {
   addVacancyAction,
   getVacanciesByGroup,
   getVacanciesByAccount,
+  getApplicantCV,
   getSingleVacancy,
   deleteSingleVacancy,
   updateVacancy,
