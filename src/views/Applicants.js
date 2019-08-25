@@ -228,9 +228,6 @@ class Applicants extends React.Component {
             subtitle="Overview"
             className="text-sm-left mb-3"
           />
-          <Col sm="4" className="d-flex ml-auto my-auto">
-            <RangeDatePicker className="justify-content-end" />
-          </Col>
         </Row>
         <Card className="p-0">
           <CardHeader className="p-0">
@@ -274,42 +271,22 @@ class Applicants extends React.Component {
                 pageSize={pageSize}
                 showPageSizeOptions={false}
                 resizable={true}
-                // getTdProps={(state, rowInfo, column, instance) => {
-                //   return {
-                //     onClick: (e, handleOriginal) => {
-                //       console.log('It was in this row:', rowInfo);
-                //       this.setState({
-                //         modal: true,
-                //         modalInfo: rowInfo.original
-                //       });
-
-                //       // IMPORTANT! React-Table uses onClick internally to trigger
-                //       // events like expanding SubComponents and pivots.
-                //       // By default a custom 'onClick' handler will override this functionality.
-                //       // If you want to fire the original onClick handler, call the
-                //       // 'handleOriginal' function.
-                //       if (handleOriginal) {
-                //         handleOriginal();
-                //       }
-                //     }
-                //   };
-                // }}
               />
             </div>
           </CardBody>
         </Card>
         {this.state.openDeviationModal ? (
           <Modal
+            size="sm"
             open={this.state.modal}
             toggle={() => this.toggle()}
-            position="center"
-            className="c-modal"
-          >
-                      <DeviationModal
-                        deviations={this.props.deviations}
-                      />
-                    </Modal>
-                  ) : null}
+            position="center">
+              <ModalHeader>Invite member</ModalHeader>
+              <ModalBody>
+                <DeviationModal deviations={this.props.deviations}/>
+              </ModalBody>
+          </Modal>
+        ) : null}
       </Container>
     );
   }

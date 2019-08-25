@@ -39,13 +39,17 @@ class Analytics extends React.Component {
       this.props.getApplicantsTime(group._id, '2019-09-01', '2019-10-01');
     }
   }
+
+  openChat = () => {
+    window.$crisp.push(['do', 'chat:open']);
+  }
+
   render() {
 
     const { applicationCount, vacancyCount, applicantsTime } = this.props;
     if(this.props.dates.length) {
       console.log(this.props.dates);
     }
-
 
     return (
 
@@ -148,73 +152,15 @@ class Analytics extends React.Component {
             <CardFooter className="border-top">
               <Row>
                 <Col className="text-right view-report">
-                  <Link to="/help">Leave Feedback &rarr;</Link>
+                  <a href="#" onClick={() => this.openChat()}>Leave Feedback &rarr;</a>
                 </Col>
               </Row>
             </CardFooter>
           </Card>
         </Col>
       </Row>
-{/*
-        <Row>
-          <Col lg="6" sm="12" className="mb-4" key={1}>
-            <Card small className="card-post card-post--aside card-post--1">
-              <div
-                className="card-post__image"
-                style={{
-                  backgroundImage: `url(${require('../images/content-management/1.jpeg')})`
-                }}
-              />
-              <CardBody>
-                <h5 className="card-title">
-                  <a className="text-fiord-blue" href="#">
-                    This is our first week launching the beta platform
-                  </a>
-                </h5>
-                <p className="card-text d-inline-block mb-3">
-                  {homeNotification}
-                </p>
-                <span className="text-muted">28 February 2019</span>
-              </CardBody>
-            </Card>
-            <div className="d-flex mt-4">
-              {this.props.smallStats.map((stats, idx) => (
-                <Col
-                  className={
-                    'col-lg' +
-                    (idx === 0 ? ' pl-0' : '') +
-                    (idx === 1 ? ' pr-0' : '')
-                  }
-                  lg="6"
-                  md="4"
-                  sm="6"
-                  key={idx}
-                >
-                  <SmallStats
-                    id={`small-stats-${idx}`}
-                    variation="1"
-                    chartData={stats.datasets}
-                    chartLabels={stats.chartLabels}
-                    label={stats.label}
-                    value={idx === 0 ? applicationCount : vacancyCount}
-                    percentage={stats.percentage}
-                    increase={stats.increase}
-                    decrease={stats.decrease}
-                  />
-                </Col>
-              ))}
-            </div>
-          </Col>
-          <Col lg="6" md="12" sm="12" className="mb-4">
-            <Sessions />
-          </Col>
-        </Row> */}
-
-        {/* Small Stats Blocks */}
-        <Row />
-
-        <Row />
-      </Container>
+    <Row />
+  </Container>
     );
   }
 }

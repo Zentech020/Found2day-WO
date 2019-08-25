@@ -41,6 +41,12 @@ import {
   UPDATE_VACANCY_ERROR
 } from '../../actions/Vacancies/UpdateVacancyAction';
 
+import {
+  GET_COORDINATES_LOADING,
+  GET_COORDINATES_DATA,
+  GET_COORDINATES_ERROR
+} from '../../actions/Vacancies/getCoordinatesAction';
+
 const initialState = {
   vacancies_by_account: [],
   vacancies_by_group:[],
@@ -126,6 +132,19 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_VACANCY_ERROR: {
+      return { ...state, err: true, message:'Something went wrong , try again!' };
+    }
+
+    case GET_COORDINATES_LOADING: {
+      return { ...state, isLoading: true };
+    }
+
+    case GET_COORDINATES_DATA: {
+      console.log(action.result);
+      return { ...state };
+    }
+
+    case GET_COORDINATES_ERROR: {
       return { ...state, err: true, message:'Something went wrong , try again!' };
     }
 

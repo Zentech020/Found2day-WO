@@ -26,7 +26,7 @@ import FormSectionTitle from '../components/edit-user-profile/FormSectionTitle';
 import GeneralInformation from '../components/add-vacancy/GeneralInformation';
 import PreviewVacancy from '../components/add-vacancy/PreviewVacancy';
 
-import { addVacancyAction, getSpecs, changeSpecs } from '../actions';
+import { addVacancyAction, getSpecs, changeSpecs, getCoordinates } from '../actions';
 import PageTitle from '../components/common/PageTitle';
 
 import colors from '../utils/colors';
@@ -66,6 +66,7 @@ class addVacancy extends React.Component {
       groupId: group._id
     });
     await this.props.getSpecs();
+    await this.props.getCoordinates();
   };
 
   async componentDidUpdate(nextProps, history) {
@@ -515,5 +516,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { addVacancyAction, getSpecs , changeSpecs}
+  { addVacancyAction, getSpecs , changeSpecs, getCoordinates}
 )(addVacancy);
