@@ -41,7 +41,7 @@ export const logoutUser = (history) => async dispatch => {
   try {
     dispatch({ type: LOGOUT_IS_LOADING });
     sessionStorage.clear();
-    const result = await axios.get(`http://127.0.0.1:5000/auth/logout`, header);
+    const result = await axios.get(`${API_URL}/auth/logout`, header);
     history.push('/login')
     return dispatch({ type: LOGOUT_DATA, result });
   } catch (err) {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();
 export const VACANCIES_COUNT_IS_LOADING = 'vacancies_count_is_loading';
@@ -9,7 +10,7 @@ export const getVacancyCount = (groupId) => async dispatch => {
   try {
     dispatch({ type: VACANCIES_COUNT_IS_LOADING });
     const result = await axios.get(
-      `http://127.0.0.1:5000/vacancies/groups/${groupId}/count`,
+      `${API_URL}/vacancies/groups/${groupId}/count`,
       header
     );
     return dispatch({ type: VACANCIES_COUNT_DATA, result, err:false });

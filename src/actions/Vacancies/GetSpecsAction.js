@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 
 export const GET_SPECS_IS_LOADING = 'get_specs_is_loading';
 export const GET_SPECS_DATA = 'get_specs_data';

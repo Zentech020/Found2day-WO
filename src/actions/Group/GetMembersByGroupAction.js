@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();
 export const MEMBERS_BY_GROUP_IS_LOADING = 'members_by_group_is_loading';
@@ -9,7 +10,7 @@ export const getMembersByGroup = groupId => async dispatch => {
   try {
     dispatch({ type: MEMBERS_BY_GROUP_IS_LOADING });
     const result = await axios.get(
-      `http://127.0.0.1:5000/groups/${groupId}/members`,
+      `${API_URL}/groups/${groupId}/members`,
       header
     );
     return dispatch({ type: MEMBERS_BY_GROUP_DATA, result });

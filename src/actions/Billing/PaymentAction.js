@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 
 export const PAYMENT_IS_LOADING = 'payment_is_loading';
 export const PAYMENTE_DATA = 'payment_data';
@@ -12,7 +13,7 @@ export const getPayLink = (
 ) => async dispatch => {
   try {
     dispatch({ type: PAYMENT_IS_LOADING });
-    const result = await axios.post(`http://127.0.0.1:5000/payments`, {
+    const result = await axios.post(`${API_URL}/payments`, {
       groupId: groupId,
       amount: amount,
       currency: currency,

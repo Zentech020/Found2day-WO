@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 
 export const REGISTER_IS_LOADING = 'register_is_loading';
 export const REGISTER_DATA = 'register_data';
@@ -13,7 +14,7 @@ export const registerUser = (
 ) => async dispatch => {
   try {
     dispatch({ type: REGISTER_IS_LOADING });
-    const result = await axios.post(`http://127.0.0.1:5000/auth/register`, {
+    const result = await axios.post(`${API_URL}/auth/register`, {
       name,
       email,
       password,

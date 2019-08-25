@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from "react-toastify";
+import { API_URL } from '../../constants/url';
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();
 export const UPDATE_VACANCY_IS_LOADING = 'update_vacancy_is_loading';
@@ -13,7 +14,7 @@ export const updateVacancy = (
   try {
     dispatch({ type: UPDATE_VACANCY_IS_LOADING });
     const result = await axios.put(
-      `http://127.0.0.1:5000/vacancies/${vacancyId}`,
+      `${API_URL}/vacancies/${vacancyId}`,
       {
         title: vacancy.title,
         description: vacancy.description,

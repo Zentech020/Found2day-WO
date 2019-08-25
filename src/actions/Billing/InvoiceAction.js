@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();
 export const UP_INVOICE_IS_LOADING = 'up_invoice_is_loading';
@@ -18,9 +19,9 @@ export const END_INVOICE_ERROR = 'end_invoice_data';
 export const getUpcomingInvoice = (customerId) => async dispatch => {
   try {
     // dispatch({ type: UP_INVOICE_IS_LOADING });
-    const result = await axios.get(`http://127.0.0.1:5000/billing/invoices/customer/${customerId}/upcoming`);
+    const result = await axios.get(`${API_URL}/billing/invoices/customer/${customerId}/upcoming`);
     console.log('YOYOYOYO', result);
-    
+
     return dispatch({ type: UP_INVOICE_DATA, result });
   } catch (err) {
     if(err) {

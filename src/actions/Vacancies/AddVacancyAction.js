@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/url';
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();
 export const ADD_VACANCIE_IS_LOADING = 'add_vacancie_is_loading';
@@ -25,7 +26,7 @@ export const addVacancyAction = (
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
     const result = await axios.post(
-      `http://127.0.0.1:5000/vacancies`,
+      `${API_URL}/vacancies`,
       {
         title: title,
         description: description,
