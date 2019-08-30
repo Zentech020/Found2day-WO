@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Tooltip} from "shards-react";
+import {Tooltip, Button} from "shards-react";
+
 
 
 class TooltipHelper extends React.Component {
@@ -12,10 +13,16 @@ class TooltipHelper extends React.Component {
   }
 
   render() {
-    const { content, toggle, open, className, tooltipTarget } = this.props;
+    const { content, toggle, open, className, tooltipTarget, icon, hasButton } = this.props;
     return (
       <div className={className}>
-        <i id={tooltipTarget} className="material-icons">info</i>{' '}
+        {hasButton ?  (
+        <Button id={tooltipTarget} className="mr-2">
+          <i className="material-icons">{icon}</i>
+        </Button>
+        ) : (
+           <i id={tooltipTarget} className="material-icons">{icon}</i>
+        ) }
         <Tooltip
           open={this.state.open}
           target={`#${tooltipTarget}`}
@@ -33,6 +40,7 @@ TooltipHelper.propTypes = {
   toggle:PropTypes.func,
   open:PropTypes.bool,
   className:PropTypes.string,
+  hasButton:PropTypes.bool
 };
 
 TooltipHelper.defaultProps = {
@@ -40,7 +48,8 @@ TooltipHelper.defaultProps = {
   className:"",
   tooltipTarget:"",
   open:false,
-
+  icon:'info',
+  hasButton:false
 };
 
 export default TooltipHelper;

@@ -55,6 +55,7 @@ const initialState = {
   err:false,
   message:'',
   busy:false,
+  location:[],
 };
 
 export default (state = initialState, action) => {
@@ -140,8 +141,8 @@ export default (state = initialState, action) => {
     }
 
     case GET_COORDINATES_DATA: {
-      console.log(action.result);
-      return { ...state };
+      console.log(action.result.data);
+      return { ...state, err:false, location:action.result.data};
     }
 
     case GET_COORDINATES_ERROR: {

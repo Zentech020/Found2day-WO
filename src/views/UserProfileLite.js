@@ -257,10 +257,7 @@ class UserProfileLite extends React.Component {
           <ModalBody>
             <div>
               <p>
-                Proin pretium, leo ac pellentesque mollis, felis nunc ultrices
-                eros, sed gravida augue augue mollis justo. Nulla porta dolor.
-                Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi
-                congue nunc, vitae euismod ligula urna in dolor.
+                Invite team members so they can place vacancies at Found2Day. Every team member can see which vacancies they personally placed. At the company profile you can allow other members to be admin.
               </p>
             </div>
 

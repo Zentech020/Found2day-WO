@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {  toast } from 'react-toastify';
+import React from "react";
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import {
   Container,
   Row,
@@ -13,20 +13,21 @@ import {
   FormInput,
   FormSelect,
   FormTextarea,
-  Progress,
-  Modal,
-  ModalBody,
-  ModalHeader
-} from 'shards-react';
-import { connect } from 'react-redux';
-import ReactQuill from 'react-quill';
-import FormSectionTitle from '../components/edit-user-profile/FormSectionTitle';
-import GeneralInformation from '../components/add-vacancy/GeneralInformation';
-import { getSingleVacancy, updateVacancy, getSpecs, changeSpecs } from '../actions';
+} from "shards-react";
+import { connect } from "react-redux";
+import ReactQuill from "react-quill";
+import TooltipHelper from "../components/tooltip/tooltip";
+import FormSectionTitle from "../components/edit-user-profile/FormSectionTitle";
+import {
+  getSingleVacancy,
+  updateVacancy,
+  getSpecs,
+  changeSpecs
+} from "../actions";
 
-import PageTitle from '../components/common/PageTitle';
+import PageTitle from "../components/common/PageTitle";
 
-import colors from '../utils/colors';
+import colors from "../utils/colors";
 
 class editVacancy extends React.Component {
   constructor(props) {
@@ -34,52 +35,53 @@ class editVacancy extends React.Component {
 
     this.state = {
       preview: false,
-      newContent:'',
+      newContent: "",
       showingError: true,
-      newSingleVacancy:[],
+      newSingleVacancy: [],
+      filteredJobTitles:[]
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount = async () => {
     const { id } = this.props.match.params;
     const { getSpecs, getSingleVacancy } = this.props;
     await getSingleVacancy(id);
     getSpecs();
 
-    const {content} = this.props.single_vacancy;
+    const { content } = this.props.single_vacancy;
 
     if (this.props.single_vacancy) {
       this.setState({
-        newSingleVacancy:this.props.single_vacancy,
-        newContent:content,
+        newSingleVacancy: this.props.single_vacancy,
+        newContent: content
       });
     }
-  }
+  };
 
   async componentDidUpdate(nextProps, history) {
     if (!this.props.error && !this.state.showingError) {
-      if(this.props.message) {
+      if (this.props.message) {
         toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
-        await this.setState({showingError: true})
+        await this.setState({ showingError: true });
+      }
     }
-    }
-    if(this.props.error && !this.state.showingError) {
-      if(this.props.message) {
+    if (this.props.error && !this.state.showingError) {
+      if (this.props.message) {
         toast.error(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
-        await this.setState({showingError: true})
+        await this.setState({ showingError: true });
       }
     }
   }
 
-  onUpdateVacancy = async (id) => {
-    const {newSingleVacancy, newContent } = this.state;
+  onUpdateVacancy = async id => {
+    const { newSingleVacancy, newContent } = this.state;
     if (newSingleVacancy || newContent) {
-      await this.props.updateVacancy(id, newSingleVacancy);
-      await this.setState({showingError: false})
+      await this.props.updateVacancy(id, newSingleVacancy, newContent);
+      await this.setState({ showingError: false });
     }
   };
 
@@ -89,57 +91,57 @@ class editVacancy extends React.Component {
     });
   };
 
-  handleChange = value => {
-    this.setState({ text: value });
-  };
 
-  onUploadImage = (e)  => {
+  onUploadImage = e => {
     var reader = new FileReader();
     let newState = Object.assign({}, this.state);
     reader.onloadend = () => {
-      newState.newSingleVacancy['image'] = reader.result
+      newState.newSingleVacancy["image"] = reader.result;
       this.setState(newState);
-    }
+    };
     reader.readAsDataURL(e.target.files[0]);
-  }
+  };
 
   onChangeBranch = (e) => {
     let newState = Object.assign({}, this.state);
     newState.newSingleVacancy['branch'] = e.target.value
     this.setState(newState);
-    var index = e.nativeEvent.target.selectedIndex;
-    this.props.changeSpecs(e.target[e.target.selectedIndex].getAttribute('data-id'));
+    this.setState({filteredJobTitles: this.props.jobTitles.filter(el => String(el.branchId) === String(e.target[e.target.selectedIndex].getAttribute('data-id')))})
   }
 
-  onChangeField = (e) => {
-    const name = e.target.name
+  onChangeField = e => {
+    const name = e.target.name;
     const value = e.target.value;
     console.log(name, value);
     let newState = Object.assign({}, this.state);
-    newState.newSingleVacancy[name] = value
+    newState.newSingleVacancy[name] = value;
     this.setState(newState);
-  }
+  };
 
   render() {
     const { id } = this.props.match.params;
 
-    const {
-      newContent,
-      newSingleVacancy
-    } = this.state;
+    const { newContent, newSingleVacancy } = this.state;
 
     const BranchList = ({ array }) => {
       if (array) {
-        return array.map(item => <option key={item.id} data-id={item.id} value={item.name}>{item.name}</option>);
+        return array.map(item => (
+          <option key={item.id} data-id={item.id} value={item.name}>
+            {item.name}
+          </option>
+        ));
       }
     };
 
     const SpecsList = ({ array }) => {
       if (array) {
-        return array.map(item => <option name={item.name} key={item.id} value={item.name}>{item.name}</option>);
+        return array.map(item => (
+          <option name={item.name} key={item.id} value={item.name}>
+            {item.name}
+          </option>
+        ));
       }
     };
-
 
     return (
       <Container fluid className="main-content-container px-4">
@@ -156,8 +158,6 @@ class editVacancy extends React.Component {
             <Row>
               <Col lg="10" className="mx-auto mt-4">
                 <Card small className="edit-user-details mb-4">
-                  {/* <ProfileBackgroundPhoto /> */}
-
                   <CardBody className="p-0">
                     {/* Form Section Title :: General */}
                     <Form className="py-4">
@@ -171,55 +171,97 @@ class editVacancy extends React.Component {
                           <Row form>
                             {/* Title */}
                             <Col md="12" className="form-group">
-                              <label htmlFor="firstName">Title</label>
+                              <div className="d-flex">
+                                <label htmlFor="firstName">Title</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="title"
+                                  content="Add a clear title for your vacancy"
+                                />
+                              </div>
                               <FormInput
                                 id="firstName"
                                 name="title"
                                 value={newSingleVacancy.title}
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
 
                             <Col md="12" className="form-group">
-                              <label htmlFor="feDescription">Description</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Preheader text
+                                </label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="description"
+                                  content="Add a preheader text of the vacancy which will be shown beneath the title"
+                                />
+                              </div>
                               <FormTextarea
                                 id="firstName"
                                 name="description"
                                 value={newSingleVacancy.description}
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
 
                             {/* Description */}
                             <Col md="12" className="form-group">
-                              <label htmlFor="feDescription">Content</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">Job description</label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="content"
+                                  content="Add a more specific description to outline the tasks, responsibilities and conditions of the job"
+                                />
+                              </div>
                               <ReactQuill
                                 value={newContent}
                                 defaultValue={newSingleVacancy.content}
-                                onChange={(e) => this.onChangeField(e)}
+                                // onChange={e => this.onChangeField(e)}
                                 onChange={value =>
                                   this.setState({ newContent: value })
                                 }
                               />
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="firstName">Max Applicants</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Max applicants
+                                </label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="maxApplicants"
+                                  content="Select the maximum number of applicants. When the maximum is reached, the vacancy will close automatically"
+                                />
+                              </div>
                               <FormInput
                                 id="maxApplicants"
                                 name="maxApplicants"
                                 type="number"
                                 value={newSingleVacancy.maxApplicants}
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
                             <Col md="12">
                               <label className="edit-user-details__change-background">
                                 <i className="material-icons mr-1">&#xE439;</i>
                                 Change Background Photo
-                                <FormInput name="image" className="d-none" type="file" onChange={(e) => this.onUploadImage(e)}/>
+                                <FormInput
+                                  name="image"
+                                  className="d-none"
+                                  type="file"
+                                  onChange={e => this.onUploadImage(e)}
+                                />
                               </label>
-                              <br/>
-                              <img src={newSingleVacancy.image} alt="Vacancy" height={100} width={100}/>
+                              <br />
+                              <img
+                                src={newSingleVacancy.image}
+                                alt="Vacancy"
+                                height={100}
+                                width={100}
+                              />
                             </Col>
                           </Row>
                         </Col>
@@ -228,17 +270,21 @@ class editVacancy extends React.Component {
                       <hr />
                       <FormSectionTitle
                         title="Specifications"
-                        description="Setup your general profile details."
+                        description="Didn’t find the right specification? Fill in this form and we’ll get in touch very soon."
+                        linkText="here"
+                        linkUrl="https://accountfound2day.typeform.com/to/AxQ0Rm"
                       />
                       <Row form className="mx-4">
                         <Col lg="8">
                           <Row form>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">
-                                Alle vakgebieden
-                              </label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Alle vakgebieden
+                                </label>
+                              </div>
                               <FormSelect
-                                onChange={(e) => this.onChangeBranch(e)}
+                                onChange={e => this.onChangeBranch(e)}
                               >
                                 <option>{newSingleVacancy.branch}</option>
                                 {this.props.specs.branch ? (
@@ -254,20 +300,25 @@ class editVacancy extends React.Component {
                                 onChange={(e) => this.onChangeField(e)}
                               >
                                 <option value={newSingleVacancy.jobTitle} >{newSingleVacancy.jobTitle}</option>
-                                {this.props.specs.jobTitle ? (
+                                {this.state.filteredJobTitles ? (
                                   <SpecsList
-                                    array={this.props.specs.jobTitle}
+                                    array={this.state.filteredJobTitles}
                                   />
                                 ) : null}
                               </FormSelect>
                             </Col>
+
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Opleiding</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">Opleiding</label>
+                              </div>
                               <FormSelect
                                 name="education"
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option value={newSingleVacancy.education}>{newSingleVacancy.education}</option>
+                                <option value={newSingleVacancy.education}>
+                                  {newSingleVacancy.education}
+                                </option>
                                 {this.props.specs.education ? (
                                   <SpecsList
                                     array={this.props.specs.education}
@@ -276,12 +327,18 @@ class editVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Werkervaring</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Werkervaring
+                                </label>
+                              </div>
                               <FormSelect
                                 name="experience"
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option value={newSingleVacancy.experience}>{newSingleVacancy.experience}</option>
+                                <option value={newSingleVacancy.experience}>
+                                  {newSingleVacancy.experience}
+                                </option>
                                 {this.props.specs.experience ? (
                                   <SpecsList
                                     array={this.props.specs.experience}
@@ -290,14 +347,18 @@ class editVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">
-                                Dienstverbanden
-                              </label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Dienstverbanden
+                                </label>
+                              </div>
                               <FormSelect
                                 name="employmentType"
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option value={newSingleVacancy.employmentType}>{newSingleVacancy.employmentType}</option>
+                                <option value={newSingleVacancy.employmentType}>
+                                  {newSingleVacancy.employmentType}
+                                </option>
                                 {this.props.specs.employmentType ? (
                                   <SpecsList
                                     array={this.props.specs.employmentType}
@@ -306,12 +367,16 @@ class editVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="displayEmail">Werkweek</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">Werkweek</label>
+                              </div>
                               <FormSelect
                                 name="weekHours"
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option value={newSingleVacancy.weekHours}>{newSingleVacancy.weekHours}</option>
+                                <option value={newSingleVacancy.weekHours}>
+                                  {newSingleVacancy.weekHours}
+                                </option>
                                 {this.props.specs.weekHours ? (
                                   <SpecsList
                                     array={this.props.specs.weekHours}
@@ -320,12 +385,14 @@ class editVacancy extends React.Component {
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                              <label htmlFor="firstName">Postcode</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">Postcode</label>
+                              </div>
                               <FormInput
                                 id="firstName"
                                 name="postalcode"
                                 value={newSingleVacancy.postalcode}
-                                onChange={(e) => this.onChangeField(e)}
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
                           </Row>
@@ -350,32 +417,6 @@ class editVacancy extends React.Component {
             </Row>
           </Container>
         </div>
-        {/* {this.state.preview ? (
-          <Modal
-            open={this.state.preview}
-            toggle={() => this.toggle()}
-            position="center"
-          >
-            <ModalHeader
-              className="popup__bg"
-              style={{
-                backgroundImage:
-                  'url(https://images.unsplash.com/photo-1477948879622-5f16e220fa42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)'
-              }}
-            />
-            <ModalBody>
-              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
-                <h2 className="mt-4">test</h2>
-                <p className="text-center mt-2">
-                  Discovered had get considered projection who favourable.
-                  Necessary up knowledge it tolerably. Unwilling departure
-                  education to admitted speaking...
-                </p>
-              </div>
-              <hr />
-            </ModalBody>
-          </Modal>
-        ) : null} */}
       </Container>
     );
   }
@@ -394,11 +435,11 @@ function mapStateToProps(state) {
     single_vacancy: state.vacancies.single_vacancy,
     specs: state.Specs.specs,
     error: state.vacancies.err,
-    message:state.vacancies.message,
-    busy:state.vacancies.busy
+    message: state.vacancies.message,
+    busy: state.vacancies.busy,
+    jobTitles:state.Specs.specs.jobTitle
   };
 }
-
 
 export default connect(
   mapStateToProps,

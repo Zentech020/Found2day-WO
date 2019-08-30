@@ -121,7 +121,7 @@ export default [
     needsAuth: true
   },
   {
-    path: '/user-profile-lite',
+    path: '/profile',
     layout: DefaultLayout,
     component: UserProfileLite,
     needsAuth: true

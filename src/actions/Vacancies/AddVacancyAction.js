@@ -6,44 +6,28 @@ export const ADD_VACANCIE_IS_LOADING = 'add_vacancie_is_loading';
 export const ADD_VACANCIE_DATA = 'add_vacancie_data';
 export const ADD_VACANCIES_ERROR = 'add_vacancie_error';
 
-export const addVacancyAction = (
-  title,
-  description,
-  content,
-  maxApplicants,
-  image,
-  jobTitle,
-  branch,
-  education,
-  employmentType,
-  experience,
-  weekHours,
-  distance,
-  postalCode,
-  author,
-  groupId
-) => async dispatch => {
+export const addVacancyAction = (vacancy, author, groupId, content, location) => async dispatch => {
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
-    const result = await axios.post(
-      `${API_URL}/vacancies`,
+    const result = await axios.post(`${API_URL}/vacancies`,
       {
-        title: title,
-        description: description,
-        content:content,
-        maxApplicants:maxApplicants,
-        image: image,
-        jobTitle: jobTitle,
-        branch: branch,
-        education: education,
-        employmentType: employmentType,
-        experience: experience,
-        weekHours: weekHours,
-        distance: distance,
-        postalcode: postalCode,
+        title: vacancy.title,
+        description: vacancy.description,
+        content: content,
+        maxApplicants:vacancy.maxApplicants,
+        image: vacancy.image,
+        jobTitle: vacancy.jobTitle,
+        branch: vacancy.branch,
+        education: vacancy.education,
+        employmentType: vacancy.employmentType,
+        experience: vacancy.experience,
+        weekHours: vacancy.weekHours,
+        distance: vacancy.distance,
+        postalcode: vacancy.postalCode,
         icon: 'icon',
         groupId: groupId,
-        author: author
+        author: author,
+        location:location
       },
       header
     );

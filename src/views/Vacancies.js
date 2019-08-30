@@ -125,7 +125,7 @@ class Vacancies extends React.Component {
 
           <Col sm="2" className="d-flex ml-auto my-auto justify-content-end">
             <Link to="/add-vacancy">
-              <Button theme="accent">Add Vacancy</Button>
+              <Button theme="accent">Add vacancy <i className="material-icons">add</i></Button>
             </Link>
           </Col>
         </Row>

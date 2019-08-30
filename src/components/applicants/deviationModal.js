@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react';
-import {Tooltip, Button} from 'shards-react';
-
+import TooltipHelper from '../tooltip/tooltip';
 class DeviationModal extends React.Component {
   constructor(props) {
     super(props);
@@ -11,86 +10,72 @@ class DeviationModal extends React.Component {
   render() {
     const {deviations} = this.props;
     return (
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center mx-auto">
           {!deviations[0].jobTitle ?
             (<div>
-              <Button id="jobTitle" className="mr-2">
-               Job title
-              </Button>
-              <Tooltip
-                open={this.state.top}
-                target="#jobTitle"
-                toggle={() => this.setState({open:!this.state.open})}
-              >
-              {deviations[0].jobTitle}
-              </Tooltip>
+            <TooltipHelper
+                className="ml-2"
+                icon="pie_chart"
+                tooltipTarget="jobTitle"
+                content="Job title"
+                hasButton={true}
+              />
             </div>
             )
           : null}
           {!deviations[0].branch ? (<div>
-              <Button id="jobTitle" className="mr-2">
-                Branch
-              </Button>
-              <Tooltip
-                open={this.state.top}
-                target="#jobTitle"
-                toggle={() => this.setState({open:!this.state.open})}
-              >
-              <i className="material-icons">pie_chart</i>{' '}
-              </Tooltip>
+            <TooltipHelper
+                className="ml-2"
+                icon="pie_chart"
+                tooltipTarget="branch"
+                content="Branch"
+                hasButton={true}
+              />
             </div>
             ) : null}
-          {!deviations[0].education ? (<div>
-              <Button id="jobTitle" className="mr-2">
-                <i className="material-icons">school</i>{' '}
-              </Button>
-              <Tooltip
-                open={this.state.top}
-                target="#jobTitle"
-                toggle={() => this.setState({open:!this.state.open})}
-              >
-                Education
-              </Tooltip>
+          {!deviations[0].education ? (
+            <div>
+              <TooltipHelper
+                className="ml-2"
+                icon="school"
+                tooltipTarget="education"
+                content="Education"
+                hasButton={true}
+              />
             </div>
             ) : null}
-          {!deviations[0].experience ? (<div>
-              <Button id="jobTitle" className="mr-2">
-                <i className="material-icons">format_list_bulleted</i>
-              </Button>
-              <Tooltip
-                open={this.state.top}
-                target="#jobTitle"
-                toggle={() => this.setState({open:!this.state.open})}
-              >
-                Experience
-              </Tooltip>
+          {!deviations[0].experience ? (
+          <div>
+              <TooltipHelper
+                className="ml-2"
+                icon="format_list_bulleted"
+                tooltipTarget="expierence"
+                content="Experience"
+                hasButton={true}
+              />
             </div>
             ) : null}
-            {!deviations[0].employementType ? (<div>
-              <Button id="jobTitle" className="mr-2">
-                <i className="material-icons">description</i>
-              </Button>
-              <Tooltip
-                open={this.state.top}
-                target="#jobTitle"
-                toggle={() => this.setState({open:!this.state.open})}
-              >
-                Employement Type
-              </Tooltip>
+            {!deviations[0].employementType ? (
+            <div>
+              <TooltipHelper
+                className="ml-2"
+                icon="description"
+                tooltipTarget="employementType"
+                content="Employement type"
+                hasButton={true}
+              />
             </div>
             ) : null}
 
-          {!deviations[0].weekHours ? (<div>
-              <Button id="jobTitle" className="mr-2">
-                <i className="material-icons">calendar_today</i>
-              </Button>
-              <Tooltip
-                open={this.state.top}
-                target="#jobTitle"
-                toggle={() => this.setState({open:!this.state.open})}
-              >
-              {deviations[0].weekHours}
-              </Tooltip>
+          {!deviations[0].weekHours ? (
+          <div>
+              <TooltipHelper
+                className="ml-2"
+                icon="calendar_today"
+                tooltipTarget="weekHours"
+                content="Week hours"
+                hasButton={true}
+              />
             </div>
             ): null}
         </div>

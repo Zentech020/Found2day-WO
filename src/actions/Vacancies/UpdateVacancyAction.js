@@ -9,7 +9,8 @@ export const UPDATE_VACANCY_ERROR = 'update_vacancy_error';
 
 export const updateVacancy = (
   vacancyId,
-  vacancy
+  vacancy,
+  newContent
 ) => async dispatch => {
   try {
     dispatch({ type: UPDATE_VACANCY_IS_LOADING });
@@ -18,7 +19,7 @@ export const updateVacancy = (
       {
         title: vacancy.title,
         description: vacancy.description,
-        content:"<p>contentcontent</p>",
+        content:newContent,
         image: vacancy.image,
         jobTitle: vacancy.jobTitle,
         branch: vacancy.branch,

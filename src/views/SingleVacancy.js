@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {  toast } from 'react-toastify';
 import FuzzySearch from 'fuzzy-search';
 import dateFormat from 'dateformat';
+import DeviationModal from '../components/applicants/deviationModal';
 import TooltipHelper from "./../components/tooltip/tooltip";
 
 import {
@@ -35,7 +36,7 @@ import SingleHeader from '../components/single-vacancy/singleHeader';
 import BlockAnimation from '../components/Animations/Block';
 import 'react-tabs/style/react-tabs.css';
 import getApplicantsData from '../data/applicants-list';
-import { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy , updateVacancy} from '../actions';
+import { getSingleVacancy, getApplicantCV, deleteSingleVacancy, getApplicationsByVacancy , updateVacancy, getDeviation} from '../actions';
 
 import colors from '../utils/colors';
 
@@ -55,6 +56,7 @@ class SingleVacancy extends React.Component {
       toggleTooltip:false,
       applications:[],
       singleVacancy:[],
+      openDeviationModal:false,
     };
 
     this.searcher = null;
@@ -203,6 +205,28 @@ class SingleVacancy extends React.Component {
     await this.props.updateVacancy(id, this.state.single_vacancy);
   }
 
+  onSetDeviations = async(row) => {
+    console.log(row);
+    await this.props.getDeviation(row.original.vacancyId);
+    this.setState({
+      openDeviationModal:true,
+      modal:true,
+      userInfo:row.original
+    })
+  }
+
+  onGetCV = () => {
+    this.props.getApplicantCV().then((res) => {
+      console.log(res);
+      const url = window.URL.createObjectURL(new Blob([res.result.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.pdf'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+
   render() {
     const { directories, applications } = this.state;
     const { pageSize, pageSizeOptions , single_vacancy} = this.state;
@@ -228,17 +252,18 @@ class SingleVacancy extends React.Component {
         className: 'text-center'
       },
       {
+        Header: 'Name',
+        accessor: 'name',
+        className: 'text-center',
+        minWidth: 200,
+      },
+      {
         Header: 'Date',
         accessor: 'date',
         className: 'text-center',
-        minWidth: 200,
+        minWidth: 80,
         Cell: row =>
-        dateFormat(new Date(row.original.createdAt), 'dddd, mmmm dS, yyyy')
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-        className: 'text-center'
+        dateFormat(new Date(row.original.createdAt), 'dd-mm-yyyy')
       },
       {
         Header: 'Vacancy',
@@ -249,41 +274,28 @@ class SingleVacancy extends React.Component {
       {
         Header: 'CV',
         accessor: 'cv',
-        maxWidth: 100,
-        // Cell: row => <span className="text-success">{row.original.total}</span>,
+        maxWidth: 75,
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <a target="_blank" href={row.original.cvURL} theme="white">
+            <div onClick={() => this.onGetCV()}>
               <i className="material-icons">&#xE870;</i>
-            </a>
+            </div>
           </ButtonGroup>
         )
       },
       {
-        Header: 'Deviations',
+        Header: 'Actions',
         accessor: 'actions',
         maxWidth: 300,
         minWidth: 180,
         sortable: false,
         Cell: row => (
-          <ButtonGroup size="sm" className="d-table mx-auto">
-            <Button theme="white" onClick={() => this.handleItemConfirm(row)}>
-              <i className="material-icons">&#xE5CA;</i>
-            </Button>
-            <Button
-              theme="white"
-              onClick={() => this.handleItemViewDetails(row)}
-            >
-              <i className="material-icons">&#xE870;</i>
-            </Button>
-            <Button theme="white" onClick={() => this.handleItemEdit(row)}>
-              <i className="material-icons">&#xE254;</i>
-            </Button>
-            <Button theme="white" onClick={() => this.handleItemDelete(row)}>
-              <i className="material-icons">&#xE872;</i>
-            </Button>
-          </ButtonGroup>
+          <div className="d-table mx-auto">
+            <a className="btn btn-primary" href={`tel:${row.original.phone}`}><i className="material-icons">phone</i></a>
+            <a className="btn btn-primary ml-2" href={`mailto:${row.original.email}`}><i className="material-icons">email</i></a>
+            <Button className="ml-2" onClick={() => this.onSetDeviations(row)}>More</Button>
+          </div>
         )
       }
     ];
@@ -308,7 +320,7 @@ class SingleVacancy extends React.Component {
           <Col sm="6" className="d-flex flex-column align-items-end">
           <TooltipHelper
             className="ml-auto my-auto"
-            content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."
+            content="When the switch is turned on, the vacancy is active and there can be applied on. Turn the switch off and the vacancy won’t be enabled."
             tooltipTarget="hideorshow"
           />
             <FormCheckbox
@@ -429,21 +441,6 @@ class SingleVacancy extends React.Component {
                         </CardFooter>
                       </Card>
                     </Col>
-                    {/* <Col lg="3" key={7}>
-                      <Card
-                        small
-                        className="file-manager__item file-manager__item--directory mb-3"
-                      >
-                        <CardFooter>
-                          <span className="file-manager__item-icon">
-                            <i className="material-icons">&#xE2C7;</i>{' '}
-                          </span>
-                          <h6 className="file-manager__item-title">
-                            {distance}
-                          </h6>
-                        </CardFooter>
-                      </Card>
-                    </Col> */}
                     <Col lg="3" key={8}>
                       <Card
                         small
@@ -508,28 +505,13 @@ class SingleVacancy extends React.Component {
                   </CardHeader>
                   <CardBody className="p-0">
                     <div className="">
-                      <ReactTable
-                        columns={tableColumns}
-                        data={applications}
-                        pageSize={pageSize}
-                        showPageSizeOptions={false}
-                        resizable={false}
-                        getTdProps={(state, rowInfo, column, instance) => {
-                          return {
-                            onClick: (e, handleOriginal) => {
-                              console.log('It was in this row:', rowInfo);
-                              this.setState({
-                                modal: true,
-                                modalInfo: rowInfo.original
-                              });
-
-                              if (handleOriginal) {
-                                handleOriginal();
-                              }
-                            }
-                          };
-                        }}
-                      />
+                    <ReactTable
+                      columns={tableColumns}
+                      data={applications}
+                      pageSize={pageSize}
+                      showPageSizeOptions={false}
+                      resizable={true}
+                    />
                     </div>
                   </CardBody>
                 </Card>
@@ -549,67 +531,70 @@ class SingleVacancy extends React.Component {
             </Button>
           </Col>
         </Row>
-        {this.state.modalInfo ? (
+        {this.state.openDeviationModal ? (
           <Modal
-            open={this.state.modal}
-            toggle={() => this.toggle()}
-            position="center"
-          >
-            <ModalHeader
-              className="popup__bg"
-              style={{
-                backgroundImage:
-                  'url(https://images.unsplash.com/photo-1477948879622-5f16e220fa42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)'
-              }}
-            />
-            <ModalBody>
-              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
-                <img
-                  height="125"
-                  width="125"
-                  alt="profile"
-                  className="rounded-circle"
-                  src={this.state.modalInfo.image}
-                />
-                <h2 className="mt-4">{this.state.modalInfo.name}</h2>
-                <p className="text-center mt-2">
-                  Discovered had get considered projection who favourable.
-                  Necessary up knowledge it tolerably. Unwilling departure
-                  education to admitted speaking...
-                </p>
-              </div>
-              <hr />
-              <Row>
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Email</h5>
-                    <p className="my-0">steye.k@vindicat.nl</p>
-                  </div>
-                </Col>
+          open={this.state.modal}
+          toggle={() => this.toggle()}
+          position="center"
+        >
+          <ModalHeader
+            className="popup__bg"
+            style={{
+              backgroundImage:
+                'url(https://images.unsplash.com/photo-1477948879622-5f16e220fa42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)'
+            }}
+          />
+          <ModalBody>
+            <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
+              <h2 className="mt-2">{this.state.userInfo.name}</h2>
+              <p className="text-center mt-2">
+                Discovered had get considered projection who favourable.
+                Necessary up knowledge it tolerably. Unwilling departure
+                education to admitted speaking...
+              </p>
+            </div>
+            <hr />
+            <Row>
+              <Col md={12}>
+                <p className="mb-2">User action</p>
+              </Col>
+              <Col md={6}>
+                <div className="flex flex-column">
+                  <h5 className="my-2">Email</h5>
+                  <p className="my-0">{this.state.userInfo.email}</p>
+                </div>
+              </Col>
 
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Address</h5>
-                    <p className="my-0">Helmholtzstraat 18b</p>
-                  </div>
-                </Col>
+              <Col md={6}>
+                <div className="flex flex-column">
+                  <h5 className="my-2">Address</h5>
+                  <p className="my-0">Helmholtzstraat 18b</p>
+                </div>
+              </Col>
 
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Phone</h5>
-                    <p className="my-0">+40 0123 456 789</p>
-                  </div>
-                </Col>
+              <Col md={6}>
+                <div className="flex flex-column">
+                  <h5 className="my-2">Phone</h5>
+                  <p className="my-0">{this.state.userInfo.phone}</p>
+                </div>
+              </Col>
 
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">CV</h5>
-                    <i className="material-icons">insert_drive_file</i>
-                  </div>
-                </Col>
-              </Row>
-            </ModalBody>
-          </Modal>
+              <Col md={6}>
+                <div className="flex flex-column">
+                  <h5 className="my-2">CV</h5>
+                  <i className="material-icons">insert_drive_file</i>
+                </div>
+              </Col>
+            </Row>
+            <hr />
+            <Row className="mt-4">
+              <Col md={12}>
+                <p className="mb-2">Deviations</p>
+              </Col>
+              <DeviationModal deviations={this.props.deviations}/>
+            </Row>
+          </ModalBody>
+        </Modal>
         ) : null}
       </Container>
     );
@@ -670,10 +655,11 @@ function mapStateToProps(state) {
     busy:state.vacancies.busy,
     applications: state.applicants.applications,
     isLoading: state.vacancies.isLoading,
+    deviations: state.applicants.deviations,
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy, updateVacancy }
+  { getSingleVacancy, deleteSingleVacancy, getApplicationsByVacancy, updateVacancy, getDeviation, getApplicantCV }
 )(SingleVacancy);

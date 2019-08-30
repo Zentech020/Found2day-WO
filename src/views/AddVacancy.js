@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {  toast } from 'react-toastify';
+import React from "react";
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import {
   Container,
   Row,
@@ -13,54 +13,69 @@ import {
   FormInput,
   FormSelect,
   FormTextarea,
-  Progress,
   Modal,
-  ModalBody,
-  ModalHeader,
-  Slider
-} from 'shards-react';
-import ReactQuill from 'react-quill';
-import { connect } from 'react-redux';
-import TooltipHelper from '../components/tooltip/tooltip';
-import FormSectionTitle from '../components/edit-user-profile/FormSectionTitle';
-import GeneralInformation from '../components/add-vacancy/GeneralInformation';
-import PreviewVacancy from '../components/add-vacancy/PreviewVacancy';
+} from "shards-react";
+import ReactQuill from "react-quill";
+import { connect } from "react-redux";
+import TooltipHelper from "../components/tooltip/tooltip";
+import FormSectionTitle from "../components/edit-user-profile/FormSectionTitle";
+import PreviewVacancy from "../components/add-vacancy/PreviewVacancy";
+import PageTitle from "../components/common/PageTitle";
 
-import { addVacancyAction, getSpecs, changeSpecs, getCoordinates } from '../actions';
-import PageTitle from '../components/common/PageTitle';
+import {
+  addVacancyAction,
+  getSpecs,
+  changeSpecs,
+  getCoordinates
+} from "../actions";
 
-import colors from '../utils/colors';
 
 class addVacancy extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      toggleTooltip:false,
+      toggleTooltip: false,
       preview: false,
-      title: '',
-      description: '',
-      content:'',
-      maxApplicants:0,
-      image: '',
-      jobTitle: 'Select Option',
-      branch: 'Select Option',
-      education: 'Select Option',
-      employmentType: 'Select Option',
-      experience: 'Select Option',
-      weekHours: 'Select Option',
-      distance: '20',
-      postalCode: '',
-      author: '',
-      groupId: '',
+      title: "",
+      description: "",
+      content: "",
+      maxApplicants: 0,
+      image: "",
+      jobTitle: "Select Option",
+      branch: "Select Option",
+      education: "Select Option",
+      employmentType: "Select Option",
+      experience: "Select Option",
+      weekHours: "Select Option",
+      distance: "20",
+      postalCode: "",
+      author: "",
+      groupId: "",
       showingError: true,
-      branchId:'',
+      branchId: "",
+      newSingleVacancy: {
+        title: "",
+        description: "",
+        content: "",
+        maxApplicants: 0,
+        image: "",
+        jobTitle: "Select Option",
+        branch: "Select Option",
+        education: "Select Option",
+        employmentType: "Select Option",
+        experience: "Select Option",
+        weekHours: "Select Option",
+        postalCode:'',
+        houseNumber:null,
+      },
+      filteredJobTitles:[]
     };
   }
 
   componentDidMount = async () => {
-    const account = JSON.parse(sessionStorage.getItem('account'));
-    const group = JSON.parse(sessionStorage.getItem('group'));
+    const account = JSON.parse(sessionStorage.getItem("account"));
+    const group = JSON.parse(sessionStorage.getItem("group"));
     this.setState({
       author: account._id,
       groupId: group._id
@@ -71,25 +86,24 @@ class addVacancy extends React.Component {
 
   async componentDidUpdate(nextProps, history) {
     if (!this.props.error && !this.state.showingError) {
-      if(this.props.message) {
+      if (this.props.message) {
         toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
 
-        await this.setState({showingError: true})
-        await history.push('/vacancies');
+        await this.setState({ showingError: true });
+        // await history.push("/vacancies");
+      }
     }
-    }
-    if(this.props.error && !this.state.showingError) {
-      if(this.props.message) {
+    if (this.props.error && !this.state.showingError) {
+      if (this.props.message) {
         toast.error(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
-        await this.setState({showingError: true})
+        await this.setState({ showingError: true });
       }
     }
   }
-
 
   toggle = () => {
     this.setState({
@@ -102,95 +116,82 @@ class addVacancy extends React.Component {
   };
 
   onSubmitVacancy = async () => {
-    const {
-      title,
-      description,
-      content,
-      maxApplicants,
-      image,
-      jobTitle,
-      branch,
-      education,
-      employmentType,
-      experience,
-      weekHours,
-      distance,
-      postalCode,
-      author,
-      groupId
-    } = this.state;
-    if (title && description && content && image && jobTitle && branch && education && employmentType &&
-        experience &&
-        weekHours &&
-        distance &&
-        postalCode,
-        author,
-        groupId) {
-      this.props.addVacancyAction(
-        title,
-        description,
-        content,
-        maxApplicants,
-        image,
-        jobTitle,
-        branch,
-        education,
-        employmentType,
-        experience,
-        weekHours,
-        distance,
-        postalCode,
-        author,
-        groupId
-      )
-      await this.setState({showingError: false})
+    const { newSingleVacancy, groupId, author, content} = this.state;
+    const {location} = this.props;
+    if(newSingleVacancy.postalCode && newSingleVacancy.houseNumber) {
+      await this.props.getCoordinates(newSingleVacancy.postalCode, newSingleVacancy.houseNumber);
+    }
+    if (newSingleVacancy && groupId && location) {
+      this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location);
+      await this.setState({ showingError: false });
     }
   };
 
-  onUploadImage = (e)  => {
-      var reader = new FileReader();
-      reader.onloadend = () => {
-        this.setState({
-          image: reader.result
-        })
-      }
-      reader.readAsDataURL(e.target.files[0]);
-    }
+  onUploadImage = e => {
+    let newState = Object.assign({}, this.state);
+    var reader = new FileReader();
+    reader.onloadend = () => {
+      newState.newSingleVacancy["image"] = reader.result;
+      this.setState(newState);
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
 
-    handleSlide = (e) => {
-      this.setState({
-        distance: parseInt(e[0])
-      });
-    }
+  handleSlide = e => {
+    this.setState({
+      distance: parseInt(e[0])
+    });
+  };
 
-    onChangeBranch = (e) => {
-      var index = e.nativeEvent.target.selectedIndex;
-      const brachTitle = e.nativeEvent.target[index].text;
-      console.log(e.target.value)
-      this.props.changeSpecs(e.target.value);
-      this.setState({branch:brachTitle})
-    }
+  onChangeBranch = (e) => {
+    let newState = Object.assign({}, this.state);
+    var index = e.nativeEvent.target.selectedIndex;
+    const brachTitle = e.nativeEvent.target[index].text;
+    newState.newSingleVacancy['branch'] = brachTitle
+    this.setState(newState);
+    this.setState({filteredJobTitles: this.props.jobTitles.filter(el => String(el.branchId) === String(e.target.value))})
+  }
+
+  onChangeField = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log(name, value);
+    let newState = Object.assign({}, this.state);
+    newState.newSingleVacancy[name] = value;
+    this.setState(newState);
+  };
 
   render() {
-
-    const {jobTitle, branch, education, experience, employmentType, weekHours} = this.props.specs;
-    const {image} = this.state;
+    const {
+      jobTitle,
+      branch,
+      education,
+      experience,
+      employmentType,
+      weekHours
+    } = this.props.specs;
 
     const BranchList = ({ array }) => {
       if (array) {
-        return array.map(item => <option key={item.id} value={item.id}>{item.name}</option>);
+        return array.map(item => (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        ));
       }
     };
 
     const SpecsList = ({ array }) => {
       if (array) {
-        return array.map(item => <option key={item.id} value={item.name}>{item.name}</option>);
+        return array.map(item => (
+          <option key={item.id} value={item.name}>
+            {item.name}
+          </option>
+        ));
       }
     };
 
-
     return (
-
       <Container fluid className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
           {/* Page Header :: Title */}
@@ -205,7 +206,6 @@ class addVacancy extends React.Component {
             <Row>
               <Col lg="10" className="mx-auto mt-4">
                 <Card small className="edit-user-details mb-4">
-
                   <CardBody className="p-0">
                     <Form className="py-4">
                       <FormSectionTitle
@@ -223,48 +223,49 @@ class addVacancy extends React.Component {
                                 <TooltipHelper
                                   className="ml-2"
                                   tooltipTarget="title"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."
-                                  // open={this.state.toggleTooltip}
-                                  // toggle={() => this.setState({toggleTooltip: !this.state.toggleTooltip})}
+                                  content="Add a clear title for your vacancy"
                                 />
                               </div>
                               <FormInput
                                 id="firstName"
-                                value={this.state.title}
-                                onChange={e =>
-                                  this.setState({ title: e.target.value })
-                                }
-                              />
-                            </Col>
-
-                          {/* Content */}
-                            <Col md="12" className="form-group">
-                              <div className="d-flex">
-                                <label htmlFor="feDescription">Description</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="description"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
-                              <FormTextarea
-                                id="firstName"
-                                value={this.state.description}
-                                onChange={e =>
-                                  this.setState({ description: e.target.value })
-                                }
+                                name="title"
+                                value={this.state.newSingleVacancy.title}
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
 
                             {/* Content */}
                             <Col md="12" className="form-group">
-                            <div className="d-flex">
-                                <label htmlFor="feDescription">Content</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Preheader text
+                                </label>
+                                <TooltipHelper
+                                  className="ml-2"
+                                  tooltipTarget="description"
+                                  content="Add a preheader text of the vacancy which will be shown beneath the title"
+                                />
+                              </div>
+                              <FormTextarea
+                                id="firstName"
+                                name="description"
+                                value={this.state.newSingleVacancy.description}
+                                onChange={e => this.onChangeField(e)}
+                              />
+                            </Col>
+
+                            {/* Content */}
+                            <Col md="12" className="form-group">
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Job description
+                                </label>
                                 <TooltipHelper
                                   className="ml-2"
                                   tooltipTarget="content"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
-                              {/* <FormTextarea id="feDescription" rows="5" /> */}
+                                  content="Add a more specific description to outline the tasks, responsibilities and conditions of the job"
+                                />
+                              </div>
                               <ReactQuill
                                 value={this.state.content}
                                 onChange={value =>
@@ -274,19 +275,24 @@ class addVacancy extends React.Component {
                             </Col>
 
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
-                                <label htmlFor="feDescription">Max applicants</label>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Max applicants
+                                </label>
                                 <TooltipHelper
                                   className="ml-2"
                                   tooltipTarget="maxApplicants"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                                  content="Select the maximum number of applicants. When the maximum is reached, the vacancy will close automatically"
+                                />
+                              </div>
                               <FormInput
                                 id="maxApplicants"
-                                type="number"
-                                onChange={e =>
-                                  this.setState({ maxApplicants: e.target.value })
+                                name="maxApplicants"
+                                value={
+                                  this.state.newSingleVacancy.maxApplicants
                                 }
+                                type="number"
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
 
@@ -294,9 +300,15 @@ class addVacancy extends React.Component {
                               <label className="edit-user-details__change-background">
                                 <i className="material-icons mr-1">&#xE439;</i>
                                 Add vacancy image
-                                <input className="d-none" type="file" onChange={(e) => this.onUploadImage(e)}/>
-                                <br/>
-                                {image ? (<img src={image} height={100} width={100} />) : (null)}
+                                <input
+                                  className="d-none"
+                                  type="file"
+                                  onChange={e => this.onUploadImage(e)}
+                                />
+                                <br />
+                                {this.state.newSingleVacancy.image ? (
+                                  <img src={this.state.newSingleVacancy.image} height={100} width={100} alt="image"/>
+                                ) : null}
                               </label>
                             </Col>
                           </Row>
@@ -306,140 +318,121 @@ class addVacancy extends React.Component {
                       <hr />
                       <FormSectionTitle
                         title="Specifications"
-                        description="Add your specifications"
+                        description="Didn’t find the right specification? Fill in this form and we’ll get in touch very soon."
+                        linkText="here"
+                        linkUrl="https://accountfound2day.typeform.com/to/AxQ0Rm"
                       />
+
                       <Row form className="mx-4">
                         <Col lg="8">
                           <Row form>
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
-                                <label htmlFor="feDescription">Alle vakgebieden</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="vakgebieden"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">Branches</label>
+                              </div>
                               <FormSelect
-                                onChange={e =>
-                                  this.onChangeBranch(e)
-                                }
+                                onChange={e => this.onChangeBranch(e)}
                               >
-                                <option>{this.state.branch}</option>
+                                <option>{this.state.newSingleVacancy.branch}</option>
                                 {branch ? <BranchList array={branch} /> : null}
                               </FormSelect>
                             </Col>
 
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
-                                <label htmlFor="feDescription">Functietitel</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="Functietitel"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              <label htmlFor="displayEmail">Functietitel</label>
                               <FormSelect
-                                onChange={e =>
-                                  this.setState({ jobTitle: e.target.value })
-                                }
+                                name="jobTitle"
+                                onChange={(e) => this.onChangeField(e)}
                               >
-                                <option>{this.state.jobTitle}</option>
-                                {jobTitle ? (
-                                  <SpecsList array={jobTitle} />
+                                <option value={this.state.newSingleVacancy.jobTitle} >{this.state.newSingleVacancy.jobTitle}</option>
+                                {this.state.filteredJobTitles ? (
+                                  <SpecsList
+                                    array={this.state.filteredJobTitles}
+                                  />
                                 ) : null}
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
+                              <div className="d-flex">
                                 <label htmlFor="feDescription">Opleiding</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="Opleiding"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              </div>
                               <FormSelect
-                                onChange={e =>
-                                  this.setState({ education: e.target.value })
-                                }
+                                name="education"
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option>{this.state.education}</option>
+                                <option>{this.state.newSingleVacancy.education}</option>
                                 {education ? (
                                   <SpecsList array={education} />
                                 ) : null}
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
-                                <label htmlFor="feDescription">Werkervaring</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="Werkervaring"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Werkervaring
+                                </label>
+                              </div>
                               <FormSelect
-                                onChange={e =>
-                                  this.setState({ experience: e.target.value })
-                                }
+                                name="experience"
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option>{this.state.experience}</option>
+                                <option>{this.state.newSingleVacancy.experience}</option>
                                 {experience ? (
                                   <SpecsList array={experience} />
                                 ) : null}
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
-                                <label htmlFor="feDescription">Dienstverbanden</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="Dienstverbanden"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Dienstverbanden
+                                </label>
+                              </div>
                               <FormSelect
-                                onChange={e =>
-                                  this.setState({
-                                    employmentType: e.target.value
-                                  })
-                                }
+                                name="employmentType"
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option>{this.state.employmentType}</option>
+                                <option>{this.state.newSingleVacancy.employmentType}</option>
                                 {employmentType ? (
                                   <SpecsList array={employmentType} />
                                 ) : null}
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
+                              <div className="d-flex">
                                 <label htmlFor="feDescription">Werkweek</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="Werkweek"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              </div>
                               <FormSelect
-                                onChange={e =>
-                                  this.setState({ weekHours: e.target.value })
-                                }
+                                name="weekHours"
+                                onChange={e => this.onChangeField(e)}
                               >
-                                <option>{this.state.weekHours}</option>
+                                <option>{this.state.newSingleVacancy.weekHours}</option>
                                 {weekHours ? (
                                   <SpecsList array={weekHours} />
                                 ) : null}
                               </FormSelect>
                             </Col>
                             <Col md="6" className="form-group">
-                            <div className="d-flex">
+                              <div className="d-flex">
                                 <label htmlFor="feDescription">Postcode</label>
-                                <TooltipHelper
-                                  className="ml-2"
-                                  tooltipTarget="Postcode"
-                                  content="Praesent congue erat at massa. Cras dapibus. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi."                                  />
-                                </div>
+                              </div>
                               <FormInput
                                 id="firstName"
-                                value={this.state.postalCode}
-                                onChange={e => {
-                                  this.setState({ postalCode: e.target.value });
-                                }}
+                                name="postalCode"
+                                value={this.state.newSingleVacancy.postalCode}
+                                onChange={e => this.onChangeField(e)}
+                              />
+                            </Col>
+
+                            <Col md="6" className="form-group">
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">House number</label>
+                              </div>
+                              <FormInput
+                                id="firstName"
+                                name="houseNumber"
+                                value={this.state.newSingleVacancy.houseNumber}
+                                onChange={e => this.onChangeField(e)}
                               />
                             </Col>
                           </Row>
@@ -449,12 +442,14 @@ class addVacancy extends React.Component {
                   </CardBody>
                   <CardFooter className="border-top">
                     <div className="d-flex justify-content-end">
-                      {' '}
+                      {" "}
                       <Button
                         size="sm"
                         theme="accent"
                         outline
-                        disabled={this.state.title && this.state.image ? (false) : (true)}
+                        disabled={
+                          this.state.title && this.state.image ? false : true
+                        }
                         className="d-table mr-3"
                         onClick={() => this.setState({ preview: true })}
                       >
@@ -483,12 +478,11 @@ class addVacancy extends React.Component {
             className="c-modal"
           >
             <PreviewVacancy
-              // image={this.state.image}
               title={this.state.title}
               description={this.state.description}
               image={this.state.image}
-              icon={(JSON.parse(sessionStorage.getItem('group')).icon)}
-              company={(JSON.parse(sessionStorage.getItem('group')).title)}
+              icon={JSON.parse(sessionStorage.getItem("group")).icon}
+              company={JSON.parse(sessionStorage.getItem("group")).title}
             />
           </Modal>
         ) : null}
@@ -509,12 +503,14 @@ function mapStateToProps(state) {
   return {
     specs: state.Specs.specs,
     error: state.vacancies.err,
-    message:state.vacancies.message,
-    busy:state.vacancies.busy
+    message: state.vacancies.message,
+    busy: state.vacancies.busy,
+    jobTitles:state.Specs.specs.jobTitle,
+    location:state.vacancies.location
   };
 }
 
 export default connect(
   mapStateToProps,
-  { addVacancyAction, getSpecs , changeSpecs, getCoordinates}
+  { addVacancyAction, getSpecs, changeSpecs, getCoordinates }
 )(addVacancy);

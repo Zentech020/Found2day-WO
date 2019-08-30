@@ -12,9 +12,9 @@ import {
 } from 'shards-react';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
-import addVacancyImg from '../images/AddVacancy.jpg';
-import updateProfileImg from '../images/UpdateProfile.jpg';
-import leaveFeedbackImg from '../images/LeaveFeedback.jpg';
+import addVacancyImg from '../images/home/add-vacancy.png';
+import updateProfileImg from '../images/home/update-profile.png';
+import leaveFeedbackImg from '../images/home/feedback.png';
 
 import { getHomeNotification , getApplicationCount, getVacancyCount, getApplicantsTime} from '../actions';
 
@@ -36,7 +36,7 @@ class Analytics extends React.Component {
       this.props.getHomeNotification();
       this.props.getApplicationCount(group._id);
       this.props.getVacancyCount(group._id);
-      this.props.getApplicantsTime(group._id, '2019-09-01', '2019-10-01');
+      this.props.getApplicantsTime(group._id, '2019-08-01', '2019-09-01');
     }
   }
 
@@ -137,7 +137,7 @@ class Analytics extends React.Component {
             <CardFooter className="border-top">
               <Row>
                 <Col className="text-right view-report">
-                  <Link to="/profile">Update Profile &rarr;</Link>
+                  <Link to="/profile">Update profile &rarr;</Link>
                 </Col>
               </Row>
             </CardFooter>
@@ -152,7 +152,7 @@ class Analytics extends React.Component {
             <CardFooter className="border-top">
               <Row>
                 <Col className="text-right view-report">
-                  <a href="#" onClick={() => this.openChat()}>Leave Feedback &rarr;</a>
+                  <a href="#" onClick={() => this.openChat()}>Leave feedback &rarr;</a>
                 </Col>
               </Row>
             </CardFooter>

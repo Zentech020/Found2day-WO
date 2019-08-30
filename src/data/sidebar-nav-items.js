@@ -29,7 +29,7 @@ export default function() {
         // },
         {
           title: 'Profile',
-          to: '/user-profile-lite',
+          to: '/profile',
           htmlBefore: '<i class="material-icons">&#xE7FD;</i>',
           htmlAfter: ''
         },

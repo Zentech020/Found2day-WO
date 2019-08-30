@@ -73,7 +73,9 @@ export default (state = initialState, action) => {
 
     case GET_DEVIATION_DATA : {
       const applicants_specs = [action.applicantSpecs.data.specifications];
+      console.log(applicants_specs);
       const vacancy_specs = action.vacancySpecs.data;
+      console.log(vacancy_specs);
       const deviations = applicants_specs.map((specs) => {
         return {
           jobTitle: specs.jobTitle.includes(vacancy_specs.jobTitle),

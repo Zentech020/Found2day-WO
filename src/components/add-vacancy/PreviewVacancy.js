@@ -14,7 +14,7 @@ const PreviewVacancy = ({ title, description , image, company, icon }) => (
           <img src={icon} />
         </div>
         <div className="v-card__content">
-        <h2 className="ml-4 h4">{title} <b>{company}</b></h2>
+        <h2 className="ml-4 h4">{title} bij <b>{company}</b></h2>
         <div class="v-card__info d-flex ml-4">
           <div className="v-card__match">
             <p>90% Match</p>
@@ -32,7 +32,7 @@ const PreviewVacancy = ({ title, description , image, company, icon }) => (
         </div>
       </div>
     </div>
-    <div className="v-card__right" style={{flex:1,backgroundImage:`url(${image})`, backgroundSize:'cover'}}></div>
+    <div className="v-card__right" style={{flex:1,backgroundImage:`url(${image})`, backgroundSize:'cover', backgroundPosition:'center'}}></div>
     </div>
 </Fragment>
 );

@@ -23,7 +23,6 @@ import {
 import { connect } from 'react-redux';
 
 import PageTitle from '../components/common/PageTitle';
-import RangeDatePicker from '../components/common/RangeDatePicker';
 import DeviationModal from '../components/applicants/deviationModal';
 import { getApplicationsByGroup, getApplicantCV, getDeviation } from '../actions/index';
 
@@ -38,6 +37,7 @@ class Applicants extends React.Component {
       modal: false,
       modalInfo: null,
       openDeviationModal:false,
+      userInfo:null
     };
 
     this.searcher = null;
@@ -153,16 +153,17 @@ class Applicants extends React.Component {
     });
   };
 
-  onSetDeviations = async(vacancyId) => {
-    await this.props.getDeviation(vacancyId);
+  onSetDeviations = async(row) => {
+    console.log(row);
+    await this.props.getDeviation(row.original.vacancyId);
     this.setState({
       openDeviationModal:true,
       modal:true,
+      userInfo:row.original
     })
   }
 
   render() {
-
 
     const { pageSize, pageSizeOptions } = this.state;
     const {applications} = this.state;
@@ -174,17 +175,18 @@ class Applicants extends React.Component {
         className: 'text-center'
       },
       {
+        Header: 'Name',
+        accessor: 'name',
+        className: 'text-center',
+        minWidth: 200,
+      },
+      {
         Header: 'Date',
         accessor: 'date',
         className: 'text-center',
-        minWidth: 200,
+        minWidth: 80,
         Cell: row =>
-        dateFormat(new Date(row.original.createdAt), 'dddd, mmmm dS, yyyy')
-      },
-      {
-        Header: 'name',
-        accessor: 'name',
-        className: 'text-center'
+        dateFormat(new Date(row.original.createdAt), 'dd-mm-yyyy')
       },
       {
         Header: 'Vacancy',
@@ -195,8 +197,7 @@ class Applicants extends React.Component {
       {
         Header: 'CV',
         accessor: 'cv',
-        maxWidth: 100,
-        // Cell: row => <span className="text-success">{row.original.total}</span>,
+        maxWidth: 75,
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
@@ -207,15 +208,17 @@ class Applicants extends React.Component {
         )
       },
       {
-        Header: 'Deviations',
+        Header: 'Actions',
         accessor: 'actions',
         maxWidth: 300,
         minWidth: 180,
         sortable: false,
         Cell: row => (
-          <ButtonGroup size="sm" className="d-table mx-auto">
-            <Button onClick={() => this.onSetDeviations(row.original.vacancyId)}>See Job deviations</Button>
-          </ButtonGroup>
+          <div className="d-table mx-auto">
+            <a className="btn btn-primary" href={`tel:${row.original.phone}`}><i className="material-icons">phone</i></a>
+            <a className="btn btn-primary ml-2" href={`mailto:${row.original.email}`}><i className="material-icons">email</i></a>
+            <Button className="ml-2" onClick={() => this.onSetDeviations(row)}>More</Button>
+          </div>
         )
       }
     ];
@@ -277,14 +280,67 @@ class Applicants extends React.Component {
         </Card>
         {this.state.openDeviationModal ? (
           <Modal
-            size="sm"
             open={this.state.modal}
             toggle={() => this.toggle()}
-            position="center">
-              <ModalHeader>Invite member</ModalHeader>
-              <ModalBody>
+            position="center"
+          >
+            <ModalHeader
+              className="popup__bg"
+              style={{
+                backgroundImage:
+                  'url(https://images.unsplash.com/photo-1477948879622-5f16e220fa42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)'
+              }}
+            />
+            <ModalBody>
+              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
+                <h2 className="mt-2">{this.state.userInfo.name}</h2>
+                <p className="text-center mt-2">
+                  Discovered had get considered projection who favourable.
+                  Necessary up knowledge it tolerably. Unwilling departure
+                  education to admitted speaking...
+                </p>
+              </div>
+              <hr />
+              <Row>
+                <Col md={12}>
+                  <p className="mb-2">User action</p>
+                </Col>
+                <Col md={6}>
+                  <div className="flex flex-column">
+                    <h5 className="my-2">Email</h5>
+                    <p className="my-0">{this.state.userInfo.email}</p>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="flex flex-column">
+                    <h5 className="my-2">Address</h5>
+                    <p className="my-0">Helmholtzstraat 18b</p>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="flex flex-column">
+                    <h5 className="my-2">Phone</h5>
+                    <p className="my-0">{this.state.userInfo.phone}</p>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="flex flex-column">
+                    <h5 className="my-2">CV</h5>
+                    <i className="material-icons">insert_drive_file</i>
+                  </div>
+                </Col>
+              </Row>
+              <hr />
+              <Row className="mt-4">
+                <Col md={12}>
+                  <p className="mb-2">Deviations</p>
+                </Col>
                 <DeviationModal deviations={this.props.deviations}/>
-              </ModalBody>
+              </Row>
+            </ModalBody>
           </Modal>
         ) : null}
       </Container>
