@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Row, Col, Card, CardHeader, CardBody, Button } from "shards-react";
 import {Link} from 'react-router-dom';
 import Chart from "../../utils/chart";
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 class UsersOverview extends React.Component {
   constructor(props) {
@@ -44,9 +46,12 @@ class UsersOverview extends React.Component {
             // }
         }],
           yAxes: [{
+            ticks: {
+              precision:0
+            },
             scaleLabel: {
                 display:     true,
-                labelString: 'value'
+                labelString: 'Applicants'
             }
         }]
         },
@@ -97,6 +102,7 @@ class UsersOverview extends React.Component {
               <Button
                 size="sm"
                 className="d-flex btn-white ml-auto mr-auto ml-sm-auto mr-sm-0 mt-3 mt-sm-0"
+                onClick={() => employerAnalytics.logEvent('viewApplicants', {page:'Home'})}
               >
                 View applicants overview &rarr;
               </Button>
