@@ -172,7 +172,8 @@ class Applicants extends React.Component {
         Header: '#',
         accessor: 'id',
         maxWidth: 60,
-        className: 'text-center'
+        className: 'text-center',
+        Cell: row => <div>{row.index +1 }</div>
       },
       {
         Header: 'Name',
