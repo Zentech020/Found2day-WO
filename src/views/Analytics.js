@@ -74,9 +74,9 @@ class Analytics extends React.Component {
                 chartLabels={stats.chartLabels}
                 label={stats.label}
                 value={idx === 0 ? applicationCount : vacancyCount}
-                percentage={stats.percentage}
-                increase={stats.increase}
-                decrease={stats.decrease}
+                // percentage={stats.percentage}
+                // increase={stats.increase}
+                // decrease={stats.decrease}
               />
             </Col>
           ))}
@@ -111,7 +111,6 @@ class Analytics extends React.Component {
             }}
           />
         ):(null)}
-
         </Col>
       </Row>
 

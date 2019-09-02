@@ -133,9 +133,9 @@ class SmallStats extends React.Component {
               <span className={labelClasses}>{label}</span>
               <h6 className={valueClasses}>{value}</h6>
             </div>
-            <div className={innerDataFieldClasses}>
+            {/* <div className={innerDataFieldClasses}>
               <span className={percentageClasses}>{percentage}</span>
-            </div>
+            </div> */}
           </div>
           <canvas
             height={canvasHeight}
