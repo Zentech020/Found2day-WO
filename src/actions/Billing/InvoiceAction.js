@@ -37,7 +37,7 @@ export const getInvoices = (customerId) => async dispatch => {
   try {
     dispatch({ type: INVOICES_IS_LOADING });
 
-    const result = await axios.get(`http://127.0.0.1:5000/billing/invoices/customer/${customerId}`);
+    const result = await axios.get(`${API_URL}/billing/invoices/customer/${customerId}`);
 
     return dispatch({ type: INVOICES_DATA, result });
   } catch (err) {

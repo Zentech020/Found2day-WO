@@ -9,6 +9,8 @@ import {
   Collapse
 } from "shards-react";
 import { Dispatcher, Constants } from "../../../flux";
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 class SidebarNavItem extends React.Component {
   constructor(props) {
@@ -22,6 +24,7 @@ class SidebarNavItem extends React.Component {
       actionType: Constants.TOGGLE_SIDEBAR_DROPDOWN,
       payload: item
     });
+    employerAnalytics.logEvent('viewPage', {page:item.title})
   }
 
   render() {

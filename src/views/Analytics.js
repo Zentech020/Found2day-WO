@@ -23,9 +23,10 @@ import SmallStats from '../components/common/SmallStats';
 import Sessions from '../components/analytics/Sessions';
 import UsersOverview from "./../components/blog/UsersOverview";
 import Notification from "./../components/notification/notification";
-
-
 import colors from '../utils/colors';
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
+
 class Analytics extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +42,7 @@ class Analytics extends React.Component {
   }
 
   openChat = () => {
+    employerAnalytics.logEvent('leaveFeedback')
     window.$crisp.push(['do', 'chat:open']);
   }
 
@@ -122,7 +124,7 @@ class Analytics extends React.Component {
             <CardFooter className="border-top">
               <Row>
                 <Col className="text-right view-report">
-                  <Link to="/add-vacancy">Add vacancy &rarr;</Link>
+                  <Link onClick={() => employerAnalytics.logEvent('addVacancy', {page:'Home'})} to="/add-vacancy">Add vacancy &rarr;</Link>
                 </Col>
               </Row>
             </CardFooter>
@@ -137,7 +139,7 @@ class Analytics extends React.Component {
             <CardFooter className="border-top">
               <Row>
                 <Col className="text-right view-report">
-                  <Link to="/profile">Update profile &rarr;</Link>
+                  <Link onClick={() => employerAnalytics.logEvent('updateProfile')} to="/profile">Update profile &rarr;</Link>
                 </Col>
               </Row>
             </CardFooter>

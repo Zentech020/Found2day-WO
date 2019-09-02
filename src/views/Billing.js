@@ -6,24 +6,19 @@ import {
   Container,
   Row,
   Col,
-  ButtonGroup,
   Button,
   Card,
   CardHeader,
   CardBody,
-  FormSelect,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  FormInput
 } from 'shards-react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from 'react-redux';
 import { getUpcomingInvoice, endInvoice, getInvoices } from '../actions';
 import PageTitle from '../components/common/PageTitle';
 import EmptyVacanciesImg from '../images/EmptyVacanciesImg.png';
-import getTransactionHistoryData from '../data/transaction-history-data';
 import getBillingData from '../data/billing-data';
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 class Billing extends React.Component {
   constructor(props) {
@@ -166,14 +161,12 @@ class Billing extends React.Component {
             <ReactTable
               columns={tableColumns}
               data={tableData}
-              // pageSize={pageSize}
               showPageSizeOptions={false}
               showPagination={false}
               resizable={false}
               minRows={0}
             />
           }
-
       </div>
     </CardBody>
   </Card>
@@ -327,7 +320,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         //   isPaid ? (
         //     null
         //   ) : (
-        //     row => 
+        //     row =>
         //       <div className="d-flex flex-column">
         //         <span>{(row.amount_due_all / 100).toLocaleString('en-US', {
         //           style: 'currency',
@@ -357,10 +350,10 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
       <Tabs>
           <TabList className="v-tab d-flex align-items-center">
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button>Upcoming Invoices</Button>
+              <Button onClick={() => employerAnalytics.logEvent('viewUpcomingInvoices', {page:'billing'})}>Upcoming Invoices</Button>
             </Tab>
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button>All Invoices</Button>
+              <Button onClick={() => employerAnalytics.logEvent('viewAllInvoices', {page:'billing'})}>All Invoices</Button>
             </Tab>
           </TabList>
           <TabPanel>

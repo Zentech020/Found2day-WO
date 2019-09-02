@@ -21,6 +21,8 @@ import UserDetails from '../components/user-profile-lite/UserDetails';
 import UserAccountDetails from '../components/user-profile-lite/UserAccountDetails';
 import UserTeams from './../components/user-profile/UserTeams';
 import LatestOrders from './../components/ecommerce/LatestOrders';
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 const company = {
   name:'Vanmoof',
@@ -141,6 +143,7 @@ class UserProfileLite extends React.Component {
       this.setState(newState);
     }
     reader.readAsDataURL(e.target.files[0]);
+    employerAnalytics.logEvent('changePicture', {page:'profile'})
   }
 
   onUploadIcon = (e)  => {
@@ -151,6 +154,7 @@ class UserProfileLite extends React.Component {
       this.setState(newState);
     }
     reader.readAsDataURL(e.target.files[0]);
+    employerAnalytics.logEvent('changeIcon', {page:'profile'})
   }
 
   onChangeStringAccount = (e) => {
@@ -199,10 +203,10 @@ class UserProfileLite extends React.Component {
         <Tabs>
           <TabList className="v-tab d-flex align-items-center">
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button>Personal Profile</Button>
+              <Button onClick={() => employerAnalytics.logEvent('viewPersonalProfile', {page:'profile'})}>Personal Profile</Button>
             </Tab>
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button>Company Profile</Button>
+              <Button onClick={() => employerAnalytics.logEvent('viewCompanyProfile', {page:'profile'})}>Company Profile</Button>
             </Tab>
           </TabList>
 

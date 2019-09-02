@@ -7,11 +7,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import jwtDecode from 'jwt-decode';
 import thunk from 'redux-thunk';
+import amplitude from 'amplitude-js';
 import rootReducer from './reducers';
-
-
-
 import * as serviceWorker from './serviceWorker';
+var employeeAnalytics = amplitude.getInstance();
+employeeAnalytics.init('bda943ff00de1ab61cd7136f237b9024');
 
 const checkTokenExpirationMiddleware = store => next => action => {
   const token = JSON.parse(sessionStorage.getItem("jtwToken"))

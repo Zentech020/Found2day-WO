@@ -37,8 +37,9 @@ import BlockAnimation from '../components/Animations/Block';
 import 'react-tabs/style/react-tabs.css';
 import getApplicantsData from '../data/applicants-list';
 import { getSingleVacancy, getApplicantCV, deleteSingleVacancy, getApplicationsByVacancy , updateVacancy, getDeviation} from '../actions';
-
 import colors from '../utils/colors';
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 class SingleVacancy extends React.Component {
   constructor(props) {
@@ -186,6 +187,7 @@ class SingleVacancy extends React.Component {
 
   linkToEdit = id => {
     this.props.history.push(`/edit-vacancy/${id}`);
+    employerAnalytics.logEvent('editVacancy', {page:'singleVacancy'})
   };
 
   onDeleteVacancy = async(id) => {
@@ -197,9 +199,8 @@ class SingleVacancy extends React.Component {
 
   onChangeVisibillity = async() => {
     const { id } = this.props.match.params;
-    console.log('change');
     let newState = Object.assign({}, this.state);
-
+    employerAnalytics.logEvent('switchVisibillity' , {page:'singleVacancy',status: newState.single_vacancy['visible'] })
     newState.single_vacancy['visible'] = !this.state.single_vacancy.visible;
     this.setState(newState);
     await this.props.updateVacancy(id, this.state.single_vacancy);
@@ -339,12 +340,14 @@ class SingleVacancy extends React.Component {
                 <Tab
                   className="c-tabs mx-4"
                   selectedClassName="c-tabs--selected"
+                  onClick={() => employerAnalytics.logEvent('viewSpecs', {page:'singleVacancy'})}
                 >
                   Specs
                 </Tab>
                 <Tab
                   className="c-tabs mx-4"
                   selectedClassName="c-tabs--selected"
+                  onClick={() => employerAnalytics.logEvent('viewApplicants', {page:'singleVacancy'})}
                 >
                   Applicants
                 </Tab>

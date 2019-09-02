@@ -19,8 +19,9 @@ import {  Link } from 'react-router-dom';
 import CardSkeleton from '../components/Animations/CardSkeleton';
 import PageTitle from '../components/common/PageTitle';
 import EmptyVacanciesImg from '../images/EmptyVacanciesImg.png';
-
 import colors from '../utils/colors';
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 class Vacancies extends React.Component {
   constructor(props) {
@@ -97,7 +98,9 @@ class Vacancies extends React.Component {
             <Row className="my-4">
                 <Col className="text-center my-4">
                   <h2>Your vacancies are empty</h2>
-                  <Button>Add a new vacancie</Button>
+                  <Link to="/add-vacancy">
+                    <Button onClick={() => employerAnalytics.logEvent('addVacancy' , {page:'vacancy'})} theme="accent">Add vacancy <i className="material-icons">add</i></Button>
+                  </Link>
                 </Col>
               </Row>
               <Row className="my-4">
@@ -125,7 +128,7 @@ class Vacancies extends React.Component {
 
           <Col sm="2" className="d-flex ml-auto my-auto justify-content-end">
             <Link to="/add-vacancy">
-              <Button theme="accent">Add vacancy <i className="material-icons">add</i></Button>
+              <Button onClick={() => employerAnalytics.logEvent('addVacancy' , {page:'vacancy'})} theme="accent">Add vacancy <i className="material-icons">add</i></Button>
             </Link>
           </Col>
         </Row>
