@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import jwtDecode from 'jwt-decode';
 import thunk from 'redux-thunk';
 import amplitude from 'amplitude-js';
+import {Helmet} from "react-helmet";
 import rootReducer from './reducers';
 import * as serviceWorker from './serviceWorker';
 var employeeAnalytics = amplitude.getInstance();
@@ -27,6 +28,11 @@ const store = createStore(rootReducer, storeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>Maak van werk zoeken geen baan | Found2day</title>
+      <meta name="description" content="Slimmer en sneller naar werk zoeken? Het kan!  Met de vacature technologie van Found2Day. Maak van werk zoeken geen baan." />
+    </Helmet>
     <App />
     <ToastContainer/>
   </Provider>,
