@@ -6,10 +6,7 @@ import {
   Col,
   Card,
   CardBody,
-  CardFooter,
-  Badge,
   Button,
-  ButtonGroup
 } from 'shards-react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from 'react-redux';
@@ -29,7 +26,6 @@ class Vacancies extends React.Component {
     this.state = {
       vacancies_by_group:[],
       vacancies_by_account:[],
-      vacancies_loaded:false,
     }
   }
 
@@ -41,7 +37,6 @@ class Vacancies extends React.Component {
     this.setState({
       vacancies_by_group:this.props.vacancies_by_group,
       vacancies_by_account:this.props.vacancies_by_account,
-      vacancies_loaded:true,
     })
 
   }
@@ -51,12 +46,11 @@ class Vacancies extends React.Component {
 
   render() {
     const { isLoading} = this.props;
-    const {vacancies_loaded} = this.state
     const GroupVacancies = ({vacancy_type}) => {
       if(vacancy_type && vacancy_type.length) {
-        console.log("checking emtpy vacancies",vacancy_type)
+        console.log("checking emtpy vacancies",vacancy_type.length, 'loading ----' , this.props.isLoading);
       }
-      if( vacancy_type && vacancy_type.length) {
+      if( vacancy_type.length > 0) {
         return (
           <Row>
             {vacancy_type.map((vacancy, i) => (
@@ -92,7 +86,7 @@ class Vacancies extends React.Component {
           </Row>
         )
       }
-      else if( vacancy_type.length === 0 ){
+      else {
         return (
           <Container>
             <Row className="my-4">
@@ -116,7 +110,6 @@ class Vacancies extends React.Component {
 
     return (
       <Container fluid className="main-content-container px-4">
-
         <Row noGutters className="page-header py-4">
           {/* Page Header :: Title */}
           <PageTitle

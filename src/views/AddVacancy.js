@@ -298,18 +298,19 @@ class addVacancy extends React.Component {
 
                             <Col md="12">
                               <label className="edit-user-details__change-background">
-                                <i className="material-icons mr-1">&#xE439;</i>
                                 Add vacancy image
                                 <input
                                   className="d-none"
                                   type="file"
                                   onChange={e => this.onUploadImage(e)}
                                 />
-                                <br />
-                                {this.state.newSingleVacancy.image ? (
-                                  <img src={this.state.newSingleVacancy.image} height={100} width={100} alt="image"/>
-                                ) : null}
+                                 <i className="material-icons ml-2">&#xE439;</i>
                               </label>
+                            </Col>
+                            <Col>
+                              {this.state.newSingleVacancy.image ? (
+                                    <div style={{height:'100px', width: '100px',backgroundSize:'cover', backgroundPosition:'center', backgroundImage: `url(${this.state.newSingleVacancy.image})` }} ></div>
+                              ) : null}
                             </Col>
                           </Row>
                         </Col>

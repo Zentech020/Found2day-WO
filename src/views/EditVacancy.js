@@ -246,7 +246,7 @@ class editVacancy extends React.Component {
                             </Col>
                             <Col md="12">
                               <label className="edit-user-details__change-background">
-                                <i className="material-icons mr-1">&#xE439;</i>
+                               
                                 Change Background Photo
                                 <FormInput
                                   name="image"
@@ -254,14 +254,13 @@ class editVacancy extends React.Component {
                                   type="file"
                                   onChange={e => this.onUploadImage(e)}
                                 />
+                                 <i className="material-icons ml-2">&#xE439;</i>
                               </label>
-                              <br />
-                              <img
-                                src={newSingleVacancy.image}
-                                alt="Vacancy"
-                                height={100}
-                                width={100}
-                              />
+                            </Col>
+                            <Col>
+                              {newSingleVacancy.image ? (
+                                <div style={{height:'100px', width: '100px',backgroundSize:'cover', backgroundPosition:'center', backgroundImage: `url(${newSingleVacancy.image})`}} ></div>
+                              ) : null}
                             </Col>
                           </Row>
                         </Col>
