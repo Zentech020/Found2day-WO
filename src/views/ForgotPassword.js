@@ -52,7 +52,7 @@ class forgotPassword extends React.Component {
                 {/* Logo */}
                 <img
                   className="auth-form__logo d-table mx-auto mb-3"
-                  src={require('../images/shards-dashboards-logo.svg')}
+                  src="https://logo.clearbit.com/found2day.nl"
                   alt="Shards Dashboards - Register Template"
                 />
 
