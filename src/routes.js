@@ -36,6 +36,7 @@ import HeaderNav from './views/HeaderNavigation';
 import IconSidebarView from './views/IconSidebar';
 import Logout from './views/Logout';
 import PaymentSuccess from './views/PaymentSuccess';
+import notFound from './views/notFound';
 
 const BlankIconSidebarLayout = ({ children }) => (
   <IconSidebar noNavbar noFooter>
@@ -228,5 +229,5 @@ export default [
     layout: DefaultLayout,
     component: PaymentSuccess,
     needsAuth: true
-  }
+  },
 ];

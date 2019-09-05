@@ -8,6 +8,7 @@ import {
   CardBody,
   Button,
 } from 'shards-react';
+import dayjs from 'dayjs';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from 'react-redux';
 import { getVacanciesByGroup, getVacanciesByAccount } from '../actions/index';
@@ -50,7 +51,7 @@ class Vacancies extends React.Component {
       if(vacancy_type && vacancy_type.length) {
         console.log("checking emtpy vacancies",vacancy_type.length, 'loading ----' , this.props.isLoading);
       }
-      if( vacancy_type.length > 0) {
+      if( vacancy_type && vacancy_type.length) {
         return (
           <Row>
             {vacancy_type.map((vacancy, i) => (
@@ -78,7 +79,7 @@ class Vacancies extends React.Component {
                         __html: vacancy.description
                       }}
                     />
-                    <span className="text-muted">28 February 2019</span>
+                    <span className="text-muted">{dayjs(vacancy.createdAt).format('YYYY-MM-DD')}</span>
                   </CardBody>
                 </Card>
               </Col>
@@ -86,7 +87,7 @@ class Vacancies extends React.Component {
           </Row>
         )
       }
-      else {
+      else if( vacancy_type.length === 0 ){
         return (
           <Container>
             <Row className="my-4">

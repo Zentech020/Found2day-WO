@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import PropTypes from 'prop-types';
 import {  toast } from 'react-toastify';
 import FuzzySearch from 'fuzzy-search';
 import dateFormat from 'dateformat';
@@ -35,9 +34,7 @@ import PageTitle from '../components/common/PageTitle';
 import SingleHeader from '../components/single-vacancy/singleHeader';
 import BlockAnimation from '../components/Animations/Block';
 import 'react-tabs/style/react-tabs.css';
-import getApplicantsData from '../data/applicants-list';
 import { getSingleVacancy, getApplicantCV, deleteSingleVacancy, getApplicationsByVacancy , updateVacancy, getDeviation} from '../actions';
-import colors from '../utils/colors';
 import amplitude from 'amplitude-js';
 var employerAnalytics = amplitude.getInstance();
 
@@ -229,7 +226,7 @@ class SingleVacancy extends React.Component {
   }
 
   render() {
-    const { directories, applications } = this.state;
+    const { applications } = this.state;
     const { pageSize, pageSizeOptions , single_vacancy} = this.state;
     const {
       title,
@@ -524,7 +521,7 @@ class SingleVacancy extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12} className="d-flex justify-content-end">
+          <Col md={12} className="d-flex justify-content-end mb-4">
             <Button onClick={() => this.linkToEdit(id)}>Edit</Button>
             <Button
               className="ml-4"

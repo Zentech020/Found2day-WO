@@ -27,8 +27,6 @@ import {
 
 import PageTitle from "../components/common/PageTitle";
 
-import colors from "../utils/colors";
-
 class editVacancy extends React.Component {
   constructor(props) {
     super(props);
@@ -246,7 +244,7 @@ class editVacancy extends React.Component {
                             </Col>
                             <Col md="12">
                               <label className="edit-user-details__change-background">
-                               
+
                                 Change Background Photo
                                 <FormInput
                                   name="image"

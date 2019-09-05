@@ -7,7 +7,6 @@ import {
   Container,
   FormCheckbox
 } from "shards-react";
-import {isAdmin} from '../../helpers/isAdmin';
 
 const LatestOrders = ({ title, users,isSwitched, switchPosition}) => (
   <Card small className="lo-stats h-100">

@@ -16,6 +16,12 @@ import {
   UPDATE_PROFILE_ERROR
 } from '../../actions/Profile/UpdateProfileAction';
 
+import {
+  INVITE_USER_IS_LOADING,
+  INVITE_USER_DATA,
+  INVITE_USER_ERROR
+} from '../../actions/Profile/InviteUserAction';
+
 const initialState = {
   isLoading: true,
   success: false,
@@ -67,6 +73,24 @@ export default (state = initialState, action) => {
 
     case UPDATE_PROFILE_ERROR: {
       return {...state , err:true, isLoading:false, message: "Failed updated profile"}
+    }
+
+    case INVITE_USER_IS_LOADING: {
+      return { ...state, isLoading: true };
+    }
+
+    case INVITE_USER_DATA: {
+      return {
+        ...state,
+        isLoading: false,
+        success: true,
+        err:false,
+        message:'Sucessfully invited member'
+      };
+    }
+
+    case INVITE_USER_ERROR: {
+      return { ...state, err: true, message: "Failed inviting a member, try again." };
     }
 
     default:

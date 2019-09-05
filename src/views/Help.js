@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Container, Row, Col, Button, ButtonGroup } from 'shards-react';
-import { NavLink } from 'react-router-dom';
+import { Container, Row } from 'shards-react';
 
 import PageTitle from '../components/common/PageTitle';
 
-import colors from '../utils/colors';
 
 const Help = ({ smallStats }) => (
   <Container

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardBody, Container, Row, Col, Button } from 'shards-react';
+import { Card, CardHeader, CardBody, Container, Row, Col } from 'shards-react';
 
 const UserTeams = ({ title, teams }) => (
   <Card small className="user-teams mb-4">

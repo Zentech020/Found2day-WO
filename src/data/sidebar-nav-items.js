@@ -39,12 +39,12 @@ export default function() {
           htmlBefore: '<i class="material-icons">attach_money</i>',
           htmlAfter: ''
         },
-        {
-          title: 'Help',
-          to: '/help',
-          htmlBefore: '<i class="material-icons">help</i>',
-          htmlAfter: ''
-        }
+        // {
+        //   title: 'Help',
+        //   to: '/help',
+        //   htmlBefore: '<i class="material-icons">help</i>',
+        //   htmlAfter: ''
+        // }
       ]
     }
     // {

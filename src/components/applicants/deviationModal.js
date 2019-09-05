@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {} from 'react';
 import TooltipHelper from '../tooltip/tooltip';
 class DeviationModal extends React.Component {
   constructor(props) {

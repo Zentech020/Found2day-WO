@@ -13,6 +13,10 @@ export const updateGroup = (group) => async dispatch => {
     const result = await axios.put(`${API_URL}/groups/${group._id}`, {
       title:group.title,
       icon:group.icon,
+      kvk:group.kvk,
+      address:group.address,
+      city:group.city,
+      zip:group.zip
     },
     header);
     return dispatch({ type: UPDATE_GROUP_DATA, result });

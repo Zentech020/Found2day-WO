@@ -1,22 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  Row,
-  Col,
-  FormSelect,
   Card,
   CardHeader,
   CardBody,
-  CardFooter
 } from "shards-react";
 
 
 class Notification extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-
   render() {
     const { title } = this.props;
     return (

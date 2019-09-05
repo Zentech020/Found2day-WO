@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, {} from 'react';
 import { Container, Button } from 'shards-react';
-import { connect } from 'react-redux';
 
 class PaymentSuccess extends React.Component {
   render() {

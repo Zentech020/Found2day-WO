@@ -163,7 +163,6 @@ class addVacancy extends React.Component {
 
   render() {
     const {
-      jobTitle,
       branch,
       education,
       experience,
@@ -449,7 +448,7 @@ class addVacancy extends React.Component {
                         theme="accent"
                         outline
                         disabled={
-                          this.state.title && this.state.image ? false : true
+                          this.state.newSingleVacancy.title && this.state.newSingleVacancy.image ? false : true
                         }
                         className="d-table mr-3"
                         onClick={() => this.setState({ preview: true })}

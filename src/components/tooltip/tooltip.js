@@ -13,7 +13,7 @@ class TooltipHelper extends React.Component {
   }
 
   render() {
-    const { content, toggle, open, className, tooltipTarget, icon, hasButton } = this.props;
+    const { content, className, tooltipTarget, icon, hasButton } = this.props;
     return (
       <div className={className}>
         {hasButton ?  (

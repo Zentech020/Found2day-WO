@@ -12,6 +12,7 @@ import {
 } from 'shards-react';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 import addVacancyImg from '../images/home/add-vacancy.png';
 import updateProfileImg from '../images/home/update-profile.png';
 import leaveFeedbackImg from '../images/home/feedback.png';
@@ -33,11 +34,13 @@ class Analytics extends React.Component {
   }
   componentDidMount = async() => {
     const group = JSON.parse(sessionStorage.getItem('group'));
+    var recentMont = dayjs().format('YYYY-MM-DD') // display
+    var oldMonth = dayjs().subtract(1, 'month').format('YYYY-MM-DD')
     if (group) {
       this.props.getHomeNotification();
       this.props.getApplicationCount(group._id);
       this.props.getVacancyCount(group._id);
-      this.props.getApplicantsTime(group._id, '2019-08-01', '2019-09-01');
+      this.props.getApplicantsTime(group._id, oldMonth, recentMont);
     }
   }
 

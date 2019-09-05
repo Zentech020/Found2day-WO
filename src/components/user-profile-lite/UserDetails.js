@@ -7,7 +7,7 @@ import {
 } from 'shards-react';
 import Circle from '../Animations/Circle';
 
-const UserDetails = function({ account, inviteMember, management, uploadPhoto,uploadIcon, isAdmin, isLoading }) {
+const UserDetails = function({ account, inviteMember, management, uploadPhoto,uploadIcon, isAdmin, isLoading , isPersonal}) {
   return (
     <Card small className="mb-4 pt-3">
       <CardHeader className="border-bottom text-center">
@@ -15,9 +15,16 @@ const UserDetails = function({ account, inviteMember, management, uploadPhoto,up
           {isLoading ? (
             <Circle/>
           ) : (
-            <div style={{borderRadius:'50%',height:'125px',width:'125px',backgroundSize:'cover',backgroundImage:`url(${isAdmin ? account.icon : account.photo})`}} />
+            <div style={{borderRadius:'50%',height:'125px',width:'125px',backgroundSize:'cover', backgroundPosition:'center', backgroundImage:`url(${isPersonal ? account.photo : account.icon})`}} />
           )}
-          <label>Change avatar
+          {isPersonal && !isAdmin ?
+            (
+            <label style={{textDecoration:'underline', cursor:'pointer'}}>Change avatar
+              <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
+            </label>)
+           : (null)}
+
+          <label style={{textDecoration:'underline', cursor:'pointer'}}>{isAdmin ? 'Change avatar' : null}
             <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
           </label>
         </div>
@@ -47,13 +54,15 @@ UserDetails.propTypes = {
   uploadIcon: PropTypes.func,
   avatar:PropTypes.String,
   isAdmin:PropTypes.bool,
-  isLoading:PropTypes.bool
+  isLoading:PropTypes.bool,
+  isPersonal:PropTypes.bool
 };
 
 UserDetails.defaultProps = {
   account: {
     name: 'Sierra Brooks',
     photo:'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
     avatar: require('./../../images/avatars/0.jpg'),
     jobTitle: 'Project Manager',
     performanceReportTitle: 'Workload',

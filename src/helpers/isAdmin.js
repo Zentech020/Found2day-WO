@@ -1,5 +1,4 @@
-exports.isAdmin = (user_id) => {
-  const admins = JSON.parse(sessionStorage.getItem('group')).admins;
+exports.isAdmin = (user_id, admins) => {
   if(admins.find(admin => (admin === user_id))) {
     return true
   }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-const token = sessionStorage.getItem('jwtToken');
 
 export default function(ComposedComponent) {
   class NotAuthentication extends Component {

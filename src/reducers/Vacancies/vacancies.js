@@ -4,12 +4,6 @@ import {
   ADD_VACANCIES_ERROR
 } from '../../actions/Vacancies/AddVacancyAction';
 
-// import {
-//   VACANCIES_IS_LOADING,
-//   VACANCIES_DATA,
-//   VACANCIES_ERROR
-// } from '../../actions/Vacancies/getVacanciesAction';
-
 import {
   DELETE_VACANCY_IS_LOADING,
   DELETE_VACANCY_DATA,
@@ -83,17 +77,20 @@ export default (state = initialState, action) => {
     }
 
     case VACANCIES_BY_GROUP_ERROR: {
-      return { ...state, error: action.err };
+      return { ...state, error: action.err , isLoading: false};
     }
 
+    case VACANCIES_BY_ACCOUNT_IS_LOADING: {
+      return { ...state, isLoading: true };
+    }
 
     case VACANCIES_BY_ACCOUNT_DATA: {
       const { data } = action.result;
-      return { ...state, vacancies_by_account: data };
+      return { ...state, vacancies_by_account: data, isLoading: false };
     }
 
     case VACANCIES_BY_ACCOUNT_ERROR: {
-      return { ...state, error: action.err };
+      return { ...state, error: action.err, isLoading: false };
     }
 
     case DELETE_VACANCY_IS_LOADING: {

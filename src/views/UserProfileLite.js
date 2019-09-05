@@ -21,13 +21,10 @@ import UserDetails from '../components/user-profile-lite/UserDetails';
 import UserAccountDetails from '../components/user-profile-lite/UserAccountDetails';
 import UserTeams from './../components/user-profile/UserTeams';
 import LatestOrders from './../components/ecommerce/LatestOrders';
+import {isAdmin} from '../helpers/isAdmin';
 import amplitude from 'amplitude-js';
 var employerAnalytics = amplitude.getInstance();
 
-const company = {
-  name:'Vanmoof',
-  photo:'https://www.vanmoof.com/static/version1529406215/frontend/Elephant/vanmoof/en_US/icons/android-chrome-192x192.png'
-}
 
 class UserProfileLite extends React.Component {
   constructor(props) {
@@ -91,6 +88,7 @@ class UserProfileLite extends React.Component {
       group:this.props.group,
       members:memberIsAdmin,
       message:'',
+      isAdmin:isAdmin(account._id, group.admins)
     });
   }
 
@@ -131,7 +129,6 @@ class UserProfileLite extends React.Component {
         await this.props.updateAdmin(group._id, userId, !isChecked);
        }
     })
-    console.log(userId);
     this.setState({members})
   }
 
@@ -183,6 +180,7 @@ class UserProfileLite extends React.Component {
 
   onUpdateGroup = async() => {
     const {group} = this.state
+    console.log(group);
     this.props.updateGroup(group)
     await this.setState({showingError: false})
   }
@@ -203,10 +201,10 @@ class UserProfileLite extends React.Component {
         <Tabs>
           <TabList className="v-tab d-flex align-items-center">
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button onClick={() => employerAnalytics.logEvent('viewPersonalProfile', {page:'profile'})}>Personal Profile</Button>
+              <Button onClick={() => employerAnalytics.logEvent('viewPersonalProfile', {page:'profile'})}>Personal profile</Button>
             </Tab>
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button onClick={() => employerAnalytics.logEvent('viewCompanyProfile', {page:'profile'})}>Company Profile</Button>
+              <Button onClick={() => employerAnalytics.logEvent('viewCompanyProfile', {page:'profile'})}>Company profile</Button>
             </Tab>
           </TabList>
 
@@ -218,16 +216,18 @@ class UserProfileLite extends React.Component {
                   management={() => this.onManage()}
                   uploadPhoto={(e) => this.onUploadPhoto(e)}
                   account={profile}
-                  isAdmin={false}
+                  isAdmin={this.state.isAdmin}
                   isLoading={isLoading}
+                  isPersonal={true}
                 />
               </Col>
               <Col lg="8">
                 <UserAccountDetails
-                  isAdmin={false}
+                  isAdmin={this.state.isAdmin}
                   account={profile}
                   updateAccount={() => this.onUpdateAccount()}
                   changeStringAccount={(e) => this.onChangeStringAccount(e)}
+                  isPersonal={true}
                 />
               </Col>
             </Row>
@@ -236,17 +236,25 @@ class UserProfileLite extends React.Component {
             <Row>
               <Col lg="4">
                 <UserDetails
-                inviteMember={() => this.inviteMember()}
-                management={() => this.onManage()}
-                uploadIcon={(e) => this.onUploadIcon(e)}
-                account={group}
-                isAdmin={true}
-                isLoading={isLoading}
+                  inviteMember={() => this.inviteMember()}
+                  management={() => this.onManage()}
+                  uploadIcon={(e) => this.onUploadIcon(e)}
+                  account={group}
+                  isAdmin={this.state.isAdmin}
+                  isLoading={isLoading}
+                  isPersonal={false}
+
                 />
                 <UserTeams teams={members} />
               </Col>
               <Col lg="8">
-                <UserAccountDetails isAdmin={true} account={group} changeStringGroup={(e) => this.onChangeStringGroup(e)} updateGroup={() => this.onUpdateGroup()}/>
+                <UserAccountDetails
+                  isAdmin={this.state.isAdmin}
+                  isPersonal={false}
+                  account={group}
+                  changeStringGroup={(e) => this.onChangeStringGroup(e)}
+                  updateGroup={() => this.onUpdateGroup()}
+                />
               </Col>
               </Row>
             </TabPanel>
@@ -272,15 +280,13 @@ class UserProfileLite extends React.Component {
                   <FormInput
                     id="email"
                     value={this.state.inviteEmail}
-                    onChange={e =>
-                      this.setState({ inviteEmail: e.target.value })
-                    }
+                    placeholder="john.doe@gmail.com"
+                    onChange={e =>this.setState({ inviteEmail: e.target.value })}
                   />
                 </FormGroup>
                 <Button
                   onClick={() => this.onInviteUser()}
-                  className="ml-2 mt-2"
-                >
+                  className="ml-2 mt-3">
                   Add
                 </Button>
               </div>

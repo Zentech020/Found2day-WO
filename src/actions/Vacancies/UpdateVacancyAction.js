@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from "react-toastify";
 import { API_URL } from '../../constants/url';
 import {bearer} from '../../helpers/Bearer';
 const header = bearer();

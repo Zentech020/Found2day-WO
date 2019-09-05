@@ -1,19 +1,9 @@
 import React from 'react'
 import Lottie from 'react-lottie';
-import * as animationData from './loader.json'
 
 export default class Loader extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const buttonStyle = {
-      display: 'block',
-      margin: '10px auto'
-    };
-
     const defaultOptions = {
       loop: true,
       autoplay: true,
@@ -24,10 +14,11 @@ export default class Loader extends React.Component {
     };
 
     return (
-      <Lottie options={defaultOptions}
-              height={200}
-              width={200}
-            />
+      <Lottie
+        options={defaultOptions}
+        height={200}
+        width={200}
+      />
 
     )
   }
