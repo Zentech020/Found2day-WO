@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
     }
 
     case APPLICATIONS_BY_GROUP_DATA : {
-      return {...state, applications:action.result.data, err:false, isLoading:false}
+      return {...state, applications:action.result.data.applications, err:false, isLoading:false}
     }
 
     case APPLICATIONS_BY_GROUP_ERROR : {
@@ -60,7 +60,7 @@ export default (state = initialState, action) => {
     }
 
     case APPLICATIONS_BY_VACANCY_DATA : {
-      return {...state, applications:action.result.data, err:false, isLoading:false}
+      return {...state, applications:action.result.data.applications, err:false, isLoading:false}
     }
 
     case APPLICATIONS_BY_VACANCY_ERROR : {
