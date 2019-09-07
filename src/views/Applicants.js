@@ -135,8 +135,8 @@ class Applicants extends React.Component {
     alert(`Viewing details for "${row.original.id}"!`);
   }
 
-  onGetCV = () => {
-    this.props.getApplicantCV().then((res) => {
+  onGetCV = (applicantToken) => {
+    this.props.getApplicantCV(applicantToken).then((res) => {
       console.log(res);
       const url = window.URL.createObjectURL(new Blob([res.result.data]));
       const link = document.createElement('a');
@@ -202,7 +202,7 @@ class Applicants extends React.Component {
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <div onClick={() => this.onGetCV()}>
+            <div onClick={() => this.onGetCV(row.original.applicantToken)}>
               <i className="material-icons">&#xE870;</i>
             </div>
           </ButtonGroup>

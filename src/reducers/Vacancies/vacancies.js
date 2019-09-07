@@ -60,7 +60,8 @@ export default (state = initialState, action) => {
     }
 
     case ADD_VACANCIE_DATA: {
-      return {  ...state, vacancies_by_group: state.vacancies_by_group.concat(action.result.data) , message:action.message, err:false,};
+      const {vacancy, message} = action.result.data;
+      return {  ...state, vacancies_by_group: state.vacancies_by_group.concat(vacancy) , message:message, err:false,};
     }
 
     case ADD_VACANCIES_ERROR: {
@@ -72,8 +73,8 @@ export default (state = initialState, action) => {
     }
 
     case VACANCIES_BY_GROUP_DATA: {
-      const { data } = action.result;
-      return { ...state, vacancies_by_group: data, isLoading: false };
+      const { vacancies } = action.result.data;
+      return { ...state, vacancies_by_group: vacancies, isLoading: false };
     }
 
     case VACANCIES_BY_GROUP_ERROR: {
@@ -85,8 +86,8 @@ export default (state = initialState, action) => {
     }
 
     case VACANCIES_BY_ACCOUNT_DATA: {
-      const { data } = action.result;
-      return { ...state, vacancies_by_account: data, isLoading: false };
+      const { vacancies } = action.result.data;
+      return { ...state, vacancies_by_account: vacancies, isLoading: false };
     }
 
     case VACANCIES_BY_ACCOUNT_ERROR: {
@@ -113,8 +114,8 @@ export default (state = initialState, action) => {
     }
 
     case SINGLE_VACANCY_DATA: {
-      const { data } = action.result;
-      return { ...state, isLoading:false, single_vacancy: data };
+      const {vacancy} = action.result.data;
+      return { ...state, isLoading:false, single_vacancy: vacancy };
     }
 
     case SINGLE_VACANCY_ERROR: {

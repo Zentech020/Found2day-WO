@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import notFound from './views/notFound';
 import routes from './routes';
+import { DefaultLayout, HeaderNavigation, IconSidebar } from './layouts';
 import requireAuth from './helpers/require_auth';
 import noRequireAuth from './helpers/no_require_auth';
 
@@ -44,7 +45,8 @@ export default () => (
           );
         }
       })}
-      <Route path="*" component={notFound} />
+      <Route path="*"
+      component={notFound} />
     </Switch>
   </Router>
 );
