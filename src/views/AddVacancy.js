@@ -49,17 +49,18 @@ class addVacancy extends React.Component {
       experience: "Select Option",
       weekHours: "Select Option",
       distance: "20",
-      postalCode: "",
-      author: "",
-      groupId: "",
+      postalCode: '',
+      author: '',
+      groupId: '',
       showingError: true,
-      branchId: "",
+      branchId: '',
       newSingleVacancy: {
-        title: "",
-        description: "",
-        content: "",
+        title: '',
+        description: '',
+        content: '',
         maxApplicants: 0,
-        image: "",
+        image: '',
+        icon:'',
         jobTitle: "Select Option",
         branch: "Select Option",
         education: "Select Option",
@@ -117,12 +118,13 @@ class addVacancy extends React.Component {
 
   onSubmitVacancy = async () => {
     const { newSingleVacancy, groupId, author, content} = this.state;
+    const { icon} = JSON.parse(sessionStorage.getItem('group'));
     const {location} = this.props;
     if(newSingleVacancy.postalCode && newSingleVacancy.houseNumber) {
       await this.props.getCoordinates(newSingleVacancy.postalCode, newSingleVacancy.houseNumber);
     }
     if (newSingleVacancy && groupId && location) {
-      this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location);
+      this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location, icon);
       await this.setState({ showingError: false });
     }
   };

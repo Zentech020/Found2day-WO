@@ -155,7 +155,7 @@ class Applicants extends React.Component {
 
   onSetDeviations = async(row) => {
     console.log(row);
-    await this.props.getDeviation(row.original.vacancyId);
+    await this.props.getDeviation(row.original.vacancyId, row.original.applicantToken);
     this.setState({
       openDeviationModal:true,
       modal:true,

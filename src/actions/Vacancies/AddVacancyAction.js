@@ -6,7 +6,7 @@ export const ADD_VACANCIE_IS_LOADING = 'add_vacancie_is_loading';
 export const ADD_VACANCIE_DATA = 'add_vacancie_data';
 export const ADD_VACANCIES_ERROR = 'add_vacancie_error';
 
-export const addVacancyAction = (vacancy, author, groupId, content, location) => async dispatch => {
+export const addVacancyAction = (vacancy, author, groupId, content, location, icon) => async dispatch => {
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
     const result = await axios.post(`${API_URL}/vacancies`,
@@ -24,7 +24,7 @@ export const addVacancyAction = (vacancy, author, groupId, content, location) =>
         weekHours: vacancy.weekHours,
         distance: vacancy.distance,
         postalcode: vacancy.postalCode,
-        icon: 'icon',
+        icon: icon,
         groupId: groupId,
         author: author,
         location:location
