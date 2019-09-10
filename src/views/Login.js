@@ -112,6 +112,7 @@ class Login extends React.Component {
                       placeholder="Password"
                       autoComplete="current-password"
                       value={this.state.password}
+                      required
                       onChange={e =>
                         this.setState({ password: e.target.value, changed: true })
                       }
@@ -120,11 +121,15 @@ class Login extends React.Component {
                   <FormGroup>
                     <FormCheckbox>Remember me for 30 days.</FormCheckbox>
                   </FormGroup>
+                  {/* <FormInput
+                  // type="submit">
+
+                  // </FormInput> */}
                   <Button
                     pill
                     theme="accent"
                     className="d-table mx-auto"
-                    // type="submit"
+                    type="submit"
                     onClick={() => {this.onLogin()}}
                   >
                     Access Account

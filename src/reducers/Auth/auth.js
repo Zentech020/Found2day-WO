@@ -136,11 +136,15 @@ export default function(
         ...state,
         isLoading: false,
         isAuthenticated: false,
+        err:false,
+        message:'succesfully registerd please login!'
       };
     }
 
     case REGISTER_INVITE_ERROR: {
-      return { ...state, err: action.err };
+      const {message} = action.payload.response.data;
+      console.log("message",message);
+      return { ...state, err: true , message:message};
     }
 
     default:

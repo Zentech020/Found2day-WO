@@ -22,6 +22,7 @@
     "pandoc": "^0.2.0",
     "react": "^16.6.3",
     "react-big-calendar": "^0.20.3",
+    "react-circular-progressbar": "^2.0.2",
     "react-content-loader": "^4.2.2",
     "react-dom": "^16.6.3",
     "react-dropzone": "^10.1.5",

@@ -55,6 +55,7 @@ class SingleVacancy extends React.Component {
       applications:[],
       singleVacancy:[],
       openDeviationModal:false,
+      userInfo:null
     };
 
     this.searcher = null;
@@ -205,7 +206,7 @@ class SingleVacancy extends React.Component {
 
   onSetDeviations = async(row) => {
     console.log(row);
-    await this.props.getDeviation(row.original.vacancyId);
+    await this.props.getDeviation(row.original.vacancyId, row.original.applicantToken);
     this.setState({
       openDeviationModal:true,
       modal:true,
@@ -213,8 +214,8 @@ class SingleVacancy extends React.Component {
     })
   }
 
-  onGetCV = () => {
-    this.props.getApplicantCV().then((res) => {
+  onGetCV = (applicantToken) => {
+    this.props.getApplicantCV(applicantToken).then((res) => {
       console.log(res);
       const url = window.URL.createObjectURL(new Blob([res.result.data]));
       const link = document.createElement('a');
@@ -227,7 +228,7 @@ class SingleVacancy extends React.Component {
 
   render() {
     const { applications } = this.state;
-    const { pageSize, pageSizeOptions , single_vacancy} = this.state;
+    const { pageSize, pageSizeOptions , single_vacancy, userInfo} = this.state;
     const {
       title,
       description,
@@ -277,7 +278,7 @@ class SingleVacancy extends React.Component {
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <div onClick={() => this.onGetCV()}>
+            <div style={{cursor:'pointer'}} onClick={() => this.onGetCV(row.original.applicantToken)}>
               <i className="material-icons">&#xE870;</i>
             </div>
           </ButtonGroup>
@@ -547,12 +548,8 @@ class SingleVacancy extends React.Component {
           />
           <ModalBody>
             <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
-              <h2 className="mt-2">{this.state.userInfo.name}</h2>
-              <p className="text-center mt-2">
-                Discovered had get considered projection who favourable.
-                Necessary up knowledge it tolerably. Unwilling departure
-                education to admitted speaking...
-              </p>
+              <h2 className="mt-2">{userInfo.name}</h2>
+              <p className="text-center mt-2">{userInfo.motivation ? this.state.userInfo.motivation : 'applicant has not filled in motivation'}</p>
             </div>
             <hr />
             <Row>
@@ -562,7 +559,7 @@ class SingleVacancy extends React.Component {
               <Col md={6}>
                 <div className="flex flex-column">
                   <h5 className="my-2">Email</h5>
-                  <p className="my-0">{this.state.userInfo.email}</p>
+                  <p className="my-0">{userInfo.email}</p>
                 </div>
               </Col>
 
@@ -583,7 +580,7 @@ class SingleVacancy extends React.Component {
               <Col md={6}>
                 <div className="flex flex-column">
                   <h5 className="my-2">CV</h5>
-                  <i className="material-icons">insert_drive_file</i>
+                  <i onClick={() => this.props.onGetCV(userInfo.applicantToken)} className="material-icons">insert_drive_file</i>
                 </div>
               </Col>
             </Row>
@@ -592,7 +589,9 @@ class SingleVacancy extends React.Component {
               <Col md={12}>
                 <p className="mb-2">Deviations</p>
               </Col>
-              <DeviationModal deviations={this.props.deviations}/>
+              <Col md={12}>
+                <DeviationModal deviations={this.props.deviations}/>
+              </Col>
             </Row>
           </ModalBody>
         </Modal>

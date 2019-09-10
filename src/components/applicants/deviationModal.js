@@ -1,5 +1,8 @@
 import React, {} from 'react';
 import TooltipHelper from '../tooltip/tooltip';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 class DeviationModal extends React.Component {
   constructor(props) {
     super(props);
@@ -9,10 +12,35 @@ class DeviationModal extends React.Component {
   }
   render() {
     const {deviations} = this.props;
+    let counter = 6;
+
+      if(!deviations[0].jobTitle) {
+          counter--;
+      }
+      if(!deviations[0].branch) {
+          counter--;
+      }
+      if(!deviations[0].education) {
+          counter--;
+      }
+      if(!deviations[0].experience) {
+          counter--;
+      }
+      if(!deviations[0].employementType) {
+          counter--;
+      }
+      if(!deviations[0].weekHours) {
+          counter--;
+      }
+      console.log(counter);
+      var percentage = parseInt((100 * counter) / 6);
+      console.log(percentage);
     return (
-      <div className="d-flex justify-content-center mx-auto">
+      <div className="d-flex">
+         <CircularProgressbar value={percentage} text={`${percentage}%`} />
           {!deviations[0].jobTitle ?
-            (<div>
+            (
+            <div>
             <TooltipHelper
                 className="ml-2"
                 icon="pie_chart"
@@ -78,6 +106,7 @@ class DeviationModal extends React.Component {
               />
             </div>
             ): null}
+
         </div>
     )
   }

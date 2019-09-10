@@ -51,7 +51,7 @@ class Analytics extends React.Component {
 
   render() {
 
-    const { applicationCount, vacancyCount, applicantsTime } = this.props;
+    const { applicationCount, vacancyCount} = this.props;
     if(this.props.dates.length) {
       console.log(this.props.dates);
     }

@@ -13,6 +13,7 @@ import {
   FormCheckbox,
   Button
 } from 'shards-react';
+import {toast} from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerInviteUser } from '../actions/index';
@@ -25,7 +26,8 @@ class RegisterInvite extends React.Component {
       password: '',
       password2: '',
       token: '',
-      groupId: ''
+      groupId: '',
+      showingError:true
     };
   }
 
@@ -36,11 +38,29 @@ class RegisterInvite extends React.Component {
     });
   }
 
-  onRegister = () => {
+  async componentDidUpdate(nextProps, history) {
+    if (!this.props.error && !this.state.showingError) {
+      if (this.props.message) {
+        toast.success(this.props.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+
+        await this.setState({ showingError: true });
+        // await history.push("/vacancies");
+      }
+    }
+    if (this.props.error && !this.state.showingError) {
+      if (this.props.message) {
+        toast.error(this.props.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({ showingError: true });
+      }
+    }
+  }
+
+  onRegister = async() => {
     const { name, email, password, password2, groupId, token } = this.state;
-    console.log(
-      `${name} -- ${email} -- ${password} -- ${password2} -- ${groupId}`
-    );
     if ((name && email && password && password2 && groupId, token)) {
       this.props.registerInviteUser(
         name,
@@ -49,7 +69,8 @@ class RegisterInvite extends React.Component {
         password2,
         groupId,
         token
-      );
+      )
+      await this.setState({ showingError: false });
     }
   };
   render() {
@@ -150,7 +171,15 @@ class RegisterInvite extends React.Component {
   }
 }
 
+//Connect redux
+function mapStateToProps(state) {
+  return {
+    error: state.auth.err,
+    message: state.auth.message,
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { registerInviteUser }
 )(RegisterInvite);

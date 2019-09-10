@@ -166,7 +166,7 @@ class Applicants extends React.Component {
   render() {
 
     const { pageSize, pageSizeOptions } = this.state;
-    const {applications} = this.state;
+    const {applications, userInfo} = this.state;
     const tableColumns = [
       {
         Header: '#',
@@ -202,7 +202,7 @@ class Applicants extends React.Component {
         className: 'text-center',
         Cell: row => (
           <ButtonGroup size="sm" className="d-table mx-auto">
-            <div onClick={() => this.onGetCV(row.original.applicantToken)}>
+            <div style={{cursor:'pointer'}} onClick={() => this.onGetCV(row.original.applicantToken)}>
               <i className="material-icons">&#xE870;</i>
             </div>
           </ButtonGroup>
@@ -295,17 +295,10 @@ class Applicants extends React.Component {
             <ModalBody>
               <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
                 <h2 className="mt-2">{this.state.userInfo.name}</h2>
-                <p className="text-center mt-2">
-                  Discovered had get considered projection who favourable.
-                  Necessary up knowledge it tolerably. Unwilling departure
-                  education to admitted speaking...
-                </p>
+                <p className="text-center mt-2">{userInfo.motivation ? this.state.userInfo.motivation : 'applicant has not filled in motivation'}</p>
               </div>
               <hr />
               <Row>
-                <Col md={12}>
-                  <p className="mb-2">User action</p>
-                </Col>
                 <Col md={6}>
                   <div className="flex flex-column">
                     <h5 className="my-2">Email</h5>
@@ -339,7 +332,9 @@ class Applicants extends React.Component {
                 <Col md={12}>
                   <p className="mb-2">Deviations</p>
                 </Col>
-                <DeviationModal deviations={this.props.deviations}/>
+                <Col md={12}>
+                  <DeviationModal deviations={this.props.deviations}/>
+                </Col>
               </Row>
             </ModalBody>
           </Modal>

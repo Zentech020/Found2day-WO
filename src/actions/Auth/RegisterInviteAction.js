@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { API_URL } from '../../constants/url';
 export const REGISTER_INVITE_IS_LOADING = 'register_invite_is_loading';
-export const REGISTER_INVITE_DATA = 'rregister_invite_data';
-export const REGISTER_INVITE_ERROR = 'rregister_invite_error';
+export const REGISTER_INVITE_DATA = 'register_invite_data';
+export const REGISTER_INVITE_ERROR = 'register_invite_error';
 
 export const registerInviteUser = (
   name,

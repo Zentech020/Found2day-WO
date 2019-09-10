@@ -76,18 +76,19 @@ export default (state = initialState, action) => {
       console.log(applicants_specs);
       const vacancy_specs = action.vacancySpecs.data;
       console.log(vacancy_specs);
+      var counter = 6;
       const deviations = applicants_specs.map((specs) => {
         return {
-          jobTitle: specs.jobTitle.includes(vacancy_specs.jobTitle),
-          branch:specs.branch.includes(vacancy_specs.branch),
-          education:specs.education.includes(vacancy_specs.education),
-          experience: specs.experience.includes(vacancy_specs.experience),
-          employmentType:specs.employmentType.includes(vacancy_specs.employmentType),
-          weekHours:specs.workingWeek.includes(vacancy_specs.weekHours),
+          jobTitle: specs.jobTitle.includes(vacancy_specs.vacancy.jobTitle),
+          branch:specs.branch.includes(vacancy_specs.vacancy.branch),
+          education:specs.education.includes(vacancy_specs.vacancy.education),
+          experience: specs.experience.includes(vacancy_specs.vacancy.experience),
+          employmentType:specs.employmentType.includes(vacancy_specs.vacancy.employmentType),
+          weekHours:specs.workingWeek.includes(vacancy_specs.vacancy.weekHours),
         }
       })
 
-      return {...state, deviations:deviations, err:false, isLoading:false}
+      return {...state, deviations:deviations, match:counter ,err:false, isLoading:false}
     }
 
     case GET_DEVIATION_ERROR : {
