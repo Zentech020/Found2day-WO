@@ -2,7 +2,7 @@
   "name": "shards-dashboard-pro-react",
   "version": "1.1.0",
   "private": true,
-  "homepage": "./analytics",
+  "homepage": "https://dashboard.found2day.work/",
   "dependencies": {
     "amplitude-js": "^5.3.1",
     "axios": "^0.19.0",
