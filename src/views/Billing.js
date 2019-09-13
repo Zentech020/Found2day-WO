@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 import { getUpcomingInvoice, endInvoice, getInvoices } from '../actions';
 import PageTitle from '../components/common/PageTitle';
 import EmptyVacanciesImg from '../images/EmptyVacanciesImg.png';
-import getBillingData from '../data/billing-data';
 import amplitude from 'amplitude-js';
 var employerAnalytics = amplitude.getInstance();
 
@@ -36,7 +35,6 @@ class Billing extends React.Component {
 
     this.getStatusClass = this.getStatusClass.bind(this);
     this.handlePageSizeChange = this.handlePageSizeChange.bind(this);
-    this.handleFilterSearch = this.handleFilterSearch.bind(this);
     this.handleItemEdit = this.handleItemEdit.bind(this);
     this.handleItemDelete = this.handleItemDelete.bind(this);
     this.handleItemConfirm = this.handleItemConfirm.bind(this);
@@ -44,12 +42,8 @@ class Billing extends React.Component {
   }
 
   componentDidMount = async () => {
-    const tableData = await getBillingData();
 
-    // Initialize the fuzzy searcher.
-    this.searcher = new FuzzySearch(tableData, ['customer', 'status'], {
-      caseSensitive: false
-    });
+
 
 
     await this.props.getInvoices(JSON.parse(sessionStorage.getItem('group')).stripeCustomerId);
@@ -59,7 +53,6 @@ class Billing extends React.Component {
 
     this.setState({
       ...this.state,
-      tableData,
       invoice: this.props.invoice
     });
   }
@@ -84,16 +77,6 @@ class Billing extends React.Component {
     this.setState({
       ...this.state,
       pageSize: e.target.value
-    });
-  }
-
-  /**
-   * Handles the global search.
-   */
-  handleFilterSearch(e) {
-    this.setState({
-      ...this.state,
-      tableData: this.searcher.search(e.target.value)
     });
   }
 
