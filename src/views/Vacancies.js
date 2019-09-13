@@ -31,19 +31,26 @@ class Vacancies extends React.Component {
   }
 
   componentDidMount =  async() => {
-    const account = JSON.parse(sessionStorage.getItem('account'));
     const group = JSON.parse(sessionStorage.getItem('group'));
     await this.props.getVacanciesByGroup(group._id);
-    await this.props.getVacanciesByAccount(account._id);
+    // await this.props.getVacanciesByAccount(account._id);
     this.setState({
       vacancies_by_group:this.props.vacancies_by_group,
-      vacancies_by_account:this.props.vacancies_by_account,
+      // vacancies_by_account:this.props.vacancies_by_account,
     })
 
   }
   linkTo = id => {
     this.props.history.push(`/vacancy/${id}`);
   };
+
+  showMyVacancies = async() => {
+    const account = JSON.parse(sessionStorage.getItem('account'));
+    await this.props.getVacanciesByAccount(account._id);
+    this.setState({
+      vacancies_by_account:this.props.vacancies_by_account,
+    })
+  }
 
   render() {
     const { isLoading} = this.props;
@@ -132,7 +139,7 @@ class Vacancies extends React.Component {
               <Button>All</Button>
             </Tab>
             <Tab selectedClassName="v-tabs--selected" className="v-tabs">
-              <Button>My vacancies</Button>
+              <Button onClick={() => this.showMyVacancies()}>My vacancies</Button>
             </Tab>
           </TabList>
 

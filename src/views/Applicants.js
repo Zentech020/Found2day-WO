@@ -25,6 +25,8 @@ import { connect } from 'react-redux';
 import PageTitle from '../components/common/PageTitle';
 import DeviationModal from '../components/applicants/deviationModal';
 import { getApplicationsByGroup, getApplicantCV, getDeviation } from '../actions/index';
+import amplitude from 'amplitude-js';
+var employerAnalytics = amplitude.getInstance();
 
 class Applicants extends React.Component {
   constructor(props) {
@@ -100,11 +102,12 @@ class Applicants extends React.Component {
    * Handles the global search.
    */
   handleFilterSearch(e) {
-    console.log(e.target.value);
     this.setState({
       ...this.state,
       applications: this.searcher.search(e.target.value)
     });
+    // setTimeout(() => employerAnalytics.logEvent('search')}, 300);
+    setTimeout(() => console.log('search'), 3000);
   }
 
   /**
@@ -261,7 +264,7 @@ class Applicants extends React.Component {
                         <i className="material-icons">search</i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <FormInput onChange={this.handleFilterSearch} />
+                    <FormInput onChange={this.handleFilterSearch} onBlur={() => employerAnalytics.logEvent('search applicant')}/>
                   </InputGroup>
                 </Col>
               </Row>

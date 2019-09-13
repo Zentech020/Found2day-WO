@@ -45,8 +45,7 @@ export default () => (
           );
         }
       })}
-      <Route path="*"
-      component={notFound} />
+      <Route path="*" component={notFound} />
     </Switch>
   </Router>
 );

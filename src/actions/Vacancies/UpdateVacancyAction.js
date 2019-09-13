@@ -6,11 +6,18 @@ export const UPDATE_VACANCY_IS_LOADING = 'update_vacancy_is_loading';
 export const UPDATE_VACANCY_DATA = 'update_vacancy_data';
 export const UPDATE_VACANCY_ERROR = 'update_vacancy_error';
 
-export const updateVacancy = (
-  vacancyId,
-  vacancy,
-  newContent
-) => async dispatch => {
+export const updateVacancy = (vacancyId,vacancy,newContent) => async dispatch => {
+  const realContent = `
+  ${newContent}
+  <ul>
+    <li>${vacancy.jobTitle}</li>
+    <li>${vacancy.branch}</li>
+    <li>${vacancy.education}</li>
+    <li>${vacancy.experience}</li>
+    <li>${vacancy.employmentType}</li>
+    <li>${vacancy.postalcode}</li>
+  </ul>
+`
   try {
     dispatch({ type: UPDATE_VACANCY_IS_LOADING });
     const result = await axios.put(
@@ -18,7 +25,7 @@ export const updateVacancy = (
       {
         title: vacancy.title,
         description: vacancy.description,
-        content:newContent,
+        content:realContent,
         image: vacancy.image,
         jobTitle: vacancy.jobTitle,
         branch: vacancy.branch,

@@ -21,6 +21,8 @@ import TooltipHelper from "../components/tooltip/tooltip";
 import FormSectionTitle from "../components/edit-user-profile/FormSectionTitle";
 import PreviewVacancy from "../components/add-vacancy/PreviewVacancy";
 import PageTitle from "../components/common/PageTitle";
+import ButtonLoader from '../components/Animations/ButtonLoader';
+
 
 import {
   addVacancyAction,
@@ -82,7 +84,7 @@ class addVacancy extends React.Component {
       groupId: group._id
     });
     await this.props.getSpecs();
-    await this.props.getCoordinates();
+    // await this.props.getCoordinates();
   };
 
   async componentDidUpdate(nextProps, history) {
@@ -120,9 +122,9 @@ class addVacancy extends React.Component {
     const { newSingleVacancy, groupId, author, content} = this.state;
     const { icon} = JSON.parse(sessionStorage.getItem('group'));
     const {location} = this.props;
-    if(newSingleVacancy.postalCode && newSingleVacancy.houseNumber) {
-      await this.props.getCoordinates(newSingleVacancy.postalCode, newSingleVacancy.houseNumber);
-    }
+    // if(newSingleVacancy.postalCode && newSingleVacancy.houseNumber) {
+    //   await this.props.getCoordinates(newSingleVacancy.postalCode, newSingleVacancy.houseNumber);
+    // }
     if (newSingleVacancy && groupId && location) {
       this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location, icon);
       await this.setState({ showingError: false });
@@ -163,6 +165,12 @@ class addVacancy extends React.Component {
     this.setState(newState);
   };
 
+  changeContent = (value) => {
+    this.setState({
+      content:value
+    })
+  }
+
   render() {
     const {
       branch,
@@ -171,6 +179,7 @@ class addVacancy extends React.Component {
       employmentType,
       weekHours
     } = this.props.specs;
+    const {isLoading} = this.props;
 
     const BranchList = ({ array }) => {
       if (array) {
@@ -269,9 +278,7 @@ class addVacancy extends React.Component {
                               </div>
                               <ReactQuill
                                 value={this.state.content}
-                                onChange={value =>
-                                  this.setState({ content: value })
-                                }
+                                onChange={value => this.changeContent(value)}
                               />
                             </Col>
 
@@ -461,9 +468,12 @@ class addVacancy extends React.Component {
                         size="sm"
                         theme="accent"
                         className="d-table mr-3"
+                        disabled={
+                          this.state.newSingleVacancy.postalCode && this.state.newSingleVacancy.houseNumber ? false : true
+                        }
                         onClick={() => this.onSubmitVacancy()}
                       >
-                        Submit
+                       {isLoading ? <ButtonLoader/> : 'Submit'}
                       </Button>
                     </div>
                   </CardFooter>
@@ -480,9 +490,9 @@ class addVacancy extends React.Component {
             className="c-modal"
           >
             <PreviewVacancy
-              title={this.state.title}
-              description={this.state.description}
-              image={this.state.image}
+              title={this.state.newSingleVacancy.title}
+              description={this.state.newSingleVacancy.description}
+              image={this.state.newSingleVacancy.image}
               icon={JSON.parse(sessionStorage.getItem("group")).icon}
               company={JSON.parse(sessionStorage.getItem("group")).title}
             />
@@ -508,7 +518,8 @@ function mapStateToProps(state) {
     message: state.vacancies.message,
     busy: state.vacancies.busy,
     jobTitles:state.Specs.specs.jobTitle,
-    location:state.vacancies.location
+    location:state.vacancies.location,
+    isLoading:state.vacancies.isLoading
   };
 }
 

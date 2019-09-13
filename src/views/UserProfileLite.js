@@ -74,7 +74,7 @@ class UserProfileLite extends React.Component {
   componentDidMount = async () => {
     const account = JSON.parse(sessionStorage.getItem('account'));
     const group = JSON.parse(sessionStorage.getItem('group'));
-    await this.props.getProfile(account._id);
+    // await this.props.getProfile(account._id);
     await this.props.getGroup(group._id);
     await this.props.getMembers(group._id);
     const {profile, members} = this.props;
@@ -228,6 +228,7 @@ class UserProfileLite extends React.Component {
                   updateAccount={() => this.onUpdateAccount()}
                   changeStringAccount={(e) => this.onChangeStringAccount(e)}
                   isPersonal={true}
+                  isLoading={isLoading}
                 />
               </Col>
             </Row>
@@ -254,6 +255,7 @@ class UserProfileLite extends React.Component {
                   account={group}
                   changeStringGroup={(e) => this.onChangeStringGroup(e)}
                   updateGroup={() => this.onUpdateGroup()}
+                  isLoading={isLoading}
                 />
               </Col>
               </Row>

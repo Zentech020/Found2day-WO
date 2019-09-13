@@ -68,11 +68,13 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_PROFILE_DATA: {
-      return {...state , err:false, isLoading:false, profile:action.result.data, message: "Sucessfully updated profile"}
+      const {msg} = action.result.data
+      return {...state , err:false, isLoading:false, profile:action.result.data, message: msg}
     }
 
     case UPDATE_PROFILE_ERROR: {
-      return {...state , err:true, isLoading:false, message: "Failed updated profile"}
+      const {msg} = action.result.data
+      return {...state , err:true, isLoading:false, message: msg}
     }
 
     case INVITE_USER_IS_LOADING: {
@@ -80,17 +82,18 @@ export default (state = initialState, action) => {
     }
 
     case INVITE_USER_DATA: {
+      const {msg} = action.result.data
       return {
         ...state,
         isLoading: false,
-        success: true,
         err:false,
-        message:'Sucessfully invited member'
+        message: msg
       };
     }
 
     case INVITE_USER_ERROR: {
-      return { ...state, err: true, message: "Failed inviting a member, try again." };
+      const {msg} = action.result.data
+      return { ...state, err: true, message: msg };
     }
 
     default:

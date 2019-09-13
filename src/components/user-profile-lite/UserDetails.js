@@ -17,16 +17,18 @@ const UserDetails = function({ account, inviteMember, management, uploadPhoto,up
           ) : (
             <div style={{borderRadius:'50%',height:'125px',width:'125px',backgroundSize:'cover', backgroundPosition:'center', backgroundImage:`url(${isPersonal ? account.photo : account.icon})`}} />
           )}
-          {isPersonal && !isAdmin ?
+          {isPersonal ?
             (
             <label style={{textDecoration:'underline', cursor:'pointer'}}>Change avatar
-              <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
+              <input className="d-none" type="file" onChange={uploadPhoto} />
             </label>)
-           : (null)}
+           : (
+            <label style={{textDecoration:'underline', cursor:'pointer'}}>{isAdmin ? 'Change avatar' : null}
+              <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
+            </label>
+           )}
 
-          <label style={{textDecoration:'underline', cursor:'pointer'}}>{isAdmin ? 'Change avatar' : null}
-            <input className="d-none" type="file" onChange={isAdmin ? uploadIcon : uploadPhoto} />
-          </label>
+
         </div>
         <h4 className="mb-0">{isAdmin ? account.title : account.name}</h4>
         <span className="text-muted d-block mb-2">{account.jobTitle}</span>

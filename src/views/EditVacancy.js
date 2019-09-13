@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import ReactQuill from "react-quill";
 import TooltipHelper from "../components/tooltip/tooltip";
 import FormSectionTitle from "../components/edit-user-profile/FormSectionTitle";
+import ButtonLoader from '../components/Animations/ButtonLoader';
 import {
   getSingleVacancy,
   updateVacancy,
@@ -118,7 +119,8 @@ class editVacancy extends React.Component {
 
   render() {
     const { id } = this.props.match.params;
-
+    const {isLoading} = this.props;
+    console.log(isLoading, 'loading stage');
     const { newContent, newSingleVacancy } = this.state;
 
     const BranchList = ({ array }) => {
@@ -402,10 +404,10 @@ class editVacancy extends React.Component {
                       <Button
                         size="sm"
                         theme="accent"
-                        className="d-table mr-3"
+                        className="d-flex align-items-center justify-content-between mr-3"
                         onClick={() => this.onUpdateVacancy(id)}
                       >
-                        Update
+                        {isLoading ? <ButtonLoader/> : 'Update'}
                       </Button>
                     </div>
                   </CardFooter>
@@ -434,7 +436,8 @@ function mapStateToProps(state) {
     error: state.vacancies.err,
     message: state.vacancies.message,
     busy: state.vacancies.busy,
-    jobTitles:state.Specs.specs.jobTitle
+    jobTitles:state.Specs.specs.jobTitle,
+    isLoading: state.vacancies.isLoading
   };
 }
 

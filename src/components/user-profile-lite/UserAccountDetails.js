@@ -12,8 +12,9 @@ import {
   FormInput,
   Button
 } from "shards-react";
+import ButtonLoader from '../Animations/ButtonLoader';
 
-const UserAccountDetails = ({ account, isAdmin, updateAccount, changeStringAccount, changeStringGroup, updateGroup , isPersonal}) => (
+const UserAccountDetails = ({ account, isLoading, isAdmin, updateAccount, changeStringAccount, changeStringGroup, updateGroup , isPersonal}) => (
   <Card small className="mb-4">
     <CardHeader className="border-bottom">
       <h6 className="m-0">{isAdmin ? 'Company Details' : 'Account details'}</h6>
@@ -142,9 +143,9 @@ const UserAccountDetails = ({ account, isAdmin, updateAccount, changeStringAccou
               ) : (null) }
               {isPersonal
               ?
-                (<Button theme="accent" onClick={updateAccount}>Update Profile</Button>)
+                (<Button theme="accent" onClick={updateAccount}>{isLoading ? <ButtonLoader/> :'Update Profile'}</Button>)
               :
-                (<Button theme="accent" disabled={!isAdmin} onClick={updateGroup}>Update Company</Button>)
+                (<Button theme="accent" disabled={!isAdmin} onClick={updateGroup}>{isLoading ? <ButtonLoader/> : 'Update Company'}</Button>)
               }
             </Form>
           </Col>
@@ -164,7 +165,8 @@ UserAccountDetails.propTypes = {
   updateGroup:PropTypes.func,
   changeStringAccount:PropTypes.func,
   changeStringGroup:PropTypes.func,
-  isPersonal:PropTypes.bool
+  isPersonal:PropTypes.bool,
+  isLoading:PropTypes.bool
 };
 
 UserAccountDetails.defaultProps = {

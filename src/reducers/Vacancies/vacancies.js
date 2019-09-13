@@ -60,12 +60,14 @@ export default (state = initialState, action) => {
     }
 
     case ADD_VACANCIE_DATA: {
-      const {vacancy, message} = action.result.data;
-      return {  ...state, vacancies_by_group: state.vacancies_by_group.concat(vacancy) , message:message, err:false,};
+      const {vacancy, msg} = action.result.data;
+      return {  ...state, isLoading: false, vacancies_by_group: state.vacancies_by_group.concat(vacancy) , message:msg, err:false,};
     }
 
     case ADD_VACANCIES_ERROR: {
-      return { ...state, err: true, message:action.message };
+      const {msg} = action.payload.response.data
+      console.log(action);
+      return { ...state, err: true, isLoading:false ,message:msg };
     }
 
     case VACANCIES_BY_GROUP_IS_LOADING: {
@@ -101,11 +103,11 @@ export default (state = initialState, action) => {
     case DELETE_VACANCY_DATA: {
       return {
         ...state, ...state.vacancies_by_group.filter((data, i) => data._id !== action.id),
-        success: true, err:false, message:'succesfully deleted vacancy' };
+        isLoading: false, err:false, message:'succesfully deleted vacancy' };
     }
 
     case DELETE_VACANCY_ERROR: {
-      return { ...state, error: true, message:'Something went wrong , try again!' };
+      return { ...state, error: true, isLoading: false, message:'Something went wrong , try again!' };
     }
 
 
@@ -127,7 +129,8 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_VACANCY_DATA: {
-      return { ...state, success: true, isLoading:false, err:false, message:'succesfully updated vacancy' };
+      const {msg} = action.result.data;
+      return { ...state, isLoading:false, err:false, message:msg };
     }
 
     case UPDATE_VACANCY_ERROR: {

@@ -5,6 +5,7 @@ import FuzzySearch from 'fuzzy-search';
 import dateFormat from 'dateformat';
 import DeviationModal from '../components/applicants/deviationModal';
 import TooltipHelper from "./../components/tooltip/tooltip";
+import ButtonLoader from '../components/Animations/ButtonLoader';
 
 import {
   Container,
@@ -529,7 +530,7 @@ class SingleVacancy extends React.Component {
               theme="danger"
               onClick={() => this.onDeleteVacancy(id)}
             >
-              Delete
+              {isLoading ? <ButtonLoader/> : 'Delete'}
             </Button>
           </Col>
         </Row>

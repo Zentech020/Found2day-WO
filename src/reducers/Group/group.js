@@ -77,11 +77,13 @@ export default (state = initialState, action) => {
   }
 
   case UPDATE_ADMIN_DATA: {
-    return {...state , err:false, isLoading:false, message: "Sucessfully updated ADMIN"}
+    const {msg} = action.result.data;
+    return {...state , err:false, isLoading:false, message: msg}
   }
 
   case UPDATE_ADMIN_ERROR: {
-    return {...state , err:true, isLoading:false, message: "Failed updated ADMIN"}
+    const {msg} = action.result.data;
+    return {...state , err:true, isLoading:false, message: msg}
   }
 
   default:

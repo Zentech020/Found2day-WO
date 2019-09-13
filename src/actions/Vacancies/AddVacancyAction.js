@@ -7,13 +7,25 @@ export const ADD_VACANCIE_DATA = 'add_vacancie_data';
 export const ADD_VACANCIES_ERROR = 'add_vacancie_error';
 
 export const addVacancyAction = (vacancy, author, groupId, content, location, icon) => async dispatch => {
+  const realContent = `
+    ${content}
+    <ul>
+      <li>${vacancy.jobTitle}</li>
+      <li>${vacancy.branch}</li>
+      <li>${vacancy.education}</li>
+      <li>${vacancy.experience}</li>
+      <li>${vacancy.employmentType}</li>
+      <li>${vacancy.postalcode}</li>
+    </ul>
+  `
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
+    const location = await axios.get(`${API_URL}/vacancies/location/${vacancy.postalCode}/${vacancy.houseNumber}`);
     const result = await axios.post(`${API_URL}/vacancies`,
       {
         title: vacancy.title,
         description: vacancy.description,
-        content: content,
+        content: realContent,
         maxApplicants:vacancy.maxApplicants,
         image: vacancy.image,
         jobTitle: vacancy.jobTitle,
@@ -27,15 +39,15 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
         icon: icon,
         groupId: groupId,
         author: author,
-        location:location
+        location:location.data.location
       },
       header
     );
-    return dispatch({ type: ADD_VACANCIE_DATA, result, message: "Submitting vacancy succeed" });
+    return dispatch({ type: ADD_VACANCIE_DATA, result });
   } catch (err) {
     return dispatch({
       type: ADD_VACANCIES_ERROR,
-      message: "Submitting vacancy failed",
+      payload:err
     });
   }
 };

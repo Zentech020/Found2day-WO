@@ -34,12 +34,28 @@ class UserActions extends React.Component {
   componentDidMount = async () => {
     const account = JSON.parse(sessionStorage.getItem('account'));
     if(account && sessionStorage.getItem('jwtToken')) {
-      await this.props.getProfile(account._id);
+      if(this.props.profile.length === 0) {
+        await this.props.getProfile(account._id);
+      }
     }
     if (this.props.profile) {
       this.setState({
         profile:this.props.profile
       });
+    }
+  }
+
+
+  componentDidUpdate = async(prevProps) => {
+    if (this.props.profile._id !== prevProps.profile._id) {
+      console.log('not the same')
+      const account = JSON.parse(sessionStorage.getItem('account'));
+      if(account && sessionStorage.getItem('jwtToken')) {
+        await this.props.getProfile(account._id);
+      }
+    }
+    else {
+      console.log('the smame');
     }
   }
 
