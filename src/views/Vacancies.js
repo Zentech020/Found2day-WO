@@ -8,6 +8,7 @@ import {
   CardBody,
   Button,
 } from 'shards-react';
+import Truncate from 'react-truncate';
 import dayjs from 'dayjs';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from 'react-redux';
@@ -81,12 +82,10 @@ class Vacancies extends React.Component {
                       </a>
                     </h5>
                     {/* <p className="card-text d-inline-block mb-3"> */}
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: vacancy.description
-                      }}
-                    />
-                    <span className="text-muted">{dayjs(vacancy.createdAt).format('YYYY-MM-DD')}</span>
+                    <Truncate width={250}>
+                      {vacancy.description}
+                    </Truncate>
+                    <p className="text-muted">{dayjs(vacancy.createdAt).format('YYYY-MM-DD')}</p>
                   </CardBody>
                 </Card>
               </Col>
