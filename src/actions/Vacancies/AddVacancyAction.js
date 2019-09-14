@@ -21,6 +21,8 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
     const location = await axios.get(`${API_URL}/vacancies/location/${vacancy.postalCode}/${vacancy.houseNumber}`);
+    console.log('loca', location);
+    
     const result = await axios.post(`${API_URL}/vacancies`,
       {
         title: vacancy.title,

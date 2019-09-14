@@ -23,6 +23,7 @@ import PreviewVacancy from "../components/add-vacancy/PreviewVacancy";
 import PageTitle from "../components/common/PageTitle";
 import ButtonLoader from '../components/Animations/ButtonLoader';
 
+import "react-quill/dist/quill.snow.css";
 
 import {
   addVacancyAction,
@@ -30,6 +31,7 @@ import {
   changeSpecs,
   getCoordinates
 } from "../actions";
+// import Editor from "../components/add-new-post/Editor";
 
 
 class addVacancy extends React.Component {
@@ -275,12 +277,17 @@ class addVacancy extends React.Component {
                                   tooltipTarget="content"
                                   content="Add a more specific description to outline the tasks, responsibilities and conditions of the job"
                                 />
+
                               </div>
                               <ReactQuill
                                 value={this.state.content}
                                 onChange={value => this.changeContent(value)}
                               />
                             </Col>
+
+                            {/* <ReactQuill/> */}
+
+                            {/* <Editor/> */}
 
                             <Col md="6" className="form-group">
                               <div className="d-flex">
