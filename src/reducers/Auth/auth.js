@@ -34,6 +34,12 @@ import {
   REGISTER_INVITE_ERROR
 } from '../../actions/Auth/RegisterInviteAction';
 
+import {
+  VERIFY_ACCOUNT_IS_LOADING,
+  VERIFY_ACCOUNT_DATA,
+  VERIFY_ACCOUNT_ERROR
+} from '../../actions/Auth/verifyAccountAction';
+
 export default function(
   state = {
     isLoading:false,
@@ -145,6 +151,23 @@ export default function(
       const {message} = action.payload.response.data;
       console.log("message",message);
       return { ...state, err: true , message:message};
+    }
+
+    case VERIFY_ACCOUNT_IS_LOADING: {
+      return { ...state, isLoading: true, err:false };
+    }
+
+    case VERIFY_ACCOUNT_DATA: {
+      return {
+        ...state,
+        isLoading: false,
+        err:false,
+        message:'succesfully verified account!'
+      };
+    }
+
+    case VERIFY_ACCOUNT_ERROR: {
+      return { ...state, err: true , message:'something went wrong'};
     }
 
     default:

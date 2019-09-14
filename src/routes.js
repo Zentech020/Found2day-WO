@@ -23,6 +23,7 @@ import HeaderNav from './views/HeaderNavigation';
 import IconSidebarView from './views/IconSidebar';
 import Logout from './views/Logout';
 import PaymentSuccess from './views/PaymentSuccess';
+import verifyAccountPage from './views/verifyAccount';
 
 const BlankIconSidebarLayout = ({ children }) => (
   <IconSidebar noNavbar noFooter>
@@ -148,5 +149,11 @@ export default [
     layout: DefaultLayout,
     component: PaymentSuccess,
     needsAuth: true
+  },
+  {
+    path: '/verify/:verifyToken/:userId',
+    layout: emptyLayout,
+    component: verifyAccountPage,
+    needsAuth: false
   },
 ];

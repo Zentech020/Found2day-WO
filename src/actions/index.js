@@ -10,6 +10,7 @@ import { registerInviteUser } from './Auth/RegisterInviteAction';
 import { logoutUser } from './Auth/LoginAction';
 import { forgetPasswordUser } from './Auth/ForgotPasswordAction';
 import { resetPasswordUser } from './Auth/ResetPasswordAction';
+import { verifyAccount } from './Auth/verifyAccountAction';
 import { inviteUser } from './Profile/InviteUserAction';
 import { getVacanciesByGroup } from './Vacancies/GetVacanciesByGroupAction';
 import { getVacanciesByAccount } from './Vacancies/GetVacanciesByAccountAction';
@@ -47,6 +48,7 @@ export {
   resetPasswordUser,
   inviteUser,
   registerInviteUser,
+  verifyAccount,
   addVacancyAction,
   getVacanciesByGroup,
   getVacanciesByAccount,
