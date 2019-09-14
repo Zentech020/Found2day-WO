@@ -23,6 +23,7 @@ import PreviewVacancy from "../components/add-vacancy/PreviewVacancy";
 import PageTitle from "../components/common/PageTitle";
 import ButtonLoader from '../components/Animations/ButtonLoader';
 
+import { Redirect } from 'react-router-dom';
 import "react-quill/dist/quill.snow.css";
 
 import {
@@ -128,7 +129,10 @@ class addVacancy extends React.Component {
     //   await this.props.getCoordinates(newSingleVacancy.postalCode, newSingleVacancy.houseNumber);
     // }
     if (newSingleVacancy && groupId && location) {
-      this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location, icon);
+      const resp = await this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location, icon);
+      if (resp.result && resp.result.status === 200) {
+        this.props.history.push('/vacancies');
+      }  
       await this.setState({ showingError: false });
     }
   };
