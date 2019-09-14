@@ -138,13 +138,17 @@ class addVacancy extends React.Component {
   };
 
   onUploadImage = e => {
-    let newState = Object.assign({}, this.state);
-    var reader = new FileReader();
-    reader.onloadend = () => {
-      newState.newSingleVacancy["image"] = reader.result;
-      this.setState(newState);
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    try {
+      let newState = Object.assign({}, this.state);
+      var reader = new FileReader();
+      reader.onloadend = () => {
+        newState.newSingleVacancy["image"] = reader.result;
+        this.setState(newState);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    } catch (err) {
+      return
+    }
   };
 
   handleSlide = e => {
@@ -468,7 +472,17 @@ class addVacancy extends React.Component {
                         theme="accent"
                         outline
                         disabled={
-                          this.state.newSingleVacancy.title && this.state.newSingleVacancy.image ? false : true
+                          (this.state.newSingleVacancy.title &&
+                          this.state.newSingleVacancy.image &&
+                          this.state.newSingleVacancy.postalCode &&
+                          this.state.newSingleVacancy.houseNumber &&
+                          this.state.newSingleVacancy.employmentType &&
+                          this.state.newSingleVacancy.experience &&
+                          this.state.newSingleVacancy.weekHours &&
+                          this.state.newSingleVacancy.education &&
+                          this.state.newSingleVacancy.jobTitle &&
+                          this.state.newSingleVacancy.branch)
+                          ? false : true
                         }
                         className="d-table mr-3"
                         onClick={() => this.setState({ preview: true })}
@@ -480,7 +494,17 @@ class addVacancy extends React.Component {
                         theme="accent"
                         className="d-table mr-3"
                         disabled={
-                          this.state.newSingleVacancy.postalCode && this.state.newSingleVacancy.houseNumber ? false : true
+                          (this.state.newSingleVacancy.title &&
+                            this.state.newSingleVacancy.image &&
+                            this.state.newSingleVacancy.postalCode &&
+                            this.state.newSingleVacancy.houseNumber &&
+                            this.state.newSingleVacancy.employmentType &&
+                            this.state.newSingleVacancy.experience &&
+                            this.state.newSingleVacancy.weekHours &&
+                            this.state.newSingleVacancy.education &&
+                            this.state.newSingleVacancy.jobTitle &&
+                            this.state.newSingleVacancy.branch)
+                            ? false : true
                         }
                         onClick={() => this.onSubmitVacancy()}
                       >
