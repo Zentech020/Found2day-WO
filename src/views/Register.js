@@ -31,16 +31,23 @@ class Register extends React.Component {
   }
 
 
-  async componentDidUpdate(nextProps) {
+  async componentDidUpdate(nextProps, history) {
     if (!this.props.error && !this.state.showingError) {
-      console.log('FUck');
-
-
-        toast.success('Successfully registered', {
+      if (this.props.message) {
+        toast.success(this.props.message, {
           position: toast.POSITION.BOTTOM_CENTER
         });
 
-      await this.setState({showingError: true})
+        await this.setState({ showingError: true });
+      }
+    }
+    if (this.props.error && !this.state.showingError) {
+      if (this.props.message) {
+        toast.error(this.props.message, {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({ showingError: true });
+      }
     }
   }
 
@@ -50,15 +57,9 @@ class Register extends React.Component {
       `${name} -- ${email} -- ${password} -- ${password2} -- ${groupName}`
     );
     if (name && email && password && password2 && groupName) {
-      this.props.registerUser(name, email, password, password2, groupName);
+      await this.props.registerUser(name, email, password, password2, groupName);
       await this.setState({showingError: false})
       await this.props.history.push(`/login`)
-    }
-
-    else {
-      toast.error('Please enter all the fields', {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
     }
   };
   render() {

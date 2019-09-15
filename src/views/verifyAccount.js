@@ -1,8 +1,9 @@
 import React, {} from 'react';
-import { Container, Button } from 'shards-react';
+import { Container, Button, Row, Col } from 'shards-react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom';
 import { verifyAccount } from '../actions';
+import verifyAccountImg from '../images/verifyAccount.png';
 
 class verifyAccountPage extends React.Component {
   componentDidMount = async() => {
@@ -16,9 +17,15 @@ class verifyAccountPage extends React.Component {
       <Container fluid className="main-content-container px-4 pb-4">
         <div className="error">
           <div className="error__content">
-            <h3>Loggin out...</h3>
-            <p>There was a problem on our end. Please try again later.</p>
-            <Link to="/login"><Button>Login</Button></Link>
+            <Row>
+              <Col>
+                <div className="d-flex flex-column align-items-center">
+                  <h3>Your account is verified</h3>
+                  <img className="my-4" width="50%" src={verifyAccountImg} alt="verify account img" />
+                  <Link to="/login"><Button>Login</Button></Link>
+                </div>
+            </Col>
+            </Row>
           </div>
         </div>
       </Container>

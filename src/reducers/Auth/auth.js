@@ -77,7 +77,7 @@ export default function(
         ...state,
         isLoading: false,
         isAuthenticated: false,
-        payload: action.result
+        message: action.result.data
       };
     }
 

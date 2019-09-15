@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import addVacancyImg from "../images/home/add-vacancy.png";
 import updateProfileImg from "../images/home/update-profile.png";
 import leaveFeedbackImg from "../images/home/feedback.png";
+import noApplicantsImg from "../images/noApplicantsImg.png";
 
 import {
   getHomeNotification,
@@ -140,7 +141,28 @@ class Analytics extends React.Component {
                   ]
                 }}
               />
-            ) : null}
+            ) :(
+              <UsersOverview
+              chartData={{
+                labels: this.props.dates ? this.props.dates : null,
+                datasets: [
+                  {
+                    label: "Applicants",
+                    fill: false,
+                    data: this.props.applicantsTime,
+                    backgroundColor: "rgba(0,123,255,0.1)",
+                    borderColor: "rgba(0,123,255,1)",
+                    pointBackgroundColor: "#ffffff",
+                    pointHoverBackgroundColor: "rgb(0,123,255)",
+                    borderWidth: 1.5,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                  }
+                ]
+              }}
+            />
+            )
+            }
           </Col>
         </Row>
 
@@ -186,7 +208,6 @@ class Analytics extends React.Component {
                   backgroundImage: `url(${updateProfileImg})`
                 }}
               >
-                {/* <img width={300} src={addVacancyImg} /> */}
               </CardBody>
               <CardFooter className="border-top">
                 <Row>

@@ -126,7 +126,13 @@ class UserProfileLite extends React.Component {
     members.forEach(async member => {
        if (member._id === userId) {
         member.isAdmin =  !isChecked
-        await this.props.updateAdmin(group._id, userId, !isChecked);
+        this.props.updateAdmin(group._id, userId, !isChecked).then((res)=>{
+          if(res.result) {
+            toast.success(res.result.data.msg, {
+              position: toast.POSITION.BOTTOM_CENTER
+            });
+          }
+        })
        }
     })
     this.setState({members})
