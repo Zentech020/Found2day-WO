@@ -405,6 +405,19 @@ class editVacancy extends React.Component {
                         size="sm"
                         theme="accent"
                         className="d-flex align-items-center justify-content-between mr-3"
+                        disabled={
+                          (newSingleVacancy.title &&
+                            newSingleVacancy.image &&
+                            newSingleVacancy.postalCode &&
+                            newSingleVacancy.houseNumber &&
+                            newSingleVacancy.employmentType &&
+                            newSingleVacancy.experience &&
+                            newSingleVacancy.weekHours &&
+                            newSingleVacancy.education &&
+                            newSingleVacancy.jobTitle &&
+                            newSingleVacancy.branch)
+                            ? false : true
+                        }
                         onClick={() => this.onUpdateVacancy(id)}
                       >
                         {isLoading ? <ButtonLoader/> : 'Update'}
