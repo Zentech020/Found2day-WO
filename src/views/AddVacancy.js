@@ -303,6 +303,7 @@ class addVacancy extends React.Component {
                                   Max applicants
                                 </label>
                                 <TooltipHelper
+                                  min="1"
                                   className="ml-2"
                                   tooltipTarget="maxApplicants"
                                   content="Select the maximum number of applicants. When the maximum is reached, the vacancy will close automatically"
