@@ -51,7 +51,9 @@ class Login extends React.Component {
     if (username && password) {
       this.props.loginUser(username, password).then((res)=> {
         this.setState({showingError: false})
-        window.location.reload();
+        if(res.type !== 'login_error'){
+          window.location.reload();
+        }
       });
 
 
