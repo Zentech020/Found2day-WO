@@ -228,7 +228,7 @@ class Applicants extends React.Component {
     ];
 
     return (
-      <Container fluid className="main-content-container px-4 pb-4">
+      <Container fluid className="main-content-container px-2 px-sm-4 pb-4">
         <Row noGutters className="page-header py-4">
           <PageTitle
             title="Applicants"

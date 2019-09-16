@@ -126,7 +126,7 @@ class Vacancies extends React.Component {
           />
           {/* Page Header :: Actions */}
 
-          <Col sm="2" className="d-flex ml-auto my-auto justify-content-end">
+          <Col sm="2" className="d-flex ml-auto my-auto justify-content-center  justify-content-md-center">
             <Link to="/add-vacancy">
               <Button onClick={() => employerAnalytics.logEvent('addVacancy' , {page:'vacancy'})} theme="accent">Add vacancy <i className="material-icons">add</i></Button>
             </Link>

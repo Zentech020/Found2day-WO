@@ -2,6 +2,10 @@
   top: 20%;
   left: calc(16.666667% / 2 ) !important;
   max-width: 800px;
+
+  @include media-breakpoint-down(xs) {
+    left: 0 !important;
+  }
 }
 
 
