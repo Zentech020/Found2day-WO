@@ -108,17 +108,21 @@ class Billing extends React.Component {
     alert(`Viewing details for "${row.original.id}"!`);
   }
 
-  onPay = async() => {
-    await this.props.endInvoice(JSON.parse(sessionStorage.getItem('group')).stripeCustomerId).then((res)=>{
+  onPay = async(url) => {
+
+    // If invoice already exists, just follow the already generated url
+    if (url) {
+      window.open(url, 'name');
+    } else {
+      const res = await this.props.endInvoice(JSON.parse(sessionStorage.getItem('group')).stripeCustomerId)
       console.log(res);
       if(res && res.type !== 'end_invoice_error') {
         this.setState({
           toPayLink:true,
         })
-        var win = window.open(res.result.data.hosted_invoice_url, '_blank');
-        win.focus();
+        window.open(res.result.data.hosted_invoice_url, 'name');
       }
-    });
+    }
   };
 
   renderTableUpcomingInvoice = (tableColumns, tableData, period_start, period_end, next_payment_attempt) =>
@@ -133,7 +137,7 @@ class Billing extends React.Component {
             <span>Invoice for period {period_start} - {period_end}</span>
           </Col>
           <Col className="file-manager__filters__rows d-flex" md="4">
-            <span>Will be sent on {next_payment_attempt} to {JSON.parse(sessionStorage.getItem('account')).email}</span>
+            <span>Will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
           </Col>
         </Row>
       </Container>
@@ -154,7 +158,7 @@ class Billing extends React.Component {
     </CardBody>
   </Card>
 
-renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next_payment_attempt, amount_due, status, due_date) =>
+renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next_payment_attempt, amount_due, status, due_date, url) =>
 <Card className="p-0 mb-4">
 <CardHeader className="p-0">
   <Container fluid className="file-manager__filters border-bottom">
@@ -164,12 +168,12 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         {(due_date < (Date.now()) && status !== 'paid') && <i className='material-icons' style={{'width': 'auto', 'font-size': '16px', 'color': 'rgb(173, 21, 53)', 'top': '0'}}>warning</i>}
       </Col>
       <Col className="file-manager__filters__rows d-flex" md="6">
-        <span>Invoice for period {new Date(period_start * 1000).toLocaleDateString()} - {new Date(period_end * 1000).toLocaleDateString()}</span>
+        <span>Invoice created {new Date(period_start * 1000).toLocaleDateString()}</span>
         {(due_date < (Date.now()) && status !== 'paid') && <span class="test" style={{color:'#ad1535'}}>This invoice is late!</span>}
       </Col>
       <Col className="file-manager__filters__rows d-flex" md="4">
 
-        <span>Will be sent on {next_payment_attempt} to {JSON.parse(sessionStorage.getItem('account')).email}</span>
+        <span>Will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
       </Col>
     </Row>
   </Container>
@@ -188,7 +192,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
       }
       <div className="d-flex">
       
-        {status !== "paid" ? (<Button onClick={() => this.onPay()} theme={(due_date < (Date.now()) && status !== 'paid') ? "danger": "success"} className="flex-end my-2 mx-3 ml-auto w-25">
+        {status !== "paid" ? (<Button onClick={() => this.onPay(url)} theme={(due_date < (Date.now()) && status !== 'paid') ? "danger": "success"} className="flex-end my-2 mx-3 ml-auto w-25">
           Pay now ({(amount_due / 100).toLocaleString('en-US', {
           style: 'currency',
           currency: 'USD',
@@ -365,7 +369,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
           </TabPanel>
           <TabPanel>
             {this.props.all_invoices && this.props.all_invoices.map(invoice =>
-              this.renderTableAllInvoice(tableColumns_all, invoice.lines.data, invoice.period_start, invoice.period_end, invoice.next_payment_attempt, invoice.amount_due, invoice.status, invoice.due_date)
+              this.renderTableAllInvoice(tableColumns_all, invoice.lines.data, invoice.period_start, invoice.period_end, invoice.next_payment_attempt, invoice.amount_due, invoice.status, invoice.due_date, invoice.hosted_invoice_url)
             )}
           </TabPanel>
         </Tabs>

@@ -62,7 +62,7 @@ export const endInvoice = (customerId) => async dispatch => {
         type: END_INVOICE_ERROR
       });
     }
-    // return dispatch({ type: END_INVOICE_DATA, result });
+    return dispatch({ type: END_INVOICE_DATA, result });
   } catch (err) {
       console.log(err);
     return dispatch({
