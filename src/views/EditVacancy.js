@@ -37,7 +37,8 @@ class editVacancy extends React.Component {
       newContent: "",
       showingError: true,
       newSingleVacancy: [],
-      filteredJobTitles:[]
+      filteredJobTitles:[],
+      houseNumber:''
     };
   }
 
@@ -391,6 +392,17 @@ class editVacancy extends React.Component {
                                 id="firstName"
                                 name="postalcode"
                                 value={newSingleVacancy.postalcode}
+                                onChange={e => this.onChangeField(e)}
+                              />
+                            </Col>
+                            <Col md="6" className="form-group">
+                              <div className="d-flex">
+                                <label htmlFor="feDescription">House number</label>
+                              </div>
+                              <FormInput
+                                id="firstName"
+                                name="houseNumber"
+                                value={this.state.houseNumber}
                                 onChange={e => this.onChangeField(e)}
                               />
                             </Col>
