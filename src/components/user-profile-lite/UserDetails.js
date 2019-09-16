@@ -35,10 +35,10 @@ const UserDetails = function({ account, inviteMember, management, uploadPhoto,up
         {isAdmin ? (
           <Fragment>
             <Button pill outline size="sm" className="mb-2 mx-1" onClick={inviteMember}>
-              <i className="material-icons mr-1">person_add</i> Invite memmber
+              <i className="material-icons mr-1">person_add</i> Invite member
             </Button>
             <Button pill size="sm" className="mb-2 mx-1" onClick={management}>
-              <i className="material-icons mr-1">settings</i> Admin managment
+              <i className="material-icons mr-1">settings</i> Admin management
             </Button>
           </Fragment>
         )
