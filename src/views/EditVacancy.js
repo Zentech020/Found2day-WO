@@ -93,13 +93,17 @@ class editVacancy extends React.Component {
 
 
   onUploadImage = e => {
-    var reader = new FileReader();
-    let newState = Object.assign({}, this.state);
-    reader.onloadend = () => {
-      newState.newSingleVacancy["image"] = reader.result;
-      this.setState(newState);
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    try {
+      var reader = new FileReader();
+      let newState = Object.assign({}, this.state);
+      reader.onloadend = () => {
+        newState.newSingleVacancy["image"] = reader.result;
+        this.setState(newState);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    } catch (err) {
+      return
+    }
   };
 
   onChangeBranch = (e) => {
@@ -384,28 +388,6 @@ class editVacancy extends React.Component {
                                 ) : null}
                               </FormSelect>
                             </Col>
-                            <Col md="6" className="form-group">
-                              <div className="d-flex">
-                                <label htmlFor="feDescription">Postcode</label>
-                              </div>
-                              <FormInput
-                                id="firstName"
-                                name="postalcode"
-                                value={newSingleVacancy.postalcode}
-                                onChange={e => this.onChangeField(e)}
-                              />
-                            </Col>
-                            <Col md="6" className="form-group">
-                              <div className="d-flex">
-                                <label htmlFor="feDescription">House number</label>
-                              </div>
-                              <FormInput
-                                id="firstName"
-                                name="houseNumber"
-                                value={this.state.houseNumber}
-                                onChange={e => this.onChangeField(e)}
-                              />
-                            </Col>
                           </Row>
                         </Col>
                       </Row>
@@ -420,8 +402,6 @@ class editVacancy extends React.Component {
                         disabled={
                           (newSingleVacancy.title &&
                             newSingleVacancy.image &&
-                            newSingleVacancy.postalCode &&
-                            newSingleVacancy.houseNumber &&
                             newSingleVacancy.employmentType &&
                             newSingleVacancy.experience &&
                             newSingleVacancy.weekHours &&
