@@ -18,25 +18,25 @@ class DeviationModal extends React.Component {
 
     if (deviations) {
       let counter = 6;
-      if(!deviations[0].jobTitle) {
+      if(!deviations.jobTitle) {
           counter--;
       }
-      if(!deviations[0].branch) {
+      if(!deviations.branch) {
           counter--;
       }
-      if(!deviations[0].education) {
+      if(!deviations.education) {
           counter--;
       }
-      if(!deviations[0].experience) {
+      if(!deviations.experience) {
           counter--;
       }
-      if(!deviations[0].employementType) {
+      if(!deviations.employementType) {
           counter--;
       }
-      if(!deviations[0].weekHours) {
+      if(!deviations.weekHours) {
           counter--;
       }
-      console.log(counter);
+      console.log(counter, deviations);
       var percentage = parseInt((100 * counter) / 6);
 
       this.setState({percentage})
@@ -45,6 +45,9 @@ class DeviationModal extends React.Component {
 
   render() {
     const {deviations} = this.props;
+
+    console.log('devi', deviations);
+    
     // let counter = 6;
 
 
@@ -73,7 +76,7 @@ class DeviationModal extends React.Component {
     return (
       <div className="d-flex">
          <CircularProgressbar value={this.state.percentage} text={`${this.state.percentage}%`} />
-          {!deviations[0].jobTitle ?
+          {!deviations.jobTitle ?
             (
             <div>
             <TooltipHelper
@@ -86,7 +89,7 @@ class DeviationModal extends React.Component {
             </div>
             )
           : null}
-          {!deviations[0].branch ? (<div>
+          {!deviations.branch ? (<div>
             <TooltipHelper
                 className="ml-2"
                 icon="pie_chart"
@@ -96,7 +99,7 @@ class DeviationModal extends React.Component {
               />
             </div>
             ) : null}
-          {!deviations[0].education ? (
+          {!deviations.education ? (
             <div>
               <TooltipHelper
                 className="ml-2"
@@ -107,7 +110,7 @@ class DeviationModal extends React.Component {
               />
             </div>
             ) : null}
-          {!deviations[0].experience ? (
+          {!deviations.experience ? (
           <div>
               <TooltipHelper
                 className="ml-2"
@@ -118,7 +121,7 @@ class DeviationModal extends React.Component {
               />
             </div>
             ) : null}
-            {!deviations[0].employementType ? (
+            {!deviations.employementType ? (
             <div>
               <TooltipHelper
                 className="ml-2"
@@ -130,7 +133,7 @@ class DeviationModal extends React.Component {
             </div>
             ) : null}
 
-          {!deviations[0].weekHours ? (
+          {!deviations.weekHours ? (
           <div>
               <TooltipHelper
                 className="ml-2"

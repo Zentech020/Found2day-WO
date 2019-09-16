@@ -159,11 +159,14 @@ class Applicants extends React.Component {
   onSetDeviations = async(row) => {
     console.log(row);
     await this.props.getDeviation(row.original.vacancyId, row.original.applicantToken);
-    this.setState({
-      openDeviationModal:true,
-      modal:true,
-      userInfo:row.original
-    })
+
+    if (row) {
+      this.setState({
+        openDeviationModal:true,
+        modal:true,
+        userInfo:row.original
+      })
+    }
   }
 
   render() {
@@ -298,7 +301,7 @@ class Applicants extends React.Component {
             <ModalBody>
               <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
                 <h2 className="mt-2">{this.state.userInfo.name}</h2>
-                <p className="text-center mt-2">{userInfo.motivation ? this.state.userInfo.motivation : 'applicant has not filled in motivation'}</p>
+                <p className="text-center mt-2">{userInfo.motivation ? this.state.userInfo.motivation : 'Applicant has not filled in a motivation.'}</p>
               </div>
               <hr />
               <Row>
@@ -336,7 +339,7 @@ class Applicants extends React.Component {
                   <p className="mb-2">Deviations</p>
                 </Col>
                 <Col md={12}>
-                  <DeviationModal deviations={this.props.deviations}/>
+                  <DeviationModal deviations={this.state.userInfo.specifications}/>
                 </Col>
               </Row>
             </ModalBody>
