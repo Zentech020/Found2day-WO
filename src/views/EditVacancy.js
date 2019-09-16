@@ -245,6 +245,7 @@ class editVacancy extends React.Component {
                                 id="maxApplicants"
                                 name="maxApplicants"
                                 type="number"
+                                min="1"
                                 value={newSingleVacancy.maxApplicants}
                                 onChange={e => this.onChangeField(e)}
                               />
