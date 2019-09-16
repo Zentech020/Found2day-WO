@@ -6,14 +6,18 @@ import 'react-circular-progressbar/dist/styles.css';
 class DeviationModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state= {
-      open:false,
-    }
-  }
-  render() {
-    const {deviations} = this.props;
-    let counter = 6;
 
+      this.state= {
+        open:false
+      }
+  }
+
+  componentDidMount = async () => {
+    
+    const {deviations} = this.props;
+
+    if (deviations) {
+      let counter = 6;
       if(!deviations[0].jobTitle) {
           counter--;
       }
@@ -34,10 +38,41 @@ class DeviationModal extends React.Component {
       }
       console.log(counter);
       var percentage = parseInt((100 * counter) / 6);
-      console.log(percentage);
+
+      this.setState({percentage})
+    }
+  }
+
+  render() {
+    const {deviations} = this.props;
+    // let counter = 6;
+
+
+
+    //   if(!deviations[0].jobTitle) {
+    //       counter--;
+    //   }
+    //   if(!deviations[0].branch) {
+    //       counter--;
+    //   }
+    //   if(!deviations[0].education) {
+    //       counter--;
+    //   }
+    //   if(!deviations[0].experience) {
+    //       counter--;
+    //   }
+    //   if(!deviations[0].employementType) {
+    //       counter--;
+    //   }
+    //   if(!deviations[0].weekHours) {
+    //       counter--;
+    //   }
+    //   console.log(counter);
+    //   var percentage = parseInt((100 * counter) / 6);
+    //   console.log(percentage);
     return (
       <div className="d-flex">
-         <CircularProgressbar value={percentage} text={`${percentage}%`} />
+         <CircularProgressbar value={this.state.percentage} text={`${this.state.percentage}%`} />
           {!deviations[0].jobTitle ?
             (
             <div>
