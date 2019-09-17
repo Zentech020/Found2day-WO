@@ -252,7 +252,7 @@ class editVacancy extends React.Component {
                             <Col md="12">
                               <label className="edit-user-details__change-background">
 
-                                Change Background Photo
+                                Change vacancy image
                                 <FormInput
                                   name="image"
                                   className="d-none"
@@ -260,6 +260,7 @@ class editVacancy extends React.Component {
                                   onChange={e => this.onUploadImage(e)}
                                 />
                                  <i className="material-icons ml-2">&#xE439;</i>
+                                 <span class="btn btn-primary ml-2">Upload image...</span>
                               </label>
                             </Col>
                             <Col>
