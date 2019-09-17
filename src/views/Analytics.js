@@ -47,7 +47,7 @@ class Analytics extends React.Component {
       this.props.getHomeNotification();
       this.props.getApplicationCount(group._id);
       this.props.getVacancyCount(group._id);
-      this.props.getApplicantsTime(group._id, oldMonth, recentMont);
+      await this.props.getApplicantsTime(group._id, oldMonth, recentMont);
       this.props.getVisibleVacancies(group._id);
     }
   };
@@ -59,9 +59,6 @@ class Analytics extends React.Component {
 
   render() {
     const { applicationCount, vacancyCount, visible_vacancies } = this.props;
-    if (this.props.dates.length) {
-      console.log(this.props.dates);
-    }
 
     return (
       <Container fluid className="main-content-container px-4">
@@ -121,10 +118,10 @@ class Analytics extends React.Component {
 
           {/* Users by Device */}
           <Col lg="8" md="12" sm="12" className="mb-4">
-            {this.props.applicantsTime && this.props.dates.length ? (
+            {this.props.applicantsTime && this.props.dates ? (
               <UsersOverview
                 chartData={{
-                  labels: this.props.dates ? this.props.dates : null,
+                  labels: this.props.dates,
                   datasets: [
                     {
                       label: "Applicants",
@@ -144,7 +141,7 @@ class Analytics extends React.Component {
             ) :(
               <UsersOverview
               chartData={{
-                labels: this.props.dates ? this.props.dates : null,
+                labels: this.props.dates,
                 datasets: [
                   {
                     label: "Applicants",

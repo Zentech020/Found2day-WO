@@ -282,7 +282,7 @@ class UserProfileLite extends React.Component {
           <ModalBody>
             <div>
               <p>
-                Invite team members so they can place vacancies at Found2Day. Every team member can see which vacancies they personally placed. At the company profile you can allow other members to be admin.
+                Invite team members to your group so they can place vacancies at Found2Day. Every team member can see which vacancies they personally placed. At the company profile you can allow other members to be admin.
               </p>
             </div>
 
@@ -313,10 +313,10 @@ class UserProfileLite extends React.Component {
           open={manageModal}
           toggle={() => this.manageToggle()}
         >
-          <ModalHeader>Manage group</ModalHeader>
-          <ModalBody>
+          <ModalHeader>Manage admins</ModalHeader>
+          {/* <ModalBody> */}
             <LatestOrders users={members} switchPosition={(e, userId, isChecked) => this.onSwitchPosition(e, userId, isChecked)}/>
-          </ModalBody>
+          {/* </ModalBody> */}
         </Modal>
       </Container>
     );

@@ -10,22 +10,22 @@ import {
 
 const LatestOrders = ({ title, users,isSwitched, switchPosition}) => (
   <Card small className="lo-stats h-100">
-    <CardHeader className="border-bottom">
+    {/* <CardHeader className="border-bottom">
       <h6 className="m-0">{title}</h6>
       <div className="block-handle" />
-    </CardHeader>
+    </CardHeader> */}
 
     <CardBody className="p-0">
       <Container fluid className="px-0">
         <table className="table mb-0">
           <thead className="py-2 bg-light text-semibold border-bottom">
             <tr>
-              <th>Details</th>
+              <th>Name</th>
               <th />
               {/* <th className="text-center">Status</th>
               <th className="text-center">Items</th>
               <th className="text-center">Total</th> */}
-              <th className="text-right">Actions</th>
+              <th>Is admin</th>
             </tr>
           </thead>
           <tbody>

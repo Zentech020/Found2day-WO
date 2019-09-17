@@ -85,6 +85,71 @@ class UsersOverview extends React.Component {
     BlogUsersOverview.render();
   }
 
+  componentDidUpdate = () => {
+    const chartOptions = {
+      ...{
+        responsive: true,
+        legend: {
+          position: "top"
+        },
+        elements: {
+          line: {
+            // A higher value makes the line look skewed at this ratio.
+            tension: 0.3
+          },
+          point: {
+            radius: 0
+          }
+        },
+        scales: {
+
+          xAxes: [{
+            type: "time",
+            time:       {
+              tooltipFormat: 'll',
+              unit:'day',
+              displayFormats: {
+                'day':'YYYY-MM-DD'
+              }
+            },
+            // scaleLabel: {
+            //   display:     true,
+            //   labelString: 'Date'
+            // }
+        }],
+          yAxes: [{
+            ticks: {
+              precision:0
+            },
+            scaleLabel: {
+                display:     true,
+                labelString: 'Applicants'
+            }
+        }]
+        },
+        hover: {
+          mode: "nearest",
+          intersect: false
+        },
+        tooltips: {
+          custom: false,
+          mode: "nearest",
+          intersect: false
+        }
+      },
+      ...this.props.chartOptions
+
+    };
+    
+    const BlogUsersOverview = new Chart(this.canvasRef.current, {
+      type: "line",
+      data: this.props.chartData,
+      options: chartOptions,
+    });
+
+    BlogUsersOverview.render();
+  }
+
   render() {
     const { title } = this.props;
     return (
