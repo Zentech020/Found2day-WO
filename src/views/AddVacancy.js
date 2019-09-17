@@ -136,14 +136,25 @@ class addVacancy extends React.Component {
     }
   };
 
-  onUploadImage = e => {
+  onUploadImage = async e => {
     try {
-      let newState = Object.assign({}, this.state);
       var reader = new FileReader();
+      let newState = Object.assign({}, this.state);
+
+      // 5MB Max file size
+      if (e.target.files[0].size > 5242880) {
+        toast.error('The uploaded file exceeds the size limit of 5MB. Please upload a smaller file.', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({ showingError: true });
+        return
+      }
+
       reader.onloadend = () => {
         newState.newSingleVacancy["image"] = reader.result;
         this.setState(newState);
       };
+
       reader.readAsDataURL(e.target.files[0]);
     } catch (err) {
       return
@@ -328,7 +339,7 @@ class addVacancy extends React.Component {
                                   onChange={e => this.onUploadImage(e)}
                                 />
                                  <i className="material-icons ml-2">&#xE439;</i>
-                                 <span class="btn btn-primary ml-2">Upload image...</span>
+                                 <span class="btn btn-primary ml-2">Upload image... (max. 5 MB)</span>
                               </label>
                             </Col>
                             <Col>
@@ -458,6 +469,7 @@ class addVacancy extends React.Component {
                                 name="houseNumber"
                                 value={this.state.newSingleVacancy.houseNumber}
                                 onChange={e => this.onChangeField(e)}
+                                required
                               />
                             </Col>
                           </Row>
@@ -468,6 +480,17 @@ class addVacancy extends React.Component {
                   <CardFooter className="border-top">
                     <div className="d-flex justify-content-end">
                       {" "}
+                      {!(this.state.newSingleVacancy.title &&
+                          this.state.newSingleVacancy.image &&
+                          this.state.newSingleVacancy.postalCode &&
+                          this.state.newSingleVacancy.houseNumber &&
+                          this.state.newSingleVacancy.employmentType &&
+                          this.state.newSingleVacancy.experience &&
+                          this.state.newSingleVacancy.weekHours &&
+                          this.state.newSingleVacancy.education &&
+                          this.state.newSingleVacancy.jobTitle &&
+                          this.state.newSingleVacancy.branch)
+                          && <span>Please fill out all fields, including the vacancy image, to view the preview or submit the vacancy.</span> }
                       <Button
                         size="sm"
                         theme="accent"
