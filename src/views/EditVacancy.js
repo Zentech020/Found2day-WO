@@ -48,12 +48,12 @@ class editVacancy extends React.Component {
     await getSingleVacancy(id);
     getSpecs();
 
-    const { content } = this.props.single_vacancy;
+    const { displayContent } = this.props.single_vacancy;
 
     if (this.props.single_vacancy) {
       this.setState({
         newSingleVacancy: this.props.single_vacancy,
-        newContent: content
+        newContent: displayContent
       });
     }
   };
@@ -223,8 +223,7 @@ class editVacancy extends React.Component {
                               </div>
                               <ReactQuill
                                 value={newContent}
-                                defaultValue={newSingleVacancy.content}
-                                // onChange={e => this.onChangeField(e)}
+                                defaultValue={newSingleVacancy.displayContent}
                                 onChange={value =>
                                   this.setState({ newContent: value })
                                 }

@@ -144,7 +144,10 @@ class UserProfileLite extends React.Component {
       let newState = Object.assign({}, this.state);
       newState.profile.photo = reader.result
       this.setState(newState);
+      this.props.updateProfile(newState.profile);
+      this.setState({showingError: false})
     }
+
     reader.readAsDataURL(e.target.files[0]);
     employerAnalytics.logEvent('changePicture', {page:'profile'})
   }
@@ -155,6 +158,8 @@ class UserProfileLite extends React.Component {
       let newState = Object.assign({}, this.state);
       newState.group.icon = reader.result
       this.setState(newState);
+      this.props.updateGroup(newState.group);
+      this.setState({showingError: false})
     }
     reader.readAsDataURL(e.target.files[0]);
     employerAnalytics.logEvent('changeIcon', {page:'profile'})

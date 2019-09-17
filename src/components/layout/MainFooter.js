@@ -10,9 +10,11 @@ const MainFooter = ({ contained, menuItems, copyright }) => (
         <Nav>
           {menuItems.map((item, idx) => (
             <NavItem key={idx}>
-              <NavLink tag={Link} to={item.to}>
+              {/* <NavLink tag={Link} to={item.to}> */}
+                <a target="_blank" href={item.to} className="pr-2">
                 {item.title}
-              </NavLink>
+                </a>
+              {/* </NavLink> */}
             </NavItem>
           ))}
         </Nav>
@@ -43,15 +45,15 @@ MainFooter.defaultProps = {
   menuItems: [
     {
       title: 'Home',
-      to: '#'
+      to: 'https://found2day.nl/werkgever'
     },
     {
       title: 'About',
-      to: '#'
+      to: 'https://found2day.nl/over-ons'
     },
     {
       title: 'Blog',
-      to: '#'
+      to: 'https://found2day.nl/blog'
     }
   ]
 };

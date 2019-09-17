@@ -7,7 +7,7 @@ export const ADD_VACANCIE_DATA = 'add_vacancie_data';
 export const ADD_VACANCIES_ERROR = 'add_vacancie_error';
 
 export const addVacancyAction = (vacancy, author, groupId, content, location, icon) => async dispatch => {
-  const realContent = `
+  const classifyContent = `
     ${content}
     <ul>
       <li>${vacancy.jobTitle}</li>
@@ -21,13 +21,12 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
     const location = await axios.get(`${API_URL}/vacancies/location/${vacancy.postalCode}/${vacancy.houseNumber}`);
-    console.log('loca', location);
-    
     const result = await axios.post(`${API_URL}/vacancies`,
       {
         title: vacancy.title,
         description: vacancy.description,
-        content: realContent,
+        displayContent: content,
+        content:classifyContent,
         maxApplicants:vacancy.maxApplicants,
         image: vacancy.image,
         jobTitle: vacancy.jobTitle,
@@ -41,10 +40,11 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
         icon: icon,
         groupId: groupId,
         author: author,
-        location:location.data.location
+        location:location.data.location,
       },
       header
     );
+    console.log(result);
     return dispatch({ type: ADD_VACANCIE_DATA, result });
   } catch (err) {
     return dispatch({

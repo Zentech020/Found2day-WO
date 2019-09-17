@@ -87,7 +87,6 @@ class addVacancy extends React.Component {
       groupId: group._id
     });
     await this.props.getSpecs();
-    // await this.props.getCoordinates();
   };
 
   async componentDidUpdate(nextProps, history) {
@@ -132,7 +131,7 @@ class addVacancy extends React.Component {
       const resp = await this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location, icon);
       if (resp.result && resp.result.status === 200) {
         this.props.history.push('/vacancies');
-      }  
+      }
       await this.setState({ showingError: false });
     }
   };
@@ -555,7 +554,8 @@ function mapStateToProps(state) {
     busy: state.vacancies.busy,
     jobTitles:state.Specs.specs.jobTitle,
     location:state.vacancies.location,
-    isLoading:state.vacancies.isLoading
+    isLoading:state.vacancies.isLoading,
+    group:state.group.group
   };
 }
 

@@ -18,7 +18,8 @@ class SidebarMainNavbar extends React.Component {
     const group = JSON.parse(sessionStorage.getItem('group'));
     if(group) {
       this.setState({
-        groupIcon: group.icon
+        groupIcon: group.icon,
+        companyName:group.title
       })
     }
   }
@@ -31,7 +32,7 @@ class SidebarMainNavbar extends React.Component {
 
   render() {
     const { hideLogoText } = this.props;
-    const {groupIcon} = this.state;
+    const {groupIcon, companyName} = this.state;
     return (
       <div className="main-navbar">
         <Navbar
@@ -52,7 +53,7 @@ class SidebarMainNavbar extends React.Component {
                 alt="Shards Dashboard"
               />
               {!hideLogoText && (
-                <span className="d-none d-md-inline ml-1">Found2Day</span>
+                <span className="d-none d-md-inline ml-1">{companyName}</span>
               )}
             </div>
           </NavbarBrand>
