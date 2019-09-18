@@ -92,14 +92,25 @@ class editVacancy extends React.Component {
   };
 
 
-  onUploadImage = e => {
+  onUploadImage = async e => {
     try {
       var reader = new FileReader();
       let newState = Object.assign({}, this.state);
+
+      // 5MB Max file size
+      if (e.target.files[0].size > 5242880) {
+        toast.error('The uploaded file exceeds the size limit of 5MB. Please upload a smaller file.', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+        await this.setState({ showingError: true });
+        return
+      }
+
       reader.onloadend = () => {
         newState.newSingleVacancy["image"] = reader.result;
         this.setState(newState);
       };
+
       reader.readAsDataURL(e.target.files[0]);
     } catch (err) {
       return
@@ -252,7 +263,7 @@ class editVacancy extends React.Component {
                             <Col md="12">
                               <label className="edit-user-details__change-background">
 
-                                Change Background Photo
+                                Change vacancy image
                                 <FormInput
                                   name="image"
                                   className="d-none"
@@ -260,6 +271,7 @@ class editVacancy extends React.Component {
                                   onChange={e => this.onUploadImage(e)}
                                 />
                                  <i className="material-icons ml-2">&#xE439;</i>
+                                 <span class="btn btn-primary ml-2">Upload image... (max. 5 MB)</span>
                               </label>
                             </Col>
                             <Col>
@@ -394,26 +406,39 @@ class editVacancy extends React.Component {
                     </Form>
                   </CardBody>
                   <CardFooter className="border-top">
-                    <div className="d-flex justify-content-end">
-                      <Button
-                        size="sm"
-                        theme="accent"
-                        className="d-flex align-items-center justify-content-between mr-3"
-                        disabled={
-                          (newSingleVacancy.title &&
-                            newSingleVacancy.image &&
-                            newSingleVacancy.employmentType &&
-                            newSingleVacancy.experience &&
-                            newSingleVacancy.weekHours &&
-                            newSingleVacancy.education &&
-                            newSingleVacancy.jobTitle &&
-                            newSingleVacancy.branch)
-                            ? false : true
-                        }
-                        onClick={() => this.onUpdateVacancy(id)}
-                      >
-                        {isLoading ? <ButtonLoader/> : 'Update'}
-                      </Button>
+                  <div className="d-flex justify-content-end">
+                    {!(newSingleVacancy.title &&
+                      newSingleVacancy.image &&
+                      newSingleVacancy.postalCode &&
+                      newSingleVacancy.houseNumber &&
+                      newSingleVacancy.employmentType &&
+                      newSingleVacancy.experience &&
+                      newSingleVacancy.weekHours &&
+                      newSingleVacancy.education &&
+                      newSingleVacancy.jobTitle &&
+                      newSingleVacancy.branch)
+                      && <span class="">Please fill out all fields, including the vacancy image, to update the vacancy.</span> }
+                    
+                    <Button
+                      size="sm"
+                      theme="accent"
+                      className="ml-3 mr-3"
+                      disabled={
+                        (newSingleVacancy.title &&
+                          newSingleVacancy.image &&
+                          newSingleVacancy.employmentType &&
+                          newSingleVacancy.experience &&
+                          newSingleVacancy.weekHours &&
+                          newSingleVacancy.education &&
+                          newSingleVacancy.jobTitle &&
+                          newSingleVacancy.branch)
+                          ? false : true
+                      }
+                      onClick={() => this.onUpdateVacancy(id)}
+                    >
+                      {isLoading ? <ButtonLoader/> : 'Update'}
+                    
+                    </Button>
                     </div>
                   </CardFooter>
                 </Card>

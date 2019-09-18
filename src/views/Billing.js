@@ -137,7 +137,7 @@ class Billing extends React.Component {
             <span>Invoice for period {period_start} - {period_end}</span>
           </Col>
           <Col className="file-manager__filters__rows d-flex" md="4">
-            <span>Will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
+            <span>Communications will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
           </Col>
         </Row>
       </Container>
@@ -173,7 +173,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
       </Col>
       <Col className="file-manager__filters__rows d-flex" md="4">
 
-        <span>Will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
+        <span>Communcations will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
       </Col>
     </Row>
   </Container>

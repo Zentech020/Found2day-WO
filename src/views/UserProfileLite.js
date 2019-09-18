@@ -145,6 +145,7 @@ class UserProfileLite extends React.Component {
       newState.profile.photo = reader.result
       this.setState(newState);
       this.props.updateProfile(newState.profile);
+      sessionStorage.setItem('account', JSON.stringify(newState.profile))
       this.setState({showingError: false})
     }
 
@@ -159,6 +160,7 @@ class UserProfileLite extends React.Component {
       newState.group.icon = reader.result
       this.setState(newState);
       this.props.updateGroup(newState.group);
+      sessionStorage.setItem('group', JSON.stringify(newState.group))
       this.setState({showingError: false})
     }
     reader.readAsDataURL(e.target.files[0]);

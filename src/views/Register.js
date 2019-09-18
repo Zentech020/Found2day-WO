@@ -26,6 +26,7 @@ class Register extends React.Component {
       password: '',
       password2: '',
       groupName: '',
+      checked: false,
       showingError: true
     };
   }
@@ -51,15 +52,19 @@ class Register extends React.Component {
     }
   }
 
+  handleCheck = e => {
+    this.setState({checked: !this.state.checked});
+  }
+
   onRegister = async() => {
-    const { name, email, password, password2, groupName } = this.state;
-    console.log(
-      `${name} -- ${email} -- ${password} -- ${password2} -- ${groupName}`
-    );
-    if (name && email && password && password2 && groupName) {
-      await this.props.registerUser(name, email, password, password2, groupName);
-      await this.setState({showingError: false})
-      await this.props.history.push(`/login`)
+    const { name, email, password, password2, groupName, checked } = this.state;
+    if (name && email && password && password2 && groupName && checked) {
+      const res = await this.props.registerUser(name, email, password, password2, groupName);
+
+      if (res.type !== "register_error") {
+        await this.setState({showingError: false})
+        await this.props.history.push(`/login`)
+      }
     }
   };
   render() {
@@ -142,7 +147,10 @@ class Register extends React.Component {
                     />
                   </FormGroup>
                   <FormGroup>
-                    <FormCheckbox>
+                    <FormCheckbox
+                       checked={this.state.checked}
+                       onChange={e => this.handleCheck(e)}
+                    >
                       I agree with the <a href="#">Terms & Conditions</a>.
                     </FormCheckbox>
                   </FormGroup>
