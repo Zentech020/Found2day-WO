@@ -165,6 +165,7 @@ class Analytics extends React.Component {
 
         <Row className="py-2">
           <Col lg="4" className="mb-4">
+          <Link to="/add-vacancy">
             <Card small>
               <CardBody
                 className="d-flex flex-column py-0"
@@ -193,9 +194,11 @@ class Analytics extends React.Component {
                 </Row>
               </CardFooter>
             </Card>
+            </Link>
           </Col>
 
           <Col lg="4" className="mb-4">
+            <Link to="/profile">
             <Card small>
               <CardBody
                 className="d-flex flex-column py-0"
@@ -221,10 +224,14 @@ class Analytics extends React.Component {
                 </Row>
               </CardFooter>
             </Card>
+            </Link>
           </Col>
 
           <Col lg="4" className="mb-4">
-            <Card small>
+            <Card
+              onClick={() => this.openChat()}
+              small
+            >
               <CardBody
                 className="d-flex flex-column py-0"
                 style={{
