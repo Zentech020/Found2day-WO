@@ -191,11 +191,11 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         />
       }
       <div className="d-flex">
-      
+
         {status !== "paid" ? (<Button onClick={() => this.onPay(url)} theme={(due_date < (Date.now()) && status !== 'paid') ? "danger": "success"} className="flex-end my-2 mx-3 ml-auto w-25">
           Pay now ({(amount_due / 100).toLocaleString('en-US', {
           style: 'currency',
-          currency: 'USD',
+          currency: 'eur',
         })})
         </Button>) : (
           <Button outline theme="success" className="flex-end my-2 mx-3 ml-auto w-25 disabled">Paid</Button>
@@ -245,7 +245,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         Footer: <span></span>,
         Cell: row => 59.99.toLocaleString('en-US', {
           style: 'currency',
-          currency: 'USD',
+          currency: 'eur',
         })
       },
       {
@@ -256,7 +256,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         className: 'text-center',
         Cell: row => (parseFloat(row.original.amount) / 100).toLocaleString('en-US', {
           style: 'currency',
-          currency: 'USD',
+          currency: 'eur',
         }),
         Footer: (
           <div className="d-flex flex-column">
@@ -265,7 +265,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
               Pay
               {' '}<span>{(amount_due_upcoming / 100).toLocaleString('en-US', {
               style: 'currency',
-              currency: 'USD',
+              currency: 'eur',
             })}</span>
             </Button>
           </div>
@@ -305,7 +305,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         className: 'text-center',
         Cell: row => (parseFloat(row.original.amount) / 100).toLocaleString('en-US', {
           style: 'currency',
-          currency: 'USD',
+          currency: 'eur',
         }),
         // Footer: (
         //   isPaid ? (

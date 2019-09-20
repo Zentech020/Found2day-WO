@@ -20,7 +20,7 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
   `
   try {
     dispatch({ type: ADD_VACANCIE_IS_LOADING  });
-    const location = await axios.get(`${API_URL}/vacancies/location/${vacancy.postalCode}/${vacancy.houseNumber}`);
+    const location = await axios.get(`${API_URL}/vacancies/location/${vacancy.postalCode.replace(/\s+/g, '')}/${vacancy.houseNumber}`);
     const result = await axios.post(`${API_URL}/vacancies`,
       {
         title: vacancy.title,
@@ -36,7 +36,7 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
         experience: vacancy.experience,
         weekHours: vacancy.weekHours,
         distance: vacancy.distance,
-        postalcode: vacancy.postalCode,
+        postalcode: vacancy.postalCode.replace(/\s+/g, ''),
         icon: icon,
         groupId: groupId,
         author: author,
@@ -44,7 +44,6 @@ export const addVacancyAction = (vacancy, author, groupId, content, location, ic
       },
       header
     );
-    console.log(result);
     return dispatch({ type: ADD_VACANCIE_DATA, result });
   } catch (err) {
     return dispatch({

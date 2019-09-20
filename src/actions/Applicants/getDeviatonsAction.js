@@ -10,8 +10,6 @@ export const getDeviation = (vacancyId, applicantToken) => async dispatch => {
   try {
     dispatch({ type: GET_DEVIATION_IS_LOADING });
     const vacancySpecs = await axios.get(`${API_URL}/vacancies/${vacancyId}`,header);
-    console.log('specs action vac', vacancySpecs, vacancyId);
-    
     const applicantSpecs = await axios.get(`https://api.found2day.nl/api/v1/applicant?apikey=${applicantToken}`);
     return dispatch({ type: GET_DEVIATION_DATA, vacancySpecs, applicantSpecs, err:false });
   } catch (err) {

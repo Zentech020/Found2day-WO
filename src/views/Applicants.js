@@ -164,7 +164,8 @@ class Applicants extends React.Component {
       this.setState({
         openDeviationModal:true,
         modal:true,
-        userInfo:row.original
+        userInfo:row.original,
+        deviations:this.props.deviations
       })
     }
   }
@@ -173,6 +174,7 @@ class Applicants extends React.Component {
 
     const { pageSize, pageSizeOptions } = this.state;
     const {applications, userInfo} = this.state;
+    const {deviations} = this.props;
     const tableColumns = [
       {
         Header: '#',
@@ -291,55 +293,47 @@ class Applicants extends React.Component {
             toggle={() => this.toggle()}
             position="center"
           >
-            <ModalHeader
+            {/* <ModalHeader
               className="popup__bg"
               style={{
                 backgroundImage:
                   'url(https://images.unsplash.com/photo-1477948879622-5f16e220fa42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)'
               }}
-            />
+            /> */}
             <ModalBody>
-              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-center">
-                <h2 className="mt-2">{this.state.userInfo.name}</h2>
-                <p className="text-center mt-2">{userInfo.motivation ? this.state.userInfo.motivation : 'Applicant has not filled in a motivation.'}</p>
+              <div className="popup__basic-info d-flex flex-column justify-content-center align-items-left">
+                <h2 className="my-4">{this.state.userInfo.name}</h2>
+                <h4 className="mb-2">Motivation</h4>
+                <label className="text-left my-0">{userInfo.motivation ? this.state.userInfo.motivation : 'Applicant has not filled in a motivation.'}</label>
               </div>
               <hr />
               <Row>
+                <Col md={12}>
+                  <h4 className="mb-2">User information</h4>
+                  <label>Quisque id mi. Nam adipiscing. Morbi vestibulum volutpat enim.</label>
+                </Col>
                 <Col md={6}>
                   <div className="flex flex-column">
-                    <h5 className="my-2">Email</h5>
-                    <p className="my-0">{this.state.userInfo.email}</p>
+                    <p className="my-2">Email</p>
+                    <label className="my-0">{this.state.userInfo.email}</label>
                   </div>
                 </Col>
 
                 <Col md={6}>
                   <div className="flex flex-column">
-                    <h5 className="my-2">Address</h5>
-                    <p className="my-0">Helmholtzstraat 18b</p>
-                  </div>
-                </Col>
-
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">Phone</h5>
-                    <p className="my-0">{this.state.userInfo.phone}</p>
-                  </div>
-                </Col>
-
-                <Col md={6}>
-                  <div className="flex flex-column">
-                    <h5 className="my-2">CV</h5>
-                    <i className="material-icons">insert_drive_file</i>
+                    <p className="my-2">Phone</p>
+                    <label className="my-0">{this.state.userInfo.phone}</label>
                   </div>
                 </Col>
               </Row>
               <hr />
               <Row className="mt-4">
-                <Col md={12}>
-                  <p className="mb-2">Deviations</p>
+                <Col md={12} className="mb-4">
+                  <h4 className="mb-2">Deviations</h4>
+                  <label>Quisque id mi. Nam adipiscing. Morbi vestibulum volutpat enim.</label>
                 </Col>
                 <Col md={12}>
-                  <DeviationModal deviations={this.state.userInfo.specifications}/>
+                  <DeviationModal deviations={this.state.deviations}/>
                 </Col>
               </Row>
             </ModalBody>

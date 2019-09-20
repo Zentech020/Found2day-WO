@@ -97,7 +97,6 @@ class addVacancy extends React.Component {
         });
 
         await this.setState({ showingError: true });
-        // await history.push("/vacancies");
       }
     }
     if (this.props.error && !this.state.showingError) {
@@ -331,15 +330,24 @@ class addVacancy extends React.Component {
                             </Col>
 
                             <Col md="12">
+                            <div className="d-flex">
+                                <label htmlFor="feDescription">
+                                  Add vacancy image
+                                </label>
+                                <TooltipHelper
+                                  min="1"
+                                  className="ml-2"
+                                  tooltipTarget="uploadImage"
+                                  content="Select the maximum number of applicants. When the maximum is reached, the vacancy will close automatically"
+                                />
+                              </div>
                               <label className="edit-user-details__change-background">
-                                Vacancy image
                                 <input
                                   className="d-none"
                                   type="file"
                                   onChange={e => this.onUploadImage(e)}
                                 />
-                                 <i className="material-icons ml-2">&#xE439;</i>
-                                 <span class="btn btn-primary ml-2">Upload image... (max. 5 MB)</span>
+                                 <span class="btn btn-primary">Upload image... (max. 5 MB)</span>
                               </label>
                             </Col>
                             <Col>
@@ -467,6 +475,7 @@ class addVacancy extends React.Component {
                               <FormInput
                                 id="firstName"
                                 name="houseNumber"
+                                type="number"
                                 value={this.state.newSingleVacancy.houseNumber}
                                 onChange={e => this.onChangeField(e)}
                                 required
@@ -495,19 +504,19 @@ class addVacancy extends React.Component {
                         size="sm"
                         theme="accent"
                         outline
-                        disabled={
-                          (this.state.newSingleVacancy.title &&
-                          this.state.newSingleVacancy.image &&
-                          this.state.newSingleVacancy.postalCode &&
-                          this.state.newSingleVacancy.houseNumber &&
-                          this.state.newSingleVacancy.employmentType &&
-                          this.state.newSingleVacancy.experience &&
-                          this.state.newSingleVacancy.weekHours &&
-                          this.state.newSingleVacancy.education &&
-                          this.state.newSingleVacancy.jobTitle &&
-                          this.state.newSingleVacancy.branch)
-                          ? false : true
-                        }
+                        // disabled={
+                        //   (this.state.newSingleVacancy.title &&
+                        //   this.state.newSingleVacancy.image &&
+                        //   this.state.newSingleVacancy.postalCode &&
+                        //   this.state.newSingleVacancy.houseNumber &&
+                        //   this.state.newSingleVacancy.employmentType &&
+                        //   this.state.newSingleVacancy.experience &&
+                        //   this.state.newSingleVacancy.weekHours &&
+                        //   this.state.newSingleVacancy.education &&
+                        //   this.state.newSingleVacancy.jobTitle &&
+                        //   this.state.newSingleVacancy.branch)
+                        //   ? false : true
+                        // }
                         className="d-table mr-3"
                         onClick={() => this.setState({ preview: true })}
                       >
@@ -547,6 +556,7 @@ class addVacancy extends React.Component {
             toggle={() => this.toggle()}
             position="center"
             className="c-modal"
+            size="lg"
           >
             <PreviewVacancy
               title={this.state.newSingleVacancy.title}

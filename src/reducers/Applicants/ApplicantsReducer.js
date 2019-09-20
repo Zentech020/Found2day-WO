@@ -73,22 +73,17 @@ export default (state = initialState, action) => {
 
     case GET_DEVIATION_DATA : {
       const applicants_specs = [action.applicantSpecs.data.specifications];
-      console.log(applicants_specs);
       const vacancy_specs = action.vacancySpecs.data.vacancy;
-      console.log(vacancy_specs);
       var counter = 6;
-      // const deviations = {
-      //     jobTitle: applicants_specs.jobTitle.includes(vacancy_specs.vacancy.jobTitle),
-      //     branch: applicants_specs.branch.includes(vacancy_specs.vacancy.branch),
-      //     education:applicants_specs.education.includes(vacancy_specs.vacancy.education),
-      //     experience: applicants_specs.experience.includes(vacancy_specs.vacancy.experience),
-      //     employmentType:applicants_specs.employmentType.includes(vacancy_specs.vacancy.employmentType),
-      //     weekHours:applicants_specs.workingWeek.includes(vacancy_specs.vacancy.weekHours),
-      // }
-
-      // console.log('dev', deviations);
-      
-      return {...state, deviations:[], match:counter ,err:false, isLoading:false}
+      const deviations = {
+          jobTitle: {isDeviated:applicants_specs[0].jobTitle.includes(vacancy_specs.jobTitle), title:vacancy_specs.jobTitle},
+          branch: {isDeviated:applicants_specs[0].branch.includes(vacancy_specs.branch), title:vacancy_specs.branch},
+          education: {isDeviated:applicants_specs[0].education.includes(vacancy_specs.education), title:vacancy_specs.education},
+          experience: {isDeviated:applicants_specs[0].experience.includes(vacancy_specs.experience), title:vacancy_specs.experience},
+          employmentType: {isDeviated:applicants_specs[0].employmentType.includes(vacancy_specs.employmentType), title:vacancy_specs.employmentType},
+          weekHours: {isDeviated:applicants_specs[0].workingWeek.includes(vacancy_specs.weekHours), title:vacancy_specs.weekHours},
+      }
+      return {...state, deviations:deviations, match:counter ,err:false, isLoading:false}
     }
 
     case GET_DEVIATION_ERROR : {

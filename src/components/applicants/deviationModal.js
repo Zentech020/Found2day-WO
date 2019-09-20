@@ -8,36 +8,37 @@ class DeviationModal extends React.Component {
     super(props);
 
       this.state= {
-        open:false
+        open:false,
       }
   }
 
   componentDidMount = async () => {
-    
+
     const {deviations} = this.props;
+    console.log('from cdm',deviations)
 
     if (deviations) {
       let counter = 6;
-      if(!deviations.jobTitle) {
+      if(!deviations.jobTitle.isDeviated) {
           counter--;
       }
-      if(!deviations.branch) {
+      if(!deviations.branch.isDeviated) {
           counter--;
       }
-      if(!deviations.education) {
+      if(!deviations.education.isDeviated) {
           counter--;
       }
-      if(!deviations.experience) {
+      if(!deviations.experience.isDeviated) {
           counter--;
       }
-      if(!deviations.employementType) {
+      if(!deviations.employmentType.isDeviated) {
           counter--;
       }
-      if(!deviations.weekHours) {
+      if(!deviations.weekHours.isDeviated) {
           counter--;
       }
-      console.log(counter, deviations);
       var percentage = parseInt((100 * counter) / 6);
+      console.log(percentage);
 
       this.setState({percentage})
     }
@@ -45,106 +46,58 @@ class DeviationModal extends React.Component {
 
   render() {
     const {deviations} = this.props;
+    console.log(deviations);
+    const Table = () => (
+      <table class="table pr-4">
+      <tbody>
+      <tr>
+        <td>Job title</td>
+        <td style={deviations.jobTitle.isDeviated ? { color:'green'} : {color : 'red'} }>
+          {deviations.jobTitle.title}
+        </td>
+      </tr>
 
-    console.log('devi', deviations);
-    
-    // let counter = 6;
+      <tr>
+        <td>Branch</td>
+        <td style={ deviations.branch.isDeviated ? { color:'green'} : {color : 'red'} }>
+          {deviations.branch.title}
+        </td>
+      </tr>
 
+      <tr>
+        <td>Education</td>
+        <td style={deviations.education.isDeviated ? { color:'green'} : {color : 'red'} }>
+            {deviations.education.title}
+        </td>
+      </tr>
 
+      <tr>
+        <td>Experience</td>
+        <td style={deviations.experience.isDeviated ? { color:'green'} : {color : 'red'} }>
+            {deviations.experience.title}
+        </td>
+      </tr>
 
-    //   if(!deviations[0].jobTitle) {
-    //       counter--;
-    //   }
-    //   if(!deviations[0].branch) {
-    //       counter--;
-    //   }
-    //   if(!deviations[0].education) {
-    //       counter--;
-    //   }
-    //   if(!deviations[0].experience) {
-    //       counter--;
-    //   }
-    //   if(!deviations[0].employementType) {
-    //       counter--;
-    //   }
-    //   if(!deviations[0].weekHours) {
-    //       counter--;
-    //   }
-    //   console.log(counter);
-    //   var percentage = parseInt((100 * counter) / 6);
-    //   console.log(percentage);
+      <tr>
+        <td>Employment type</td>
+        <td style={deviations.employmentType.isDeviated ? { color:'green'} : {color : 'red'} }>
+            {deviations.employmentType.title}
+        </td>
+      </tr>
+
+      <tr>
+        <td>Weekhours</td>
+        <td style={ deviations.weekHours.isDeviated ? { color:'green'} : {color : 'red'} }>
+            {deviations.weekHours.title}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    )
     return (
       <div className="d-flex">
-         <CircularProgressbar value={this.state.percentage} text={`${this.state.percentage}%`} />
-          {!deviations.jobTitle ?
-            (
-            <div>
-            <TooltipHelper
-                className="ml-2"
-                icon="pie_chart"
-                tooltipTarget="jobTitle"
-                content="Job title"
-                hasButton={true}
-              />
-            </div>
-            )
-          : null}
-          {!deviations.branch ? (<div>
-            <TooltipHelper
-                className="ml-2"
-                icon="pie_chart"
-                tooltipTarget="branch"
-                content="Branch"
-                hasButton={true}
-              />
-            </div>
-            ) : null}
-          {!deviations.education ? (
-            <div>
-              <TooltipHelper
-                className="ml-2"
-                icon="school"
-                tooltipTarget="education"
-                content="Education"
-                hasButton={true}
-              />
-            </div>
-            ) : null}
-          {!deviations.experience ? (
-          <div>
-              <TooltipHelper
-                className="ml-2"
-                icon="format_list_bulleted"
-                tooltipTarget="expierence"
-                content="Experience"
-                hasButton={true}
-              />
-            </div>
-            ) : null}
-            {!deviations.employementType ? (
-            <div>
-              <TooltipHelper
-                className="ml-2"
-                icon="description"
-                tooltipTarget="employementType"
-                content="Employement type"
-                hasButton={true}
-              />
-            </div>
-            ) : null}
-
-          {!deviations.weekHours ? (
-          <div>
-              <TooltipHelper
-                className="ml-2"
-                icon="calendar_today"
-                tooltipTarget="weekHours"
-                content="Week hours"
-                hasButton={true}
-              />
-            </div>
-            ): null}
-
+        {deviations ? <Table/> : null}
+         <CircularProgressbar className="w-25 pl-4" value={this.state.percentage} text={`${this.state.percentage}%`} />
         </div>
     )
   }

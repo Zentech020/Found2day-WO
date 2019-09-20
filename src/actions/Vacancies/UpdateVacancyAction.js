@@ -33,7 +33,7 @@ export const updateVacancy = (vacancyId,vacancy,newContent) => async dispatch =>
         experience: vacancy.experience,
         employmentType: vacancy.employmentType,
         weekHours: vacancy.weekHours,
-        postalcode: vacancy.postalcode,
+        postalcode: vacancy.postalCode.replace(/\s+/g, ''),
         visible:vacancy.visible
       },
       header

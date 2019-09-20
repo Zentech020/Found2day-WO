@@ -1,7 +1,7 @@
 .c-modal {
   top: 20%;
   left: calc(16.666667% / 2 ) !important;
-  max-width: 800px;
+  // max-width: 800px;
 
   @include media-breakpoint-down(xs) {
     left: 0 !important;
@@ -13,6 +13,11 @@
   border-radius: 4px;
   box-shadow: 0 2px 20px 0 rgba(0,0,0,0.10);
   border: none;
+  flex-direction: row;
+
+  @include media-breakpoint-down(md) {
+    flex-direction: column;
+  }
 
   &__logo {
     img {
@@ -34,5 +39,9 @@
 
   &__right {
     border-radius: 0 4px 4px 0;
+
+    @include media-breakpoint-down(md) {
+      height: 200px;
+    }
   }
 }

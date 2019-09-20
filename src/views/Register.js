@@ -57,14 +57,17 @@ class Register extends React.Component {
   }
 
   onRegister = async() => {
+    console.log('register');
     const { name, email, password, password2, groupName, checked } = this.state;
     if (name && email && password && password2 && groupName && checked) {
-      const res = await this.props.registerUser(name, email, password, password2, groupName);
+      this.props.registerUser(name, email, password, password2, groupName).then((res)=> {
+        if (res.type !== "register_error") {
+           this.props.history.push(`/login`)
+        }
+        this.setState({showingError: false})
+      });
 
-      if (res.type !== "register_error") {
-        await this.setState({showingError: false})
-        await this.props.history.push(`/login`)
-      }
+
     }
   };
   render() {

@@ -114,7 +114,7 @@ export default function(
     }
 
     case FORGOT_PW_ERROR: {
-      return { ...state, err: true, message:'Something went wront , try again!', };
+      return { ...state, err: true, message:'Something went wront , try again!' };
     }
 
     case RESET_PW_IS_LOADING: {
@@ -125,12 +125,13 @@ export default function(
       return {
         ...state,
         isLoading: false,
+        message:'succesfully reset password!',
         err:false,
       };
     }
 
     case RESET_PW_ERROR: {
-      return { ...state, err: true };
+      return { ...state, err: true , isLoading: false,  message:'failed to reset password, please try again in a couple minutes'};
     }
 
     case REGISTER_INVITE_IS_LOADING: {
