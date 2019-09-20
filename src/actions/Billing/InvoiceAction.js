@@ -53,7 +53,7 @@ export const getInvoices = (customerId) => async dispatch => {
 export const endInvoice = (customerId) => async dispatch => {
   try {
     dispatch({ type: END_INVOICE_IS_LOADING });
-    const result = await axios.post(`http://127.0.0.1:5000/billing/existing`, {
+    const result = await axios.post(`${API_URL}/billing/existing`, {
       customerId:customerId
     },header);
     console.log('rezzz', result);

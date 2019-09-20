@@ -134,7 +134,7 @@ class Billing extends React.Component {
             <span>UPCOMING INVOICE</span>
           </Col>
           <Col className="file-manager__filters__rows d-flex" md="6">
-            <span>Invoice for period {period_start} - {period_end}</span>
+            <span>Invoice created {new Date(period_start * 1000).toLocaleDateString()}</span>
           </Col>
           <Col className="file-manager__filters__rows d-flex" md="4">
             <span>Communications will be sent to {JSON.parse(sessionStorage.getItem('account')).email}</span>
