@@ -6,17 +6,14 @@ import {
   Col,
   Card,
   CardBody,
-  CardHeader,
   CardFooter,
-  FormSelect
 } from "shards-react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
-import addVacancyImg from "../images/home/add-vacancy.png";
-import updateProfileImg from "../images/home/update-profile.png";
-import leaveFeedbackImg from "../images/home/feedback.png";
-import noApplicantsImg from "../images/noApplicantsImg.png";
+import addVacancyImg from "../images/home/100.jpg";
+import updateProfileImg from "../images/home/101.jpg";
+import leaveFeedbackImg from "../images/home/102.jpg";
 
 import {
   getHomeNotification,
@@ -28,7 +25,6 @@ import {
 
 import PageTitle from "../components/common/PageTitle";
 import SmallStats from "../components/common/SmallStats";
-import Sessions from "../components/analytics/Sessions";
 import UsersOverview from "./../components/blog/UsersOverview";
 import Notification from "./../components/notification/notification";
 import colors from "../utils/colors";
@@ -170,7 +166,7 @@ class Analytics extends React.Component {
               <CardBody
                 className="d-flex flex-column py-0"
                 style={{
-                  height: "200px",
+                  height: "250px",
                   backgroundSize: "cover",
                   backgroundImage: `url(${addVacancyImg})`
                 }}
@@ -203,7 +199,7 @@ class Analytics extends React.Component {
               <CardBody
                 className="d-flex flex-column py-0"
                 style={{
-                  height: "200px",
+                  height: "250px",
                   backgroundSize: "cover",
                   backgroundImage: `url(${updateProfileImg})`
                 }}
@@ -235,7 +231,7 @@ class Analytics extends React.Component {
               <CardBody
                 className="d-flex flex-column py-0"
                 style={{
-                  height: "200px",
+                  height: "250px",
                   backgroundSize: "cover",
                   backgroundImage: `url(${leaveFeedbackImg})`
                 }}
