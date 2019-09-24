@@ -134,7 +134,7 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_VACANCY_ERROR: {
-      return { ...state, err: true, message:'Something went wrong , try again!' };
+      return { ...state, isLoading:false, err: true, message:'Something went wrong , try again!' };
     }
 
     case GET_COORDINATES_LOADING: {

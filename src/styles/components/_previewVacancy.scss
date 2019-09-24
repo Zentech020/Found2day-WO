@@ -1,0 +1,58 @@
+.v-card {
+  border-radius: 4px;
+  box-shadow: 0 2px 20px 0 rgba(0,0,0,0.10);
+  font-family: 'Poppins', sans-serif;
+  border: none;
+  flex:2;
+
+  @include media-breakpoint-down(xs) {
+    flex:0;
+  }
+
+  &__logo {
+    img {
+      height: 60px;
+      width: 60px;
+    }
+  }
+
+  &__desc {
+    p {
+      color: rgba(0,0,0,0.70);
+    }
+  }
+
+  &__match {
+    color: #008000;
+    font-size: 12px;
+    font-weight: 300 !important;
+  }
+
+  &__verified {
+    font-size: 12px;
+    color: black;
+    font-weight: bold;
+  }
+
+  &__left {
+    flex: 7;
+
+    @include media-breakpoint-down(xs) {
+      flex:none;
+    }
+  }
+
+
+
+  &__right {
+    border-radius: 0 4px 4px 0;
+    flex:3;
+
+    @include media-breakpoint-down(xs) {
+      height: 200px;
+      width: 100%;
+      flex:none;
+    }
+
+  }
+}
