@@ -80,7 +80,7 @@ class editVacancy extends React.Component {
   onUpdateVacancy = async id => {
     const { newSingleVacancy, newContent } = this.state;
     if (newSingleVacancy || newContent) {
-      await this.props.updateVacancy(id, newSingleVacancy, newContent);
+      await this.props.updateVacancy(id, newSingleVacancy, newContent, true);
       await this.setState({ showingError: false });
     }
   };
@@ -418,7 +418,7 @@ class editVacancy extends React.Component {
                       newSingleVacancy.jobTitle &&
                       newSingleVacancy.branch)
                       && <span class="">Please fill out all fields, including the vacancy image, to update the vacancy.</span> }
-                    
+
                     <Button
                       size="sm"
                       theme="accent"
@@ -437,7 +437,7 @@ class editVacancy extends React.Component {
                       onClick={() => this.onUpdateVacancy(id)}
                     >
                       {isLoading ? <ButtonLoader/> : 'Update'}
-                    
+
                     </Button>
                     </div>
                   </CardFooter>

@@ -6,7 +6,7 @@ export const UPDATE_VACANCY_IS_LOADING = 'update_vacancy_is_loading';
 export const UPDATE_VACANCY_DATA = 'update_vacancy_data';
 export const UPDATE_VACANCY_ERROR = 'update_vacancy_error';
 
-export const updateVacancy = (vacancyId,vacancy,newContent) => async dispatch => {
+export const updateVacancy = (vacancyId,vacancy,newContent , fromSwitch) => async dispatch => {
   const realContent = `
   ${newContent}
   <ul>
@@ -25,7 +25,7 @@ export const updateVacancy = (vacancyId,vacancy,newContent) => async dispatch =>
       {
         title: vacancy.title,
         description: vacancy.description,
-        content:realContent,
+        content:fromSwitch ? vacancy.content : realContent,
         image: vacancy.image,
         jobTitle: vacancy.jobTitle,
         branch: vacancy.branch,
@@ -33,13 +33,13 @@ export const updateVacancy = (vacancyId,vacancy,newContent) => async dispatch =>
         experience: vacancy.experience,
         employmentType: vacancy.employmentType,
         weekHours: vacancy.weekHours,
-        postalcode: vacancy.postalCode.replace(/\s+/g, ''),
         visible:vacancy.visible
       },
       header
     );
     return dispatch({ type: UPDATE_VACANCY_DATA, result });
   } catch (err) {
+    console.log(err);
     return dispatch({
       type: UPDATE_VACANCY_ERROR,
       payload: err

@@ -198,11 +198,14 @@ class SingleVacancy extends React.Component {
 
   onChangeVisibillity = async() => {
     const { id } = this.props.match.params;
+    console.log(id);
     let newState = Object.assign({}, this.state);
-    employerAnalytics.logEvent('switchVisibillity' , {page:'singleVacancy',status: newState.single_vacancy['visible'] })
     newState.single_vacancy['visible'] = !this.state.single_vacancy.visible;
     this.setState(newState);
-    await this.props.updateVacancy(id, this.state.single_vacancy);
+    console.log(this.state.single_vacancy);
+    await this.props.updateVacancy(id, this.state.single_vacancy, this.state.single_vacancy.content, true);
+    // employerAnalytics.logEvent('switchVisibillity' , {page:'singleVacancy',status: newState.single_vacancy['visible'] })
+
   }
 
   onSetDeviations = async(row) => {

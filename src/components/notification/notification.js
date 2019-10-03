@@ -19,8 +19,14 @@ class Notification extends React.Component {
           <div className="mt-4 mb-2">
             <h5 className="card-title mb-0">This is our first week launching the beta platform</h5>
           </div>
-          <p>Hi, welkom op Found2Day! Heb jij jouw droombaan al gevonden? Help ons met het geven van feedback zodat wij nog beter kunnen worden en like onze pagina op Facebook!</p>
-        </CardBody>
+          <p>You’re one step away from placing your vacancies. Follow these steps before placing a vacancy and start right after:</p>
+  <p>1. Go to "profile"<br/>
+    2. Select "company profile"<br/>
+    3. Fill in the company details<br/>
+    4. Change the company avatar<br/>
+    5. Go to "vacancies" and place your first vacancy!<br/><br/>
+  Having any trouble? Place let us know in the chat and we’re happy to help!!
+</p></CardBody>
       </Card>
     );
   }

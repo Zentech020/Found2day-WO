@@ -42,19 +42,7 @@ class addVacancy extends React.Component {
     this.state = {
       toggleTooltip: false,
       preview: false,
-      title: "",
-      description: "",
       content: "",
-      maxApplicants: 0,
-      image: "",
-      jobTitle: "Select Option",
-      branch: "Select Option",
-      education: "Select Option",
-      employmentType: "Select Option",
-      experience: "Select Option",
-      weekHours: "Select Option",
-      distance: "20",
-      postalCode: '',
       author: '',
       groupId: '',
       showingError: true,
@@ -123,9 +111,6 @@ class addVacancy extends React.Component {
     const { newSingleVacancy, groupId, author, content} = this.state;
     const { icon} = JSON.parse(sessionStorage.getItem('group'));
     const {location} = this.props;
-    // if(newSingleVacancy.postalCode && newSingleVacancy.houseNumber) {
-    //   await this.props.getCoordinates(newSingleVacancy.postalCode, newSingleVacancy.houseNumber);
-    // }
     if (newSingleVacancy && groupId && location) {
       const resp = await this.props.addVacancyAction(newSingleVacancy, author, groupId, content, location, icon);
       if (resp.result && resp.result.status === 200) {
@@ -175,13 +160,13 @@ class addVacancy extends React.Component {
     this.setState({filteredJobTitles: this.props.jobTitles.filter(el => String(el.branchId) === String(e.target.value))})
   }
 
-  onChangeField = e => {
+  onChangeField = async(e) => {
     const name = e.target.name;
     const value = e.target.value;
     console.log(name, value);
     let newState = Object.assign({}, this.state);
     newState.newSingleVacancy[name] = value;
-    this.setState(newState);
+    await this.setState(newState);
   };
 
   changeContent = (value) => {
