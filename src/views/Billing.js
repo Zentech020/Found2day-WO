@@ -18,6 +18,7 @@ import PageTitle from '../components/common/PageTitle';
 import EmptyVacanciesImg from '../images/EmptyVacanciesImg.png';
 import amplitude from 'amplitude-js';
 var employerAnalytics = amplitude.getInstance();
+var openedWindow;
 
 class Billing extends React.Component {
   constructor(props) {
@@ -120,7 +121,9 @@ class Billing extends React.Component {
         this.setState({
           toPayLink:true,
         })
-        window.open(res.result.data.hosted_invoice_url, 'name');
+        openedWindow.location ='http://google.com';
+        openedWindow.focus();
+        // window.open(res.result.data.hosted_invoice_url, 'name');
       }
     }
   };
@@ -192,7 +195,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
       }
       <div className="d-flex">
 
-        {status !== "paid" ? (<Button onClick={() => this.onPay(url)} theme={(due_date < (Date.now()) && status !== 'paid') ? "danger": "success"} className="flex-end my-2 mx-3 ml-auto w-25">
+        {status !== "paid" ? (<Button onClick={() => {this.onPay(url); openedWindow = window.open('', 'paymentPopup');}} theme={(due_date < (Date.now()) && status !== 'paid') ? "danger": "success"} className="flex-end my-2 mx-3 ml-auto w-25">
           Pay now ({(amount_due / 100).toLocaleString('en-US', {
           style: 'currency',
           currency: 'eur',
@@ -261,7 +264,7 @@ renderTableAllInvoice = (tableColumns, tableData, period_start, period_end, next
         Footer: (
           <div className="d-flex flex-column">
 
-            <Button onClick={() => this.onPay()} className="mt-2">
+            <Button onClick={() => {this.onPay(); openedWindow = window.open('', 'paymentPopup');}} className="mt-2">
               Pay
               {' '}<span>{(amount_due_upcoming / 100).toLocaleString('en-US', {
               style: 'currency',
