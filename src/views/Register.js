@@ -11,7 +11,8 @@ import {
   FormGroup,
   FormInput,
   FormCheckbox,
-  Button
+  Button,
+  FormSelect
 } from 'shards-react';
 import {toast} from 'react-toastify';
 import { Link } from 'react-router-dom';
@@ -26,6 +27,7 @@ class Register extends React.Component {
       password: '',
       password2: '',
       groupName: '',
+      fromWhere:'',
       checked: false,
       showingError: true
     };
@@ -96,6 +98,18 @@ class Register extends React.Component {
                     />
                   </FormGroup>
                   <FormGroup>
+                    <label htmlFor="exampleInputPassword2">Company name</label>
+                    <FormInput
+                      type="text"
+                      id="groupName"
+                      placeholder="Company Name"
+                      autoComplete="Company Name"
+                      onChange={e =>
+                        this.setState({ groupName: e.target.value })
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup>
                     <label htmlFor="exampleInputEmail1">Email address</label>
                     <FormInput
                       type="email"
@@ -104,6 +118,16 @@ class Register extends React.Component {
                       autoComplete="email"
                       onChange={e => this.setState({ email: e.target.value })}
                     />
+                  </FormGroup>
+                  <FormGroup>
+                    <label htmlFor="exampleInputEmail1">Where did you find us (optional)</label>
+                    <FormSelect onChange={(e) => this.setState({fromWhere:e.target.value})}>
+                      <option value="default">Default</option>
+                      <option value="google-ads">Google ads</option>
+                      <option value="socials">Socials like Facebook and Instagram</option>
+                      <option value="network">Personal network</option>
+                      <option value="other">Other</option>
+                    </FormSelect>
                   </FormGroup>
                   <FormGroup>
                     <label htmlFor="exampleInputPassword1">Password</label>
@@ -128,18 +152,6 @@ class Register extends React.Component {
                       autoComplete="new-password"
                       onChange={e =>
                         this.setState({ password2: e.target.value })
-                      }
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <label htmlFor="exampleInputPassword2">Company name</label>
-                    <FormInput
-                      type="text"
-                      id="groupName"
-                      placeholder="Company Name"
-                      autoComplete="Company Name"
-                      onChange={e =>
-                        this.setState({ groupName: e.target.value })
                       }
                     />
                   </FormGroup>
